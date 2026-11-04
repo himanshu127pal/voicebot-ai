@@ -1,0 +1,38 @@
+# /etc/caddy/Caddyfile
+#
+# Caddy exists here for exactly one reason: browsers refuse microphone access on
+# plain HTTP, and an HTTPS page cannot open a ws:// socket. So the demo needs a real
+# certificate. Caddy gets one from Let's Encrypt automatically on first request.
+#
+# Replace demo.yourdomain.com with a hostname whose A record points at THIS server.
+# Ports 80 and 443 must be open to the world for the ACME challenge to complete.
+#
+# NOTE: this proxies SIGNALLING only. WebRTC audio does not pass through Caddy —
+# it goes straight to this host on UDP 50000-60000 (or TCP 7881 as a fallback).
+# Those must be open in the firewall or you get a connected call with no sound.
+
+demo.yourdomain.com {
+	encode zstd gzip
+
+	# LiveKit's WebSocket signalling + the client's pre-flight validate call.
+	# Caddy upgrades WebSockets on reverse_proxy automatically; no extra config.
+	@livekit path /rtc /rtc/* /twirp/*
+	reverse_proxy @livekit 127.0.0.1:7880
+
+	# Everything else is the demo page + its token API.
+	reverse_proxy 127.0.0.1:8090
+
+	header {
+		Referrer-Policy "no-referrer"
+		X-Content-Type-Options "nosniff"
+		-Server
+	}
+
+	# The directory must exist AND be owned by the caddy user, or Caddy exits 1 at
+	# startup with "permission denied" on this path:
+	#     mkdir -p /var/log/caddy && chown -R caddy:caddy /var/log/caddy
+	log {
+		output file /var/log/caddy/demo.log
+		format console
+	}
+}

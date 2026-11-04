@@ -1,0 +1,859 @@
+<title>BTBIZ — AI Voice Agents That Make Your Calls</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Syne:wght@700;800&display=swap">
+
+<style>
+:root{
+  --ground:#04100e; --ground-2:#071a17; --surface:#0b2521; --surface-2:#0f302a;
+  --line:rgba(255,255,255,.09); --line-2:rgba(255,255,255,.05);
+  --text:#e9f3f0; --body:#a9c2bc; --muted:#7d9994; --faint:#5b7671;
+  --mint:#5eead4; --mint-2:#2dd4bf; --mint-deep:#0f766e;
+  --amber:#f5b73d; --amber-hi:#ffc95c; --ink:#0b1f1b;
+  --ok:#4ade80; --ok-soft:rgba(74,222,128,.12);
+  --display:"Syne","Archivo",system-ui,sans-serif;
+  --sans:"Archivo","Segoe UI",system-ui,-apple-system,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --wrap:1140px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--ground); color:var(--body);
+  font-family:var(--sans); font-size:16.5px; line-height:1.65;
+  -webkit-font-smoothing:antialiased; overflow-x:hidden;
+}
+h1,h2,h3,h4{margin:0; color:var(--text); font-family:var(--display); font-weight:800; line-height:1.08; letter-spacing:-.02em; text-wrap:balance}
+h1{font-size:clamp(38px,6.2vw,74px)}
+h2{font-size:clamp(28px,4.2vw,48px)}
+h3{font-family:var(--sans); font-weight:700; font-size:18px; letter-spacing:-.01em; line-height:1.35}
+p{margin:0 0 16px}
+a{color:var(--mint); text-decoration:none}
+a:hover{color:var(--mint-2)}
+ul{margin:0; padding:0; list-style:none}
+img,canvas{display:block; max-width:100%}
+:focus-visible{outline:2px solid var(--mint); outline-offset:3px; border-radius:6px}
+
+.wrap{max-width:var(--wrap); margin:0 auto; padding:0 clamp(20px,4vw,36px)}
+section{padding:clamp(64px,9vw,116px) 0; position:relative}
+.eyebrow{
+  font-family:var(--mono); font-size:11.5px; text-transform:uppercase; letter-spacing:.18em;
+  color:var(--mint); margin-bottom:18px; display:block;
+}
+.lede{font-size:clamp(16.5px,1.9vw,19.5px); color:var(--body); max-width:60ch}
+.center{text-align:center; margin-left:auto; margin-right:auto}
+.center .lede{margin-left:auto; margin-right:auto}
+
+/* ── Buttons ──────────────────────────────────────────────────────────── */
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:10px;
+  font-family:var(--sans); font-size:16px; font-weight:600; cursor:pointer;
+  padding:15px 28px; border-radius:999px; border:1px solid transparent;
+  transition:transform .14s cubic-bezier(.22,1,.36,1), box-shadow .22s, background .18s;
+  white-space:nowrap;
+}
+.btn svg{width:18px; height:18px; flex:none}
+.btn-primary{
+  background:linear-gradient(180deg,var(--amber-hi),var(--amber)); color:var(--ink);
+  box-shadow:0 10px 30px -12px rgba(245,183,61,.7), inset 0 1px 0 rgba(255,255,255,.42);
+}
+.btn-primary:hover{transform:translateY(-2px); box-shadow:0 18px 40px -14px rgba(245,183,61,.8); color:var(--ink)}
+.btn-ghost{background:rgba(255,255,255,.05); color:var(--text); border-color:var(--line)}
+.btn-ghost:hover{background:rgba(255,255,255,.1); color:var(--text)}
+.btn-sm{padding:11px 20px; font-size:14.5px}
+.cta-row{display:flex; gap:13px; flex-wrap:wrap; margin-top:34px}
+.center .cta-row{justify-content:center}
+
+/* ── Nav ──────────────────────────────────────────────────────────────── */
+.nav{
+  position:sticky; top:0; z-index:60; background:rgba(4,16,14,.82);
+  backdrop-filter:blur(14px); border-bottom:1px solid var(--line-2);
+}
+.nav-in{display:flex; align-items:center; gap:30px; height:68px}
+.logo{font-family:var(--display); font-weight:800; font-size:19px; color:var(--text); letter-spacing:.01em}
+.logo span{color:var(--mint)}
+.nav-links{display:flex; gap:26px; margin-left:auto; align-items:center}
+.nav-links a{font-size:14.5px; color:var(--muted); font-weight:500}
+.nav-links a:hover{color:var(--text)}
+.nav-cta{margin-left:4px}
+.burger{display:none; margin-left:auto; background:none; border:1px solid var(--line); border-radius:9px; width:40px; height:40px; cursor:pointer; color:var(--text)}
+.burger svg{width:20px; height:20px; margin:auto}
+
+/* ── Hero ─────────────────────────────────────────────────────────────── */
+.hero{padding:clamp(56px,8vw,104px) 0 clamp(50px,7vw,86px); text-align:center; overflow:hidden}
+.hero h1{margin-bottom:22px}
+.hero h1 em{font-style:normal; color:var(--mint)}
+.hero .lede{margin:0 auto}
+.wavewrap{position:relative; margin:44px auto 0; max-width:820px; height:130px}
+#wave{width:100%; height:130px}
+.wavewrap::after{
+  content:""; position:absolute; inset:0; pointer-events:none;
+  background:linear-gradient(90deg,var(--ground) 0%,transparent 14%,transparent 86%,var(--ground) 100%);
+}
+.hero-note{margin-top:18px; font-size:13.5px; color:var(--faint)}
+
+/* ── Stat strip ───────────────────────────────────────────────────────── */
+.stats{border-block:1px solid var(--line-2); background:var(--ground-2)}
+.stats-in{display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:1px; background:var(--line-2)}
+.stat{background:var(--ground-2); padding:30px 22px; text-align:center}
+.stat b{display:block; font-family:var(--mono); font-size:clamp(26px,3.4vw,34px); font-weight:500; color:var(--mint); line-height:1}
+.stat span{display:block; font-size:13.5px; color:var(--muted); margin-top:9px}
+
+/* ── Cards ────────────────────────────────────────────────────────────── */
+.grid{display:grid; gap:16px; margin-top:44px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(268px,1fr))}
+.g4{grid-template-columns:repeat(auto-fit,minmax(228px,1fr))}
+.card{
+  background:var(--surface); border:1px solid var(--line); border-radius:16px;
+  padding:26px 26px 28px; transition:border-color .25s, transform .25s, background .25s;
+}
+.card:hover{border-color:rgba(94,234,212,.3); transform:translateY(-3px)}
+.card h3{margin-bottom:9px}
+.card p{margin:0; font-size:15.5px; color:var(--body)}
+.card .ico{
+  width:40px; height:40px; border-radius:11px; display:grid; place-items:center;
+  background:rgba(94,234,212,.11); color:var(--mint); margin-bottom:16px;
+}
+.card .ico svg{width:20px; height:20px}
+
+/* ── Demo block ───────────────────────────────────────────────────────── */
+.demo{
+  background:
+    radial-gradient(760px 420px at 50% 0%, rgba(45,212,191,.14) 0%, transparent 70%),
+    var(--ground-2);
+  border-block:1px solid var(--line-2);
+}
+.demo-card{
+  background:linear-gradient(165deg,var(--surface-2),var(--surface));
+  border:1px solid rgba(94,234,212,.2); border-radius:24px;
+  padding:clamp(34px,5vw,60px); text-align:center; position:relative; overflow:hidden;
+}
+.orb{
+  width:104px; height:104px; border-radius:50%; margin:0 auto 28px; position:relative;
+  background:radial-gradient(circle at 36% 30%,#b6fbef 0%,var(--mint) 34%,var(--mint-2) 66%,#14a89a 100%);
+  box-shadow:0 0 44px 8px rgba(45,212,191,.35), 0 0 120px 30px rgba(45,212,191,.14);
+  animation:breathe 5s ease-in-out infinite;
+}
+@keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.055)}}
+.prompts{display:flex; gap:11px; flex-wrap:wrap; justify-content:center; margin-top:32px}
+.prompt{
+  font-size:14px; color:var(--body); background:rgba(255,255,255,.05);
+  border:1px solid var(--line); border-radius:999px; padding:9px 17px;
+}
+.prompt b{color:var(--mint); font-weight:600}
+
+/* ── Timeline ─────────────────────────────────────────────────────────── */
+.timeline{display:grid; grid-template-columns:repeat(auto-fit,minmax(232px,1fr)); gap:16px; margin-top:48px; counter-reset:step}
+.step{position:relative; padding-top:34px; counter-increment:step}
+.step::before{
+  content:""; position:absolute; top:11px; left:0; right:0; height:1px;
+  background:linear-gradient(90deg,var(--mint-deep),transparent);
+}
+.step::after{
+  content:""; position:absolute; top:6px; left:0; width:11px; height:11px;
+  border-radius:50%; background:var(--mint); box-shadow:0 0 14px rgba(94,234,212,.7);
+}
+.step .d{font-family:var(--mono); font-size:11.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--mint); display:block; margin-bottom:8px}
+.step h3{margin-bottom:7px}
+.step p{margin:0; font-size:15px}
+
+/* ── Table ────────────────────────────────────────────────────────────── */
+.tw{overflow-x:auto; margin-top:44px; border:1px solid var(--line); border-radius:16px; background:var(--surface)}
+table{border-collapse:collapse; width:100%; min-width:560px; font-size:15.5px}
+th,td{text-align:left; padding:15px 22px; border-bottom:1px solid var(--line-2); vertical-align:top}
+thead th{background:rgba(255,255,255,.03); font-family:var(--mono); font-size:11px; font-weight:500; text-transform:uppercase; letter-spacing:.12em; color:var(--muted)}
+tbody tr:last-child td{border-bottom:none}
+td:first-child{color:var(--text); font-weight:600; white-space:nowrap}
+
+/* ── Languages ────────────────────────────────────────────────────────── */
+.langs{display:flex; flex-wrap:wrap; gap:11px; margin-top:40px}
+.lang{
+  display:inline-flex; align-items:center; gap:9px; padding:11px 19px; border-radius:999px;
+  background:var(--surface); border:1px solid var(--line); font-size:15px; color:var(--text);
+}
+.lang i{width:7px; height:7px; border-radius:50%; background:var(--ok); flex:none}
+.lang.soon{color:var(--muted)} .lang.soon i{background:var(--faint)}
+
+/* ── Pricing ──────────────────────────────────────────────────────────── */
+.plans{display:grid; grid-template-columns:repeat(auto-fit,minmax(285px,1fr)); gap:18px; margin-top:48px; align-items:start}
+.plan{background:var(--surface); border:1px solid var(--line); border-radius:20px; padding:32px 30px 34px; position:relative}
+.plan.feature{border-color:rgba(245,183,61,.42); background:linear-gradient(170deg,rgba(245,183,61,.07),var(--surface))}
+.plan .tag{
+  position:absolute; top:-11px; left:30px; font-family:var(--mono); font-size:10.5px;
+  text-transform:uppercase; letter-spacing:.13em; padding:4px 12px; border-radius:999px;
+  background:var(--amber); color:var(--ink); font-weight:500;
+}
+.plan h3{font-family:var(--display); font-weight:800; font-size:21px; margin-bottom:6px}
+.plan .who{font-size:14.5px; color:var(--muted); margin-bottom:22px; min-height:44px}
+.price{display:flex; align-items:baseline; gap:7px; margin-bottom:6px}
+.price b{font-family:var(--mono); font-size:38px; font-weight:500; color:var(--text); line-height:1}
+.price span{font-size:14.5px; color:var(--muted)}
+.price-sub{font-size:14px; color:var(--muted); margin-bottom:26px}
+.plan ul{display:flex; flex-direction:column; gap:11px; margin-bottom:28px}
+.plan li{display:flex; gap:11px; font-size:15px; color:var(--body); line-height:1.5}
+.plan li svg{width:17px; height:17px; flex:none; color:var(--mint); margin-top:3px}
+.plan .btn{width:100%}
+
+/* ── Compliance / proof ───────────────────────────────────────────────── */
+.split{display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:44px; align-items:start}
+.checks{display:flex; flex-direction:column; gap:16px; margin-top:12px}
+.check{display:flex; gap:14px}
+.check svg{width:20px; height:20px; flex:none; color:var(--mint); margin-top:3px}
+.check b{display:block; color:var(--text); font-size:16px; margin-bottom:2px}
+.check p{margin:0; font-size:15px}
+
+.case{background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:26px}
+.case .loc{font-family:var(--mono); font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--mint); margin-bottom:11px}
+.case h3{margin-bottom:9px}
+.case p{margin:0; font-size:15.5px}
+
+/* ── Roadmap ──────────────────────────────────────────────────────────── */
+.road{display:grid; grid-template-columns:repeat(auto-fit,minmax(212px,1fr)); gap:13px; margin-top:44px}
+.road div{
+  background:var(--surface); border:1px solid var(--line-2); border-radius:13px;
+  padding:19px 20px; font-size:15px; color:var(--body);
+}
+.road b{display:block; color:var(--text); font-size:15.5px; font-weight:600; margin-bottom:4px}
+
+/* ── FAQ ──────────────────────────────────────────────────────────────── */
+.faqs{margin-top:44px; border-top:1px solid var(--line-2)}
+details{border-bottom:1px solid var(--line-2)}
+summary{
+  cursor:pointer; list-style:none; padding:22px 44px 22px 0; position:relative;
+  font-size:17.5px; font-weight:600; color:var(--text); line-height:1.4;
+}
+summary::-webkit-details-marker{display:none}
+summary::after{
+  content:""; position:absolute; right:10px; top:29px; width:10px; height:10px;
+  border-right:2px solid var(--mint); border-bottom:2px solid var(--mint);
+  transform:rotate(45deg); transition:transform .25s;
+}
+details[open] summary::after{transform:rotate(-135deg)}
+details p{padding:0 44px 24px 0; margin:0; font-size:16px; max-width:72ch}
+
+/* ── Final CTA + footer ───────────────────────────────────────────────── */
+.final{
+  background:
+    radial-gradient(700px 400px at 50% 100%, rgba(245,183,61,.13) 0%, transparent 70%),
+    var(--ground-2);
+  border-top:1px solid var(--line-2); text-align:center;
+}
+footer{padding:52px 0 60px; border-top:1px solid var(--line-2); font-size:14.5px; color:var(--faint)}
+.foot-in{display:flex; flex-wrap:wrap; gap:22px; align-items:center; justify-content:space-between}
+.foot-links{display:flex; gap:24px; flex-wrap:wrap}
+.foot-links a{color:var(--muted); font-size:14.5px}
+.foot-links a:hover{color:var(--text)}
+
+/* ── Sticky bar ───────────────────────────────────────────────────────── */
+.sticky{
+  position:fixed; left:0; right:0; bottom:0; z-index:70;
+  background:rgba(7,26,23,.94); backdrop-filter:blur(14px);
+  border-top:1px solid var(--line); padding:13px clamp(20px,4vw,36px);
+  display:flex; align-items:center; gap:18px; justify-content:center;
+  transform:translateY(110%); transition:transform .4s cubic-bezier(.22,1,.36,1);
+}
+.sticky.on{transform:none}
+.sticky p{margin:0; font-size:15px; color:var(--body)}
+@media (max-width:620px){ .sticky p{display:none} }
+
+/* ── Reveal ───────────────────────────────────────────────────────────── */
+.rv{opacity:0; transform:translateY(20px); transition:opacity .7s cubic-bezier(.22,1,.36,1), transform .7s cubic-bezier(.22,1,.36,1)}
+.rv.in{opacity:1; transform:none}
+
+@media (max-width:860px){
+  .nav-links{display:none}
+  .nav-links.open{
+    display:flex; position:absolute; top:68px; left:0; right:0; flex-direction:column;
+    background:var(--ground-2); border-bottom:1px solid var(--line); padding:20px clamp(20px,4vw,36px) 26px; gap:18px; align-items:flex-start;
+  }
+  .burger{display:grid}
+  .nav-links.open .nav-cta{margin-left:0; width:100%}
+  .nav-links.open .btn{width:100%}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *{animation:none !important; transition:none !important}
+  .rv{opacity:1; transform:none}
+}
+</style>
+
+
+<nav class="nav">
+  <div class="wrap nav-in">
+    <a class="logo" href="#top">BT<span>BIZ</span></a>
+    <button class="burger" id="burger" aria-label="Menu" aria-expanded="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+    <div class="nav-links" id="navLinks">
+      <a href="#demo">Demo</a>
+      <a href="#what">Capabilities</a>
+      <a href="#timeline">Timeline</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#faq">FAQ</a>
+      <span class="nav-cta">
+        <a class="btn btn-primary btn-sm" href="https://demo.btbiz.in/" target="_blank" rel="noopener">Talk to the bot</a>
+      </span>
+    </div>
+  </div>
+</nav>
+
+<!-- ── Hero ──────────────────────────────────────────────────────────── -->
+<header class="hero" id="top">
+  <div class="wrap">
+    <span class="eyebrow">AI voice agents</span>
+    <h1>An AI that makes your calls,<br>and actually <em>sounds like it's listening.</em></h1>
+    <p class="lede">
+      It qualifies leads, handles objections, books callbacks and updates your CRM —
+      across hundreds of calls a day, in your customer's language. Live in seven days.
+    </p>
+    <div class="cta-row" style="justify-content:center">
+      <a class="btn btn-primary" href="https://demo.btbiz.in/" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.08 4.18 2 2 0 0 1 4.07 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92Z"/></svg>
+        Talk to the bot now
+      </a>
+      <a class="btn btn-ghost" href="#pricing">See pricing</a>
+    </div>
+    <div class="wavewrap"><canvas id="wave" aria-hidden="true"></canvas></div>
+    <p class="hero-note">No form. No sign-up. No sales call unless you want one.</p>
+  </div>
+</header>
+
+<!-- ── Stats ─────────────────────────────────────────────────────────── -->
+<div class="stats">
+  <div class="wrap stats-in">
+    <div class="stat"><b>~1.5s</b><span>from your last word to its first</span></div>
+    <div class="stat"><b>7 days</b><span>from first call to going live</span></div>
+    <div class="stat"><b>24/7</b><span>no shifts, no queue, no hold music</span></div>
+    <div class="stat"><b>3</b><span>countries running it today</span></div>
+  </div>
+</div>
+
+<!-- ── Demo ──────────────────────────────────────────────────────────── -->
+<section class="demo" id="demo">
+  <div class="wrap">
+    <div class="demo-card rv">
+      <div class="orb" aria-hidden="true"></div>
+      <h2>Don't take our word for it.</h2>
+      <p class="lede center" style="margin-top:16px">
+        Click once, allow your microphone, and have a real conversation with a live
+        agent — the same one running on our clients' phone lines right now.
+      </p>
+      <div class="cta-row" style="justify-content:center">
+        <a class="btn btn-primary" href="https://demo.btbiz.in/" target="_blank" rel="noopener">Start the conversation</a>
+      </div>
+      <div class="prompts">
+        <span class="prompt">Try: <b>"I'm not interested"</b></span>
+        <span class="prompt">Try: <b>interrupting it mid-sentence</b></span>
+        <span class="prompt">Try: <b>"Am I talking to a robot?"</b></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Why it doesn't sound like a robot ─────────────────────────────── -->
+<section id="why">
+  <div class="wrap">
+    <div class="rv">
+      <span class="eyebrow">The difference</span>
+      <h2>Why people stay on the line</h2>
+      <p class="lede" style="margin-top:18px">
+        Everyone has been trapped by a bad phone menu. These are the six things that
+        make callers forget they're talking to software.
+      </p>
+    </div>
+    <div class="grid g3">
+      <div class="card rv">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2v20M6 7v10M18 7v10M2 11v2M22 11v2"/></svg></div>
+        <h3>You can interrupt it</h3>
+        <p>Talk over it and it stops, listens, and picks up from what you actually said. It won't finish its sentence first.</p>
+      </div>
+      <div class="card rv">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
+        <h3>It won't cut you off</h3>
+        <p>A cough, a TV in the background or a pause mid-thought won't make it assume you've finished. It waits for a real gap.</p>
+      </div>
+      <div class="card rv">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 12h6M12 9v6"/><circle cx="12" cy="12" r="9"/></svg></div>
+        <h3>It admits what it is</h3>
+        <p>Ask whether it's a bot and it says yes, warmly, then carries on. It never claims to be a person.</p>
+      </div>
+      <div class="card rv">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/></svg></div>
+        <h3>It hangs up on answerphones</h3>
+        <p>Voicemail, switchboards and other companies' AI receptionists are spotted in seconds and dropped — no wasted minutes, no junk leads.</p>
+      </div>
+      <div class="card rv">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></div>
+        <h3>It takes no for an answer</h3>
+        <p>One polite reply to an objection, then a warm goodbye. It will never badger a prospect into making a complaint about you.</p>
+      </div>
+      <div class="card rv">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h10M4 17h7"/></svg></div>
+        <h3>It says numbers properly</h3>
+        <p>Prices, postcodes and phone numbers are spoken the way a person says them — read back and confirmed before it moves on.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── What it does ──────────────────────────────────────────────────── -->
+<section id="what" style="background:var(--ground-2); border-block:1px solid var(--line-2)">
+  <div class="wrap">
+    <div class="rv">
+      <span class="eyebrow">Capabilities</span>
+      <h2>What it does on every call</h2>
+    </div>
+    <div class="tw rv">
+      <table>
+        <thead><tr><th>Capability</th><th>What that means on the phone</th></tr></thead>
+        <tbody>
+          <tr><td>Outbound calling</td><td>Works your list at whatever volume you need — cold outreach, follow-ups, renewals, reactivation</td></tr>
+          <tr><td>Lead qualification</td><td>Asks your questions in order, one at a time, and records answers in the caller's own words</td></tr>
+          <tr><td>Objection handling</td><td>Your rebuttals, delivered naturally — not read off a card</td></tr>
+          <tr><td>Live transfer</td><td>Puts a hot lead straight through to a human while they're still on the line</td></tr>
+          <tr><td>Callback booking</td><td>Captures the day and time they actually want, and won't accept half an answer</td></tr>
+          <tr><td>Detail capture</td><td>Name, address, email and phone — read back and confirmed before moving on</td></tr>
+          <tr><td>Qualification rules</td><td>Your hard limits — budget floor, age, eligibility — enforced in software, not left to the AI's judgement</td></tr>
+          <tr><td>CRM updates</td><td>Every outcome posted to your system the moment the call ends</td></tr>
+          <tr><td>Opt-out handling</td><td>"Stop calling me" is honoured instantly and flagged — no rebuttal, no second attempt</td></tr>
+          <tr><td>Call outcomes</td><td>Every call closed with a reason code you can report on</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ── Timeline ──────────────────────────────────────────────────────── -->
+<section id="timeline">
+  <div class="wrap">
+    <div class="rv">
+      <span class="eyebrow">Delivery</span>
+      <h2>Live in seven days</h2>
+      <p class="lede" style="margin-top:18px">
+        No platform to learn, no seats to licence, no integration project. You describe
+        the call. We hand you an agent that makes it.
+      </p>
+    </div>
+    <div class="timeline">
+      <div class="step rv">
+        <span class="d">Days 1–2</span>
+        <h3>We learn your call</h3>
+        <p>One working session. Your script, your objections, your qualifying questions, and what makes a lead worth passing on. If you have recordings, we listen to them.</p>
+      </div>
+      <div class="step rv">
+        <span class="d">Days 2–3</span>
+        <h3>We build it</h3>
+        <p>Script, voice, language, qualifying logic and your CRM connection. You get a link to talk to your own agent the same day it's built.</p>
+      </div>
+      <div class="step rv">
+        <span class="d">Days 4–5</span>
+        <h3>We test it together</h3>
+        <p>You call it, break it, and tell us what sounds wrong. We tune tone, pacing and the awkward answers — not just the easy ones.</p>
+      </div>
+      <div class="step rv">
+        <span class="d">Days 6–7</span>
+        <h3>It goes live</h3>
+        <p>Connected to your numbers, running real traffic, with outcomes landing in your CRM from the very first call.</p>
+      </div>
+    </div>
+    <p class="hero-note rv" style="margin-top:34px">Assumes your script and phone numbers are ready on day one.</p>
+  </div>
+</section>
+
+<!-- ── Who it's for ──────────────────────────────────────────────────── -->
+<section id="who" style="background:var(--ground-2); border-block:1px solid var(--line-2)">
+  <div class="wrap">
+    <div class="rv">
+      <span class="eyebrow">Use cases</span>
+      <h2>Built for teams that live on the phone</h2>
+    </div>
+    <div class="grid g4">
+      <div class="card rv"><h3>Insurance &amp; finance</h3><p>Qualify policy-holders, check eligibility, and route only the leads worth an adviser's time.</p></div>
+      <div class="card rv"><h3>Home services &amp; trades</h3><p>Book assessments and site visits, confirm ownership, and fill an installer's diary.</p></div>
+      <div class="card rv"><h3>Clinics &amp; aesthetics</h3><p>Book consultations, confirm and rearrange appointments, and revive enquiries that went quiet.</p></div>
+      <div class="card rv"><h3>Real estate</h3><p>Qualify buyers and tenants on budget, area and timeline before an agent picks up the phone.</p></div>
+      <div class="card rv"><h3>Education &amp; coaching</h3><p>Call enquiry forms back within a minute, qualify intent, and book counselling slots.</p></div>
+      <div class="card rv"><h3>Lending &amp; collections</h3><p>Payment reminders and gentle follow-ups at a volume no team can staff.</p></div>
+      <div class="card rv"><h3>E-commerce</h3><p>Confirm cash-on-delivery orders, cut returns, and recover abandoned carts by voice.</p></div>
+      <div class="card rv"><h3>Recruitment</h3><p>First-round screening calls on every applicant, not just the ones you had time for.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Languages ─────────────────────────────────────────────────────── -->
+<section id="languages">
+  <div class="wrap split">
+    <div class="rv">
+      <span class="eyebrow">Languages</span>
+      <h2>It sounds like it's from where your customers are</h2>
+      <p class="lede" style="margin-top:18px">
+        Most voice bots sound American no matter who they're calling, and it costs them
+        the first sentence. Ours speaks with a local accent, and switches language
+        mid-conversation when your customer does.
+      </p>
+      <p style="color:var(--muted); font-size:15.5px">
+        Other languages and regional accents are added on request — usually in days,
+        not months.
+      </p>
+    </div>
+    <div class="rv">
+      <div class="langs">
+        <span class="lang"><i></i>Hindi + English</span>
+        <span class="lang"><i></i>British English</span>
+        <span class="lang"><i></i>Australian English</span>
+        <span class="lang"><i></i>US English</span>
+        <span class="lang soon"><i></i>Marathi</span>
+        <span class="lang soon"><i></i>Gujarati</span>
+        <span class="lang soon"><i></i>Tamil</span>
+        <span class="lang soon"><i></i>Telugu</span>
+        <span class="lang soon"><i></i>Bengali</span>
+        <span class="lang soon"><i></i>Punjabi</span>
+        <span class="lang soon"><i></i>Arabic</span>
+        <span class="lang soon"><i></i>Spanish</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── How it works ──────────────────────────────────────────────────── -->
+<section id="how" style="background:var(--ground-2); border-block:1px solid var(--line-2)">
+  <div class="wrap">
+    <div class="rv">
+      <span class="eyebrow">How it works</span>
+      <h2>Four steps, no rebuild</h2>
+    </div>
+    <div class="timeline">
+      <div class="step rv"><span class="d">Step 1</span><h3>It calls, or it answers</h3><p>Connects to your existing numbers, carrier and dialler. Nothing to rip out.</p></div>
+      <div class="step rv"><span class="d">Step 2</span><h3>It listens and understands</h3><p>Real speech, real accents, interruptions and background noise included.</p></div>
+      <div class="step rv"><span class="d">Step 3</span><h3>It follows your script</h3><p>Your questions, your rules, your tone — with hard limits enforced in code so it can't talk itself out of them.</p></div>
+      <div class="step rv"><span class="d">Step 4</span><h3>It hands you the result</h3><p>Transfer, callback or outcome — in your CRM before the caller has put the phone down.</p></div>
+    </div>
+
+    <div class="tw rv">
+      <table>
+        <thead><tr><th>Connects to</th><th>Examples</th></tr></thead>
+        <tbody>
+          <tr><td>Diallers &amp; telephony</td><td>VICIdial, FreeSWITCH, Asterisk, Twilio, Plivo, Exotel, or SIP trunks from any carrier</td></tr>
+          <tr><td>CRM</td><td>Zoho, HubSpot, Salesforce, GoHighLevel, Pipedrive, Freshsales, LeadSquared — or anything with a webhook</td></tr>
+          <tr><td>Databases</td><td>Writes straight into MySQL or PostgreSQL where you'd rather skip the CRM</td></tr>
+          <tr><td>Calendars</td><td>Google Calendar, Outlook and Calendly for booked appointments</td></tr>
+          <tr><td>Sheets &amp; exports</td><td>Google Sheets and CSV, for teams not on a CRM yet</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ── Compliance ────────────────────────────────────────────────────── -->
+<section id="compliance">
+  <div class="wrap split">
+    <div class="rv">
+      <span class="eyebrow">Built responsibly</span>
+      <h2>The parts that keep you out of trouble</h2>
+      <p class="lede" style="margin-top:18px">
+        An agent making thousands of calls in your name is a risk if it can improvise.
+        Ours can't. Every limit you set is enforced in software, not left to the model
+        to remember.
+      </p>
+      <p style="color:var(--muted); font-size:15px">
+        Our agents are built to support your calling obligations. Screening your lists
+        against do-not-call registers before dialling remains your responsibility, and
+        we'll help you set that up.
+      </p>
+    </div>
+    <div class="checks rv">
+      <div class="check">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"/></svg>
+        <div><b>It always says it's an AI</b><p>Asked directly, it confirms it. It never pretends to be a person.</p></div>
+      </div>
+      <div class="check">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"/></svg>
+        <div><b>Do-not-call is instant</b><p>An opt-out stops the call immediately, is flagged in your system, and is never argued with.</p></div>
+      </div>
+      <div class="check">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"/></svg>
+        <div><b>Calling hours respected</b><p>Local time per region, including multi-timezone markets. It won't book a callback outside a legal window.</p></div>
+      </div>
+      <div class="check">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"/></svg>
+        <div><b>It can't improvise</b><p>No invented prices, offers, guarantees or claims. It says only what's in your script.</p></div>
+      </div>
+      <div class="check">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"/></svg>
+        <div><b>It gives no advice</b><p>In regulated industries it gathers information and routes to a licensed human. It never advises.</p></div>
+      </div>
+      <div class="check">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"/></svg>
+        <div><b>Every call accounted for</b><p>A full transcript and outcome for each call, so you can audit exactly what was said.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Pricing ───────────────────────────────────────────────────────── -->
+<section id="pricing" style="background:var(--ground-2); border-block:1px solid var(--line-2)">
+  <div class="wrap">
+    <div class="rv center">
+      <span class="eyebrow">Pricing</span>
+      <h2>Priced like a hire, not a platform</h2>
+      <p class="lede center" style="margin-top:18px">
+        One build fee, then you pay for talk time. No per-seat licences, and ringing
+        time and answerphones are never billed.
+      </p>
+    </div>
+    <div class="plans">
+      <div class="plan rv">
+        <h3>Pilot</h3>
+        <p class="who">One campaign, one script — proof before you commit.</p>
+        <div class="price"><b>$990</b><span>one-time</span></div>
+        <p class="price-sub">then $0.19 / minute of talk time</p>
+        <ul>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"/></svg>1 campaign, 1 language</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"/></svg>1,500 minutes included</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"/></svg>Live in 7 days</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"/></svg>CRM or webhook delivery</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"/></svg>Email support</li>
+        </ul>
+        <a class="btn btn-ghost" href="https://wa.me/919205070244" target="_blank" rel="noopener">Start a pilot</a>
+      </div>
+
+      <div class="plan feature rv">
+        <span class="tag">Most popular</span>
+        <h3>Growth</h3>
+        <p class="who">Multiple campaigns running continuously, tuned as you learn.</p>
+        <div class="price"><b>$2,490</b><span>one-time</span></div>
+        <p class="price-sub">then $0.14 / minute of talk time</p>
+        <ul>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"/></svg>Up to 3 campaigns, 2 languages</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"/></svg>10,000 minutes included</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"/></svg>Live transfer to your team</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"/></svg>Monthly script tuning</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"/></svg>Priority support</li>
+        </ul>
+        <a class="btn btn-primary" href="https://wa.me/919205070244" target="_blank" rel="noopener">Talk to us</a>
+      </div>
+
+      <div class="plan rv">
+        <h3>Scale</h3>
+        <p class="who">High volume, multiple markets, or your own infrastructure.</p>
+        <div class="price"><b>Custom</b></div>
+        <p class="price-sub">volume rates from $0.09 / minute</p>
+        <ul>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"/></svg>Unlimited campaigns and languages</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"/></svg>Deployed on your infrastructure</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"/></svg>Custom integrations built for you</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"/></svg>Dedicated engineer</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"/></svg>SLA and onboarding support</li>
+        </ul>
+        <a class="btn btn-ghost" href="https://wa.me/919205070244" target="_blank" rel="noopener">Get a quote</a>
+      </div>
+    </div>
+    <p class="hero-note rv center" style="margin-top:30px">
+      Carrier and telephony minutes are billed separately by your provider.
+    </p>
+  </div>
+</section>
+
+<!-- ── Proof ─────────────────────────────────────────────────────────── -->
+<section id="proof">
+  <div class="wrap">
+    <div class="rv">
+      <span class="eyebrow">In production</span>
+      <h2>Running on real phone lines today</h2>
+    </div>
+    <div class="grid g3">
+      <div class="case rv">
+        <div class="loc">Australia</div>
+        <h3>Health insurance</h3>
+        <p>Outbound qualification with live handover to licensed advisers. Multi-state calling windows and explicit consent captured on every call.</p>
+      </div>
+      <div class="case rv">
+        <div class="loc">United Kingdom</div>
+        <h3>Home improvement</h3>
+        <p>Homeowner verification and free assessment bookings, with adviser callbacks captured and passed on automatically.</p>
+      </div>
+      <div class="case rv">
+        <div class="loc">India</div>
+        <h3>Skincare &amp; aesthetics</h3>
+        <p>Bilingual Hindi and English consultation booking, switching language mid-call to follow whichever the caller uses.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Roadmap ───────────────────────────────────────────────────────── -->
+<section id="roadmap" style="background:var(--ground-2); border-block:1px solid var(--line-2)">
+  <div class="wrap">
+    <div class="rv">
+      <span class="eyebrow">Coming next</span>
+      <h2>What we're building</h2>
+      <p class="lede" style="margin-top:18px">
+        Already in development, and included as it ships. Ask us if you need one of
+        these sooner.
+      </p>
+    </div>
+    <div class="road">
+      <div class="rv"><b>Inbound answering</b>Picks up your main line, answers questions, routes or books.</div>
+      <div class="rv"><b>Recordings &amp; transcripts</b>Every call listenable and searchable by keyword.</div>
+      <div class="rv"><b>Live dashboard</b>Calls, outcomes and conversion in real time, per campaign.</div>
+      <div class="rv"><b>WhatsApp follow-up</b>Sends a brochure, booking link or confirmation right after the call.</div>
+      <div class="rv"><b>Warm transfer</b>Briefs your agent before connecting, so nobody repeats themselves.</div>
+      <div class="rv"><b>Script A/B testing</b>Run two openings against real traffic and keep the winner.</div>
+      <div class="rv"><b>Custom brand voice</b>A voice built for your brand, or cloned from your best agent.</div>
+      <div class="rv"><b>Sentiment reporting</b>Which objections come up most, and where calls are lost.</div>
+      <div class="rv"><b>Verification calls</b>Order confirmation, OTP and reminder calls.</div>
+      <div class="rv"><b>Self-serve builder</b>Write your own script and launch a campaign without us.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FAQ ───────────────────────────────────────────────────────────── -->
+<section id="faq">
+  <div class="wrap">
+    <div class="rv"><span class="eyebrow">Questions</span><h2>Before you ask us</h2></div>
+    <div class="faqs rv">
+      <details><summary>Will people know it's a bot?</summary><p>Many won't at first. If they ask, it tells them — always. We don't build agents that pretend to be human.</p></details>
+      <details><summary>What if someone asks something off-script?</summary><p>It answers what it can from what you've given it, and says a human will cover the rest. It never invents an answer.</p></details>
+      <details><summary>Can it transfer to my team?</summary><p>Yes. A qualified lead can be put straight through while they're still on the line, or booked as a callback if nobody's free.</p></details>
+      <details><summary>Do I need to change my phone system?</summary><p>No. It connects to your existing numbers, carrier and dialler.</p></details>
+      <details><summary>How many calls can it handle at once?</summary><p>As many as your phone lines allow. It doesn't queue, and it isn't busier at five o'clock.</p></details>
+      <details><summary>What happens to the recordings and data?</summary><p>It runs on infrastructure you can point at, and call data goes into your systems. Nothing is resold or used to train anything.</p></details>
+      <details><summary>Can I change the script after go-live?</summary><p>Yes, and you should. Most clients tune the opening in the first fortnight once real calls show what's working.</p></details>
+      <details><summary>What if it doesn't work for us?</summary><p>Start with one campaign as a pilot. If the calls aren't good enough, you've lost a week rather than a quarter.</p></details>
+      <details><summary>Which languages can it speak?</summary><p>Hindi and English today, including British, Australian and US accents, with more added on request — usually in days.</p></details>
+      <details><summary>How quickly can we start?</summary><p>Seven days from our first conversation, assuming your script and numbers are ready on day one.</p></details>
+    </div>
+  </div>
+</section>
+
+<!-- ── Final CTA ─────────────────────────────────────────────────────── -->
+<section class="final">
+  <div class="wrap rv">
+    <h2>Hear it before you decide.</h2>
+    <p class="lede center" style="margin-top:18px">
+      Thirty seconds on the demo will tell you more than this page did. If it sounds
+      right, we'll have your version running inside a week.
+    </p>
+    <div class="cta-row" style="justify-content:center">
+      <a class="btn btn-primary" href="https://demo.btbiz.in/" target="_blank" rel="noopener">Talk to the bot now</a>
+      <a class="btn btn-ghost" href="https://wa.me/919205070244" target="_blank" rel="noopener">Message us on WhatsApp</a>
+    </div>
+    <p class="hero-note">No card, no commitment, no sales call unless you want one.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot-in">
+    <div>
+      <div class="logo" style="margin-bottom:6px">BT<span>BIZ</span></div>
+      <div>AI voice agents for teams that live on the phone.</div>
+    </div>
+    <div class="foot-links">
+      <a href="#demo">Demo</a>
+      <a href="#what">Capabilities</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#faq">FAQ</a>
+      <a href="https://wa.me/919205070244" target="_blank" rel="noopener">Contact</a>
+    </div>
+  </div>
+</footer>
+
+<div class="sticky" id="sticky">
+  <p>Curious how it actually sounds?</p>
+  <a class="btn btn-primary btn-sm" href="https://demo.btbiz.in/" target="_blank" rel="noopener">Talk to the bot →</a>
+</div>
+
+<script>
+(() => {
+'use strict';
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* Mobile nav */
+const burger = document.getElementById('burger');
+const links  = document.getElementById('navLinks');
+burger.addEventListener('click', () => {
+  const open = links.classList.toggle('open');
+  burger.setAttribute('aria-expanded', String(open));
+});
+links.addEventListener('click', e => {
+  if (e.target.tagName === 'A') { links.classList.remove('open'); burger.setAttribute('aria-expanded','false'); }
+});
+
+/* Scroll reveal */
+if ('IntersectionObserver' in window && !reduce){
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((en, i) => {
+      if (!en.isIntersecting) return;
+      setTimeout(() => en.target.classList.add('in'), Math.min(i * 55, 220));
+      io.unobserve(en.target);
+    });
+  }, {rootMargin: '0px 0px -60px 0px', threshold: 0.08});
+  document.querySelectorAll('.rv').forEach(el => io.observe(el));
+} else {
+  document.querySelectorAll('.rv').forEach(el => el.classList.add('in'));
+}
+
+/* Sticky CTA once the hero is behind you */
+const sticky = document.getElementById('sticky');
+const hero = document.getElementById('top');
+if ('IntersectionObserver' in window){
+  new IntersectionObserver(([en]) => sticky.classList.toggle('on', !en.isIntersecting),
+    {threshold: 0}).observe(hero);
+}
+
+/* Hero waveform — the product is voice, so the page has one.
+   Canvas rather than SVG paths: it animates continuously and stays cheap. */
+const cv = document.getElementById('wave');
+if (cv && !reduce){
+  const ctx = cv.getContext('2d');
+  let w = 0, h = 0, t = 0, raf = 0;
+
+  const size = () => {
+    const dpr = Math.min(devicePixelRatio || 1, 2);
+    w = cv.clientWidth; h = cv.clientHeight;
+    cv.width = w * dpr; cv.height = h * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  };
+  size();
+  addEventListener('resize', size, {passive: true});
+
+  // Three offset bands read as one voice rather than a sine wave.
+  const bands = [
+    {amp: 0.34, freq: 0.011, speed: 0.016, alpha: 0.85, width: 2},
+    {amp: 0.22, freq: 0.019, speed: 0.023, alpha: 0.4,  width: 1.4},
+    {amp: 0.13, freq: 0.031, speed: 0.033, alpha: 0.22, width: 1},
+  ];
+
+  const draw = () => {
+    ctx.clearRect(0, 0, w, h);
+    const mid = h / 2;
+    for (const b of bands){
+      ctx.beginPath();
+      for (let x = 0; x <= w; x += 2){
+        // Envelope keeps the ends quiet so the wave fades into the page.
+        const env = Math.sin((x / w) * Math.PI) ** 1.5;
+        const y = mid + Math.sin(x * b.freq + t * b.speed) *
+                        Math.sin(x * 0.004 + t * 0.009) * (h * b.amp) * env;
+        x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+      }
+      const g = ctx.createLinearGradient(0, 0, w, 0);
+      g.addColorStop(0,   'rgba(94,234,212,0)');
+      g.addColorStop(0.5, 'rgba(94,234,212,' + b.alpha + ')');
+      g.addColorStop(1,   'rgba(94,234,212,0)');
+      ctx.strokeStyle = g; ctx.lineWidth = b.width; ctx.lineCap = 'round';
+      ctx.stroke();
+    }
+    t += 1;
+    raf = requestAnimationFrame(draw);
+  };
+  draw();
+
+  // Stop drawing when the tab is hidden — no reason to burn a phone battery.
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden){ cancelAnimationFrame(raf); }
+    else { raf = requestAnimationFrame(draw); }
+  });
+}
+})();
+</script>

@@ -1,0 +1,14 @@
+{
+  "name": "movers-au-dispatch",
+  "trunk_ids": ["ST_REPLACE_WITH_MOVERS_TRUNK_ID"],
+  "rule": {
+    "dispatchRuleIndividual": {
+      "roomPrefix": "mov-"
+    }
+  },
+  "room_config": {
+    "agents": [
+      { "agent_name": "movers-bot" }
+    ]
+  }
+}

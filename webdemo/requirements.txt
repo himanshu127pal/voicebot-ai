@@ -1,0 +1,9 @@
+# Web demo token server only. The AGENT keeps its own venv and its own pins —
+# do not install these into the agent venv and do not install the agent's into this one.
+fastapi>=0.110
+uvicorn[standard]>=0.27
+livekit-api>=0.8
+python-dotenv>=1.0
+# Calls the WhatsApp OTP provider. Already pulled in by livekit-api; listed so the
+# dependency is explicit rather than an accident of someone else's requirements.
+aiohttp>=3.9

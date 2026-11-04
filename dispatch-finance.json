@@ -1,0 +1,14 @@
+{
+  "name": "finance-au-dispatch",
+  "trunk_ids": ["ST_REPLACE_WITH_FINANCE_TRUNK_ID"],
+  "rule": {
+    "dispatchRuleIndividual": {
+      "roomPrefix": "fin-"
+    }
+  },
+  "room_config": {
+    "agents": [
+      { "agent_name": "finance-bot" }
+    ]
+  }
+}

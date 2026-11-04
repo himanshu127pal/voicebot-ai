@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#072420">
+<title>BTBIZ · AI Voice Agent</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=IBM+Plex+Mono:wght@400;500&family=Source+Sans+3:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="/static/styles.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#127911;</text></svg>">
+</head>
+<body>
+
+<header class="bar">
+  <div class="brand">
+    <strong id="brandCompany">BTBIZ</strong>
+    <span>AI Voice Agent</span>
+  </div>
+  <div class="bar-right">
+    <span class="clock mono" id="timerValue" hidden>00:00</span>
+    <span class="pill pill-idle" id="statusPill"><i class="dot"></i><span id="statusText">Ready</span></span>
+  </div>
+</header>
+
+<main class="stage" id="stage">
+
+  <!-- The orb is the one constant. It is MOVED between the top of the stage and the
+       centre of the call layout rather than rebuilt, so the audio visualiser keeps its
+       reference and the transition reads as one object. -->
+  <div class="orbwrap mini" id="orbwrap">
+    <div class="orb idle" id="orb">
+      <span class="halo h1"></span><span class="halo h2"></span><span class="halo h3"></span>
+      <span class="core"></span>
+    </div>
+  </div>
+
+  <!-- Lockout / limit popup. Hidden until something locks. -->
+  <div class="modal" id="lockModal" hidden>
+    <div class="modal-card" role="alertdialog" aria-modal="true"
+         aria-labelledby="lockTitle" aria-describedby="lockBody">
+      <div class="modal-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+             stroke-linecap="round" stroke-linejoin="round">
+          <rect x="4" y="10.5" width="16" height="10" rx="2.5"></rect>
+          <path d="M8 10.5V7.8a4 4 0 0 1 8 0v2.7"></path>
+        </svg>
+      </div>
+      <h2 id="lockTitle">Too many attempts</h2>
+      <p id="lockBody"></p>
+      <p class="lock-count" id="lockCount" hidden>
+        <span>Try again in</span> <b id="lockLeft">15:00</b>
+      </p>
+      <p class="fine" id="lockHelp"></p>
+      <div class="modal-actions">
+        <a class="ghost" id="lockWhatsapp" hidden target="_blank" rel="noopener">Message us instead</a>
+        <button type="button" class="cta cta-sm" id="lockClose"><span class="lbl">Close</span></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Before the call ──────────────────────────────────────────────── -->
+  <section class="view" id="viewIdle">
+
+    <!-- Step 1 — details -->
+    <div class="step" id="stepDetails" hidden>
+      <h1>Talk to our AI voice agents.</h1>
+      <p class="lede">
+        Tell us a little about your business and verify your WhatsApp number. Then pick
+        a voicebot and have a live conversation with it.
+      </p>
+
+      <form class="form" id="detailsForm" novalidate>
+        <div class="row">
+          <label class="fld">
+            <span>Your name</span>
+            <input id="fName" name="name" type="text" autocomplete="name" maxlength="80" required>
+          </label>
+          <label class="fld">
+            <span>Company name</span>
+            <input id="fCompany" name="company" type="text" autocomplete="organization" maxlength="120" required>
+          </label>
+        </div>
+
+        <div class="row">
+          <label class="fld">
+            <span>Company email</span>
+            <input id="fEmail" name="email" type="email" autocomplete="email" maxlength="160" placeholder="name@yourcompany.com" required>
+          </label>
+          <label class="fld">
+            <span>Business category</span>
+            <input id="fCategory" name="category" type="text" autocomplete="off" maxlength="80" placeholder="e.g. Insurance, Real estate, Clinics" required>
+          </label>
+        </div>
+
+        <label class="fld">
+          <span>What would you like a voicebot to do?</span>
+          <textarea id="fUsecase" name="usecase" rows="3" maxlength="500" required
+                    placeholder="e.g. Call new leads within minutes, qualify them and book a site visit"></textarea>
+        </label>
+
+        <div class="fld">
+          <span id="phoneLabel">WhatsApp number</span>
+          <div class="phone">
+            <div class="cc" id="ccWrap">
+              <button type="button" class="cc-btn" id="ccBtn" aria-haspopup="listbox"
+                      aria-expanded="false" aria-label="Country code">
+                <span class="cc-iso" id="ccIso">IN</span>
+                <span class="cc-dial" id="ccDial">+91</span>
+                <svg class="cc-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                     stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="m6 9 6 6 6-6"></path>
+                </svg>
+              </button>
+              <div class="cc-pop" id="ccPop" hidden>
+                <input id="ccSearch" type="text" autocomplete="off" spellcheck="false"
+                       placeholder="Country or code" aria-label="Search countries">
+                <ul class="cc-list" id="ccList" role="listbox" aria-label="Country"></ul>
+                <p class="cc-none" id="ccNone" hidden>No match. Try the dialling code.</p>
+              </div>
+            </div>
+            <input id="fPhone" name="phone" type="tel" inputmode="tel" autocomplete="tel-national"
+                   placeholder="98765 43210" aria-labelledby="phoneLabel" maxlength="20" required>
+          </div>
+          <!-- What actually gets posted, so the server sees a plain code + country. -->
+          <input type="hidden" id="fCc" name="cc" value="+91">
+          <input type="hidden" id="fIso" name="iso" value="IN">
+        </div>
+
+        <!-- Invisible to people; bots fill every field they find. -->
+        <div class="hp" aria-hidden="true">
+          <label>Website <input id="fWebsite" name="website" type="text" tabindex="-1" autocomplete="off"></label>
+        </div>
+
+        <button class="cta" id="btnSend" type="submit">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.6 8.6 0 0 1-3.9-.9L3 20l1.1-4.6A8.4 8.4 0 1 1 21 11.5Z"></path>
+          </svg>
+          <span class="lbl">Send code on WhatsApp</span>
+        </button>
+        <p class="fine">
+          By continuing, you agree to receive a verification code on WhatsApp and to be
+          contacted by BTBIZ about this demo.
+        </p>
+      </form>
+    </div>
+
+    <!-- Step 2 — code -->
+    <div class="step" id="stepCode" hidden>
+      <h1>Check your WhatsApp.</h1>
+      <p class="lede">We sent a <span id="codeLen">6</span>-digit code to <b id="codeTo"></b>.</p>
+
+      <form class="form form-narrow" id="codeForm" novalidate>
+        <input id="fCode" class="code" type="text" inputmode="numeric" autocomplete="one-time-code"
+               maxlength="6" aria-label="Verification code" required>
+        <button class="cta" id="btnVerify" type="submit"><span class="lbl">Verify and continue</span></button>
+      </form>
+
+      <p class="fine attempts" id="codeHint" hidden></p>
+
+      <p class="links">
+        <button type="button" class="link" id="btnResend" disabled>Resend code</button>
+        <span class="sep" aria-hidden="true">·</span>
+        <button type="button" class="link" id="btnEdit">Change details</button>
+      </p>
+      <p class="fine">It can take up to a minute to arrive. Check the number is on WhatsApp.</p>
+    </div>
+
+    <!-- Step 3 — pick a bot, then start -->
+    <div class="step" id="stepReady" hidden>
+      <h1 id="readyTitle">Have a conversation with an AI voice agent.</h1>
+      <p class="lede">
+        Pick a voicebot and play the customer. We'll show you what to say, and you can
+        watch the details being captured as you talk.
+      </p>
+
+      <div class="picker" id="picker">
+        <label class="fld">
+          <span>Choose a voicebot</span>
+          <select id="fBot"></select>
+        </label>
+        <article class="botcard" id="botCard" aria-live="polite">
+          <p class="bc-tag" id="bcTagline"></p>
+          <ul class="bc-meta">
+            <li id="bcMarket"></li>
+            <li id="bcVoice"></li>
+            <li id="bcGoal"></li>
+          </ul>
+          <p class="bc-persona"><span class="k">You'll play</span><span id="bcPersona"></span></p>
+        </article>
+      </div>
+
+      <aside class="notice" aria-label="About these voicebots">
+        <p class="notice-head"><span class="live-dot" aria-hidden="true"></span>Live with our clients</p>
+        <p>
+          These are real, working voicebots, not mock-ups. Our clients use them on their
+          calls today, and each one follows the script it was given. For a true picture of
+          how it performs, play the customer and <b>follow the script we show you during
+          the call</b>.
+        </p>
+      </aside>
+
+      <button class="cta" id="btnStart" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.08 4.18 2 2 0 0 1 4.07 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92Z"></path>
+        </svg>
+        <span class="lbl">Start the conversation</span>
+      </button>
+
+      <p class="hint" id="callsLeft">You'll be asked to allow your microphone.</p>
+      <p class="links" id="readyLinks">
+        <a class="link" id="contactLink" href="#" target="_blank" rel="noopener" hidden>Message us on WhatsApp</a>
+        <span class="sep" id="contactSep" aria-hidden="true" hidden>·</span>
+        <button type="button" class="link" id="btnNotMe" hidden>Not you? Use different details</button>
+      </p>
+    </div>
+
+    <p class="err" id="idleError" role="alert" hidden></p>
+  </section>
+
+  <!-- ── In call ──────────────────────────────────────────────────────── -->
+  <section class="view view-live" id="viewLive" hidden>
+    <div class="live" id="liveGrid" data-tab="script">
+
+      <aside class="panel p-script" id="panelScript" aria-labelledby="scriptTitle">
+        <header class="ph">
+          <h3 id="scriptTitle">Your script</h3>
+          <span class="ph-sub" id="scriptProg"></span>
+        </header>
+        <p class="persona"><span class="k">You're playing</span><span id="livePersona"></span></p>
+        <ol class="steps" id="scriptSteps"></ol>
+        <details class="try" id="tryBox">
+          <summary>Try these too</summary>
+          <ul id="tryList"></ul>
+        </details>
+      </aside>
+
+      <div class="live-center" id="liveCenter">
+        <p class="botchip" id="liveBot"></p>
+        <p class="state" id="orbState">connecting…</p>
+        <div class="controls">
+          <button class="ctl" id="btnMute" type="button" aria-pressed="false">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+              <rect x="9" y="2" width="6" height="12" rx="3"></rect>
+              <path d="M5 11v1a7 7 0 0 0 14 0v-1"></path><path d="M12 19v3"></path>
+            </svg>
+            <span id="muteLabel">Mute</span>
+          </button>
+          <button class="ctl ctl-end" id="btnEnd" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+              <path d="M3 10.5a16 16 0 0 1 18 0v3.2a2 2 0 0 1-2.3 2l-2.6-.4a2 2 0 0 1-1.6-1.5l-.4-1.6a12 12 0 0 0-4.2 0l-.4 1.6a2 2 0 0 1-1.6 1.5l-2.6.4a2 2 0 0 1-2.3-2Z"></path>
+            </svg>
+            End
+          </button>
+        </div>
+        <div class="tabs" role="tablist" aria-label="Call panels">
+          <button class="tab" id="tabScript" role="tab" type="button" aria-selected="true" aria-controls="panelScript">Script</button>
+          <button class="tab" id="tabData" role="tab" type="button" aria-selected="false" aria-controls="panelData">Captured <span class="count" id="tabCount">0</span></button>
+        </div>
+        <p class="err" id="liveError" role="alert" hidden></p>
+      </div>
+
+      <aside class="panel p-data" id="panelData" aria-labelledby="dataTitle">
+        <header class="ph">
+          <h3 id="dataTitle">Captured live</h3>
+          <span class="ph-sub" id="dataProg"></span>
+        </header>
+        <div class="chips">
+          <span class="chip" id="chipOutcome">In progress</span>
+          <span class="chip" id="chipConsent">No consent yet</span>
+        </div>
+        <dl class="kv" id="dataList" aria-live="polite"></dl>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ── After the call ───────────────────────────────────────────────── -->
+  <section class="view" id="viewEnded" hidden>
+    <h2>Call ended</h2>
+    <p class="lede" id="endLede"></p>
+    <div class="panel p-summary" id="endSummary" hidden>
+      <header class="ph">
+        <h3 id="endBotName">What was captured</h3>
+        <span class="chip" id="endOutcome" hidden></span>
+      </header>
+      <dl class="kv" id="endData"></dl>
+    </div>
+    <button class="cta cta-sm" id="btnAgain" type="button">Start another</button>
+  </section>
+</main>
+
+<script src="/static/vendor/livekit-client.umd.min.js"></script>
+<script src="/static/app.js"></script>
+</body>
+</html>

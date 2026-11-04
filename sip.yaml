@@ -1,0 +1,21 @@
+# livekit-sip config — the SIP<->WebRTC bridge that terminates the trunk
+# coming FROM FreeSWITCH.
+
+api_key: APIKEY_REPLACE_ME
+api_secret: APISECRET_REPLACE_ME_use_openssl_rand_hex_32   # must match livekit.yaml
+ws_url: ws://127.0.0.1:7880                                # to livekit-server (localhost)
+
+redis:
+  address: 127.0.0.1:6379
+
+sip_port: 5060            # SIP listener FreeSWITCH sends INVITEs to
+rtp_port: 10000-20000     # RTP range FreeSWITCH sends/receives audio on — OPEN IN FIREWALL
+
+# use_external_ip: advertise a FreeSWITCH-reachable IP in the SDP c-line.
+#   true  -> auto-detects the host's primary/public IP (correct for most setups).
+#   If FreeSWITCH reaches this host over a PRIVATE/VPC IP that auto-detect gets
+#   wrong, hard-set it instead with:  nat_1to1_ip: "10.x.x.x"
+use_external_ip: true
+
+logging:
+  level: info

@@ -1,0 +1,40 @@
+# LiveKit self-hosted stack — runs on the SAME host as the Pipecat agents,
+# SEPARATE from FreeSWITCH.
+#
+# host networking is used for all three services because SIP + RTP inside
+# Docker bridge networking is painful (NAT rewrites, port mapping hell).
+# NOTE: network_mode: host is Linux-only. This is intended for your Linux server.
+#
+# Pin :latest to real version tags before production.
+
+services:
+  redis:
+    image: redis:7-alpine
+    network_mode: host
+    command: redis-server --bind 127.0.0.1 --port 6379
+    restart: unless-stopped
+
+  livekit:
+    image: livekit/livekit-server:latest
+    network_mode: host
+    command: --config /etc/livekit.yaml
+    volumes:
+      - ./livekit.yaml:/etc/livekit.yaml:ro
+    depends_on: [redis]
+    restart: unless-stopped
+
+  livekit-sip:
+    image: livekit/sip:latest
+    network_mode: host
+    command: --config /etc/sip.yaml
+    volumes:
+      - ./sip.yaml:/etc/sip.yaml:ro
+    depends_on: [livekit, redis]
+    restart: unless-stopped
+
+# ── Firewall / security-group rules you must open on THIS host ─────────────────
+#   From FreeSWITCH host only:
+#     - UDP/TCP 5060           (SIP signaling → livekit-sip)
+#     - UDP 10000-20000        (RTP media    → livekit-sip)   ← #1 cause of "silent call"
+#   Internal (localhost, no external exposure needed):
+#     - 7880 (livekit API/ws), 7881 (rtc tcp), 50000-60000 (SFU↔agent media), 6379 (redis)

@@ -1,0 +1,287 @@
+2026-09-01T06:49:36.794963+00:00,CALL-123456789,s,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,15.0,8895,194
+2026-09-01T06:55:01.825162+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,4.95,8890,70
+2026-09-01T06:55:33.972611+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,10.0,8919,70
+2026-09-01T06:55:39.648987+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,40.15,26821,220
+2026-09-01T06:55:40.297362+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,45.15,22411,187
+2026-09-01T06:55:54.170848+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,45.1,35772,144
+2026-09-01T06:56:01.771095+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,19.95,13385,432
+2026-09-01T06:56:33.465511+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,45.1,22314,277
+2026-09-01T06:56:36.184082+00:00,,,DROPPED,Not connected,False,,,,,,,,,,,,,,45.05,17866,177
+2026-09-01T06:56:37.068290+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,9.95,17753,119
+2026-09-01T06:56:37.273318+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,44.9,31252,214
+2026-09-01T06:57:01.049021+00:00,web-2ab24d5dea3f,,QUALIFIED_PENDING,"Connected - Qualified, advisor to call",True,Rob,Singh,Bupa,family,five hundred dollars monthly,both,yes,reduce premiums,,2000,,,"Family cover with Bupa, $500 monthly, hospital and extras. Looking to reduce premium.",181.15,130916,1624
+2026-09-01T06:57:04.691196+00:00,,,DROPPED,Not connected,False,,,,,,,,,,,,,,7.8,4435,70
+2026-09-01T06:57:39.080181+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,38.35,17836,70
+2026-09-01T06:58:02.949463+00:00,,,NOT_QUALIFIED_NO_POLICY,Connected - Not qualified,False,,,,,,,,,,,,,no_policy,121.2,50535,984
+2026-09-01T06:58:14.908139+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,45.0,26910,287
+2026-09-01T06:58:28.885068+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,45.05,35760,217
+2026-09-01T06:58:38.071165+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,9.9,13348,70
+2026-09-01T06:59:01.561501+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,45.15,17847,140
+2026-09-01T06:59:04.035719+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,110.4,55563,1066
+2026-09-01T06:59:10.151672+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,45.15,26820,220
+2026-09-01T06:59:32.225543+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,45.15,17841,140
+2026-09-01T06:59:55.511028+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,14.95,8847,140
+2026-09-01T06:59:55.690665+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,45.15,35758,144
+2026-09-01T07:00:08.024068+00:00,web-61e849ea63e4,,QUALIFIED_PENDING,"Connected - Qualified, advisor to call",True,Rob,Singh,Bupa,family,Five hundred dollars monthly,both,yes,reduce premiums,,2000,,,"Rob Singh — family Bupa cover, $500 monthly, hospital and extras. Wants to reduce premium.",181.15,137261,1882
+2026-09-01T07:00:20.023822+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,60.1,17951,371
+2026-09-01T07:00:25.293367+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,9.95,13233,0
+2026-09-01T07:00:29.138005+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,4.8,8879,0
+2026-09-01T07:01:00.688842+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,25.0,17728,165
+2026-09-01T07:01:21.578335+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,45.25,17887,285
+2026-09-01T07:01:22.351791+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,55.2,31595,411
+2026-09-01T07:02:03.382321+00:00,,,NOT_INTERESTED,Connected - Not interested,False,,,,,,,,,,,,"Happy with current provider, not interested in changing",,115.65,60216,1586
+2026-09-01T07:02:51.998295+00:00,web-1550bc5b1f75,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,40.3,13408,559
+2026-09-01T07:03:33.862151+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,296.55,176320,1322
+2026-09-01T07:16:15.505523+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,20.0,13286,165
+2026-09-01T07:16:30.379235+00:00,,,NOT_QUALIFIED_NO_POLICY,Connected - Not qualified,False,,,,,,,,,,,,,no_policy,35.0,31380,333
+2026-09-01T07:16:38.364890+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,40.25,22282,70
+2026-09-01T07:17:00.133182+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,50.2,22309,181
+2026-09-01T07:17:06.313164+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,4.9,8892,70
+2026-09-01T07:17:06.450041+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,45.05,26810,259
+2026-09-01T07:17:29.630482+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,45.2,26838,220
+2026-09-01T07:18:09.741347+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,9.9,13320,112
+2026-09-01T07:18:13.365338+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,4.9,8910,70
+2026-09-01T07:18:24.834256+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,55.25,17871,196
+2026-09-01T07:18:34.616822+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,80.35,35991,539
+2026-09-01T07:18:40.043365+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,9.95,17760,119
+2026-09-01T07:18:41.271334+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,4.85,8876,0
+2026-09-01T07:18:58.958100+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,9.95,17814,70
+2026-09-01T07:19:26.906358+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,30.1,22257,70
+2026-09-01T07:19:31.642829+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,9.9,13343,0
+2026-09-01T07:20:16.872399+00:00,,,DROPPED,Not connected,False,,,,,,,,,,,,,,0.0,0,0
+2026-09-01T07:20:22.566452+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,45.25,31262,220
+2026-09-01T07:20:36.589564+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,45.0,17812,140
+2026-09-01T07:20:47.514793+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,4.95,13344,0
+2026-09-01T07:21:04.009407+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,30.05,13295,184
+2026-09-01T07:21:27.940273+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,45.0,13357,377
+2026-09-01T07:21:36.970643+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,50.05,22436,284
+2026-09-01T07:21:37.787941+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,45.15,31233,214
+2026-09-01T07:21:53.255319+00:00,,,DROPPED,Not connected,False,,,,,,,,,,,,,,14.95,8899,119
+2026-09-01T07:21:57.417567+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,45.1,35809,159
+2026-09-01T07:22:23.347453+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,100.5,59476,1163
+2026-09-01T07:22:26.756429+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,9.95,8918,70
+2026-09-01T07:22:46.994417+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,60.15,40290,385
+2026-09-01T07:23:06.303720+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,55.2,22344,437
+2026-09-01T07:23:06.387366+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,20.0,17836,151
+2026-09-01T07:23:08.240096+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,9.95,17779,0
+2026-09-01T07:23:11.365309+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,9.95,22221,0
+2026-09-01T07:23:50.257295+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,35.05,26736,281
+2026-09-01T07:24:09.812768+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,45.15,17868,191
+2026-09-01T07:24:20.467146+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,4.9,8909,70
+2026-09-01T07:24:35.536326+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,50.2,22248,234
+2026-09-01T07:24:42.729711+00:00,,,DROPPED,Not connected,False,,,,,,,,,,,,,,0.0,4435,0
+2026-09-01T07:24:45.807173+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,20.0,13305,70
+2026-09-01T07:24:46.185682+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,14.9,13281,70
+2026-09-01T07:24:52.509667+00:00,,,NOT_QUALIFIED_NO_POLICY,Connected - Not qualified,False,,,,,,,,,,,,,no_policy,90.5,59277,686
+2026-09-01T07:25:08.817943+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,9.9,13318,0
+2026-09-01T07:25:12.983199+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,20.0,13299,254
+2026-09-01T07:25:48.249246+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,50.1,17821,175
+2026-09-01T07:26:01.833929+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,45.2,26876,220
+2026-09-01T07:26:04.881574+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,45.1,26796,220
+2026-09-01T07:26:07.616672+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,9.9,8875,253
+2026-09-01T07:26:12.009049+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,9.9,8892,129
+2026-09-01T07:26:25.852086+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,9.95,13384,70
+2026-09-01T07:26:30.583917+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,20.05,8913,70
+2026-09-01T07:27:02.595646+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,45.1,13306,140
+2026-09-01T07:27:21.917669+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,40.05,13345,70
+2026-09-01T07:27:23.283823+00:00,,,NOT_QUALIFIED_NO_POLICY,Connected - Not qualified,False,,,,,,,,,,,,,no_policy,50.15,22400,338
+2026-09-01T07:28:01.541344+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,296.6,210573,1877
+2026-09-01T07:28:05.053921+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,115.65,55044,761
+2026-09-01T07:28:16.022338+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,45.1,26812,220
+2026-09-01T07:28:16.760387+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,40.1,26855,233
+2026-09-01T07:28:39.579566+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,45.05,26813,144
+2026-09-01T07:28:58.141355+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,45.15,17804,140
+2026-09-01T07:29:09.107856+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,9.95,22232,0
+2026-09-01T07:29:20.720799+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,55.3,31562,473
+2026-09-01T07:29:27.359081+00:00,,,DROPPED,Not connected,False,,,,,,,,,,,,,,0.0,0,0
+2026-09-01T07:29:47.278864+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,30.05,17815,315
+2026-09-01T07:30:12.079656+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,45.2,26820,223
+2026-09-01T07:30:22.599401+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,45.05,35829,150
+2026-09-01T07:30:29.282084+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,4.9,8870,0
+2026-09-01T07:30:40.860042+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,45.15,26816,229
+2026-09-01T07:30:52.651708+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,9.9,17893,70
+2026-09-01T07:31:03.230983+00:00,,,NOT_QUALIFIED_NO_POLICY,Connected - Not qualified,False,,,,,,,,,,,,,no_policy,20.0,17948,267
+2026-09-01T07:31:19.556629+00:00,,,DROPPED,Not connected,False,,,,,,,,,,,,,,30.1,13389,170
+2026-09-01T07:31:25.838225+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,50.15,22295,653
+2026-09-01T07:31:52.759254+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,9.9,8906,70
+2026-09-01T07:32:03.849357+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,9.9,8901,70
+2026-09-01T07:32:11.464015+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,45.05,26724,70
+2026-09-01T07:32:28.852586+00:00,,,NOT_QUALIFIED_NO_POLICY,Connected - Not qualified,False,,,,,,,,,,,,,no_policy,90.35,49806,607
+2026-09-01T07:32:29.575048+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,15.0,8907,70
+2026-09-01T07:32:37.725543+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,60.25,31763,628
+2026-09-01T07:32:58.485697+00:00,,,NOT_QUALIFIED_NO_POLICY,Connected - Not qualified,False,,,,,,,,,,,,,no_policy,15.0,13422,140
+2026-09-01T07:33:05.092478+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,14.95,8871,177
+2026-09-01T07:33:30.717361+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,55.15,22462,392
+2026-09-01T07:33:33.097841+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,20.0,13410,377
+2026-09-01T07:33:40.999192+00:00,,,NOT_QUALIFIED_NO_POLICY,Connected - Not qualified,False,,,,,,,,,,,,,no_policy,50.2,36047,445
+2026-09-01T07:33:52.912970+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,50.1,13341,222
+2026-09-01T07:34:13.473679+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,24.95,8872,158
+2026-09-01T07:34:31.746705+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,45.15,26805,214
+2026-09-01T07:34:44.626253+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,45.05,17801,140
+2026-09-01T07:35:19.237750+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,175.8,28767,119
+2026-09-01T07:35:41.087986+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,45.1,17877,213
+2026-09-01T07:35:42.578634+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,80.4,54397,746
+2026-09-01T07:36:27.196103+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,24.95,13327,229
+2026-09-01T07:36:44.264286+00:00,,,DNC,Do Not Call,False,,,,,,,,,,,,,opt-out requested on call,50.1,31689,615
+2026-09-01T07:37:02.172940+00:00,,,DROPPED,Not connected,False,,,,,,,,,,,,,,24.95,13377,150
+2026-09-01T07:37:16.255282+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,45.05,26871,233
+2026-09-01T07:37:39.711862+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,45.15,17812,140
+2026-09-01T07:37:50.174577+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,25.05,8929,372
+2026-09-01T07:37:57.554444+00:00,,,DNC,Do Not Call,False,,,,,,,,,,,,,Caller requested no further contact — emphatic.,175.65,75843,1923
+2026-09-01T07:38:11.819345+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,25.0,13284,165
+2026-09-01T07:38:32.440609+00:00,,,NOT_QUALIFIED_NO_POLICY,Connected - Not qualified,False,,,,,,,,,,,,,no_policy,60.15,27153,285
+2026-09-01T07:38:59.044080+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,55.1,31571,346
+2026-09-01T07:39:01.733327+00:00,,,NOT_QUALIFIED_NO_POLICY,Connected - Not qualified,False,,,,,,,,,,,,,no_policy,30.0,18012,316
+2026-09-01T07:39:08.821313+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,14.9,8880,70
+2026-09-01T07:39:30.614716+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,4.9,13322,70
+2026-09-01T07:39:44.255860+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,4.9,8885,0
+2026-09-01T07:39:58.054432+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,14.9,22371,119
+2026-09-01T07:40:00.139882+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,9.9,13345,70
+2026-09-01T07:40:25.598592+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,9.9,17765,70
+2026-09-01T07:40:52.796189+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,45.2,22353,70
+2026-09-01T07:40:55.734165+00:00,,,NOT_QUALIFIED_NO_POLICY,Connected - Not qualified,False,,,,,,,,,,,,,no_policy,40.1,22459,351
+2026-09-01T07:41:20.752205+00:00,,,NOT_QUALIFIED_NO_POLICY,Connected - Not qualified,False,,,,,,,,,,,,,no_policy,35.15,27037,392
+2026-09-01T07:41:42.203294+00:00,web-87870e23954d,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,10.0,4435,70
+2026-09-01T07:41:50.869573+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,45.15,26824,150
+2026-09-01T07:42:03.259017+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,296.45,80039,1674
+2026-09-01T07:42:19.692290+00:00,,,CALLBACK_BOOKED,Connected - Call back required,False,,,,,,,,,,,today in five minutes,,,261.15,112276,1725
+2026-09-01T07:42:35.285425+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,30.1,22245,370
+2026-09-01T07:42:55.698974+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,55.35,35833,517
+2026-09-01T07:43:14.014813+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,45.15,26773,328
+2026-09-01T07:43:26.777646+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,14.9,17871,70
+2026-09-01T07:43:30.612352+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,45.1,31268,144
+2026-09-01T07:43:34.545427+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,20.0,13287,171
+2026-09-01T07:43:36.312210+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,45.05,22557,356
+2026-09-01T07:43:44.591083+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,4.85,13317,70
+2026-09-01T07:44:08.580017+00:00,,,DROPPED,Not connected,False,,,,,,,,,,,,,,0.0,0,0
+2026-09-01T07:44:16.294847+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,4.9,8880,0
+2026-09-01T07:44:21.451800+00:00,,,NOT_QUALIFIED_NO_POLICY,Connected - Not qualified,False,,,,,,,,,,,,,no_policy,30.0,17952,267
+2026-09-01T07:44:53.071271+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,35.1,26788,214
+2026-09-01T07:44:58.561326+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,40.0,31267,152
+2026-09-01T07:44:58.590546+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,35.0,22233,225
+2026-09-01T07:45:30.178249+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,9.95,13350,70
+2026-09-01T07:45:43.799854+00:00,web-547105ffd16c,,NOT_QUALIFIED_PREMIUM,Connected - Not qualified,False,Ran,Sharma,Bupa,family,between 100 to 150 monthly,both,yes,both,,3145,,,premium ~$100/mo below threshold,221.05,90138,1912
+2026-09-01T07:45:46.752610+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,45.2,17820,140
+2026-09-01T07:45:53.478104+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,4.9,13350,0
+2026-09-01T07:46:28.127722+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,9.9,13307,0
+2026-09-01T07:46:39.304154+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,45.15,17870,210
+2026-09-01T07:46:47.329300+00:00,,,NOT_INTERESTED,Connected - Not interested,False,,,,,,,,,,,,Happy with current provider and wife handles the bills,,85.25,55481,764
+2026-09-01T07:46:58.826630+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,4.9,13334,0
+2026-09-01T07:47:24.868017+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,50.2,22323,400
+2026-09-01T07:47:40.146300+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,45.1,22281,214
+2026-09-01T07:47:41.470668+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,45.05,26803,220
+2026-09-01T07:47:51.303708+00:00,,,NOT_QUALIFIED_NO_POLICY,Connected - Not qualified,False,,,,,,,,,,,,,no_policy,35.05,26924,323
+2026-09-01T07:48:21.253828+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,9.95,17745,70
+2026-09-01T07:48:46.119969+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,45.2,22286,214
+2026-09-01T07:48:48.842456+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,4.9,8888,70
+2026-09-01T07:48:49.081124+00:00,,,DROPPED,Not connected,False,,,,,,,,,,,,,,45.1,17875,203
+2026-09-01T07:49:10.788480+00:00,,,DROPPED,Not connected,False,,,,,,,,,,,,,,0.0,4435,0
+2026-09-01T07:49:13.759468+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,19.95,13517,472
+2026-09-01T07:49:20.430434+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,105.55,45937,1160
+2026-09-01T07:49:21.625528+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,9.95,8888,70
+2026-09-01T07:49:52.320427+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,4.9,8893,0
+2026-09-01T07:49:52.570784+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,180.95,70987,2076
+2026-09-01T07:49:55.892146+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,35.05,17765,70
+2026-09-01T07:50:24.811501+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,9.9,13354,70
+2026-09-01T07:50:59.623084+00:00,,,NOT_QUALIFIED_NO_POLICY,Connected - Not qualified,False,,,,,,,,,,,,,no_policy,60.15,45190,731
+2026-09-01T07:50:59.742529+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,45.2,26813,150
+2026-09-01T07:51:10.058112+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,65.1,35926,340
+2026-09-01T07:51:12.670972+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,40.1,22265,347
+2026-09-01T07:51:40.428652+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,20.0,17820,70
+2026-09-01T07:51:50.016377+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,45.05,31305,220
+2026-09-01T07:51:55.533914+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,35.0,13447,400
+2026-09-01T07:52:02.756606+00:00,,,NOT_QUALIFIED_AGE,Connected - Not qualified,False,,,,,,,,,,,,,under_age,155.7,108741,1498
+2026-09-01T07:52:16.119673+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,25.05,8849,140
+2026-09-01T07:52:33.147141+00:00,,,NOT_QUALIFIED_NO_POLICY,Connected - Not qualified,False,,,,,,,,,,,,,no_policy,80.2,58785,716
+2026-09-01T07:52:41.534765+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,35.0,22310,347
+2026-09-01T07:52:43.317913+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,45.2,31240,289
+2026-09-01T07:52:46.997756+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,35.05,26762,258
+2026-09-01T07:52:53.375960+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,9.95,4435,0
+2026-09-01T07:53:11.716920+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,4.9,4435,70
+2026-09-01T07:53:14.068184+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,4.9,4435,0
+2026-09-01T07:53:15.894801+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,20.05,13435,70
+2026-09-01T07:53:24.750260+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,4.9,8833,0
+2026-09-01T07:53:38.163703+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,0.05,13324,70
+2026-09-01T07:53:38.396487+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,9.9,13348,188
+2026-09-01T07:53:40.675864+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,9.9,13335,166
+2026-09-01T07:53:58.660295+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,19.9,22261,143
+2026-09-01T07:54:11.136562+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,20.05,13350,426
+2026-09-01T07:54:24.272172+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,25.0,13412,298
+2026-09-01T07:54:30.766480+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,19.9,13388,310
+2026-09-01T07:54:34.830567+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,45.15,31161,323
+2026-09-01T07:54:50.982621+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,80.3,41574,582
+2026-09-01T07:55:10.046042+00:00,,,NOT_QUALIFIED_NO_POLICY,Connected - Not qualified,False,,,,,,,,,,,,,no_policy,45.15,36021,383
+2026-09-01T07:55:15.969051+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,4.9,8885,70
+2026-09-01T07:55:18.189083+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,45.0,22277,144
+2026-09-01T07:55:26.034993+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,4.85,13348,0
+2026-09-01T07:55:26.507691+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,4.9,4435,70
+2026-09-01T07:55:28.486692+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,45.2,31286,229
+2026-09-01T07:55:47.336729+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,20.0,17846,409
+2026-09-01T07:56:04.257033+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,35.1,17851,478
+2026-09-01T07:56:14.779050+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,35.1,13424,376
+2026-09-01T07:56:15.216985+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,35.15,17825,605
+2026-09-01T07:56:16.188078+00:00,,,NOT_QUALIFIED_NO_POLICY,Connected - Not qualified,False,,,,,,,,,,,,,no_policy,35.05,26894,323
+2026-09-01T07:56:26.791031+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,9.9,8866,70
+2026-09-01T07:56:29.489637+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,30.0,17770,328
+2026-09-01T07:56:39.533202+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,9.9,13364,70
+2026-09-01T07:56:46.306435+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,19.95,17814,333
+2026-09-01T07:56:52.290957+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,0.0,4435,70
+2026-09-01T07:56:54.151142+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,4.9,8903,0
+2026-09-01T07:57:16.236039+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,35.05,22401,484
+2026-09-01T07:57:31.717018+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,35.05,22395,586
+2026-09-01T07:57:31.909224+00:00,,,NOT_QUALIFIED_NO_POLICY,Connected - Not qualified,False,,,,,,,,,,,,,no_policy,65.0,35991,452
+2026-09-01T07:57:50.332349+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,50.05,17730,101
+2026-09-01T07:57:54.982466+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,9.9,8913,231
+2026-09-01T07:58:01.909059+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,4.9,8923,0
+2026-09-01T07:58:02.593387+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,35.05,13411,543
+2026-09-01T07:58:23.540549+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,19.4,17811,290
+2026-09-01T07:58:42.480289+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,14.4,13343,70
+2026-09-01T07:58:48.659214+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,24.9,13314,281
+2026-09-01T07:58:49.885883+00:00,,,NOT_QUALIFIED_NO_POLICY,Connected - Not qualified,False,,,,,,,,,,,,,no_policy,95.7,36938,1021
+2026-09-01T07:59:13.478380+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,9.95,13328,70
+2026-09-01T07:59:33.876355+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,45.15,26727,214
+2026-09-01T07:59:42.449794+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,45.15,26823,220
+2026-09-01T07:59:43.199905+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,14.9,13363,372
+2026-09-01T07:59:43.362675+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,19.95,13416,353
+2026-09-01T08:00:12.017806+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,19.95,13401,289
+2026-09-01T08:00:16.405287+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,105.4,55474,571
+2026-09-01T08:00:20.890200+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,35.1,17883,708
+2026-09-01T08:00:33.337377+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,9.9,13317,0
+2026-09-01T08:00:38.946603+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,45.15,31264,220
+2026-09-01T08:00:46.426529+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,20.05,17835,301
+2026-09-01T08:01:08.287700+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,4.95,16055,89
+2026-09-01T08:01:08.643846+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,45.15,35809,150
+2026-09-01T08:01:14.342851+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,45.15,31310,220
+2026-09-01T08:01:24.836968+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,35.05,13396,541
+2026-09-01T08:01:28.685800+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,9.95,8921,70
+2026-09-01T08:01:39.248153+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,4.9,13311,0
+2026-09-01T08:02:01.209603+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,35.0,17867,623
+2026-09-01T08:02:03.317158+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,20.0,13389,310
+2026-09-01T08:02:14.926913+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,34.95,17971,184
+2026-09-01T08:02:23.619415+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,35.1,17898,730
+2026-09-01T08:02:46.722049+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,35.15,22291,353
+2026-09-01T08:02:47.478219+00:00,,,NOT_QUALIFIED_NO_POLICY,Connected - Not qualified,False,,,,,,,,,,,,,no_policy,110.65,63864,819
+2026-09-01T08:02:47.873579+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,20.0,17836,327
+2026-09-01T08:02:49.573136+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,34.95,22347,528
+2026-09-01T08:03:11.920909+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,35.05,13460,680
+2026-09-01T08:03:12.005390+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,9.9,13350,213
+2026-09-01T08:03:31.057229+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,30.0,22310,219
+2026-09-01T08:03:35.415666+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,34.95,22310,409
+2026-09-01T08:03:42.302402+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,50.1,17848,629
+2026-09-01T08:03:52.663608+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,24.95,17948,226
+2026-09-01T08:03:58.792185+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,35.25,17839,279
+2026-09-01T08:04:00.372456+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,20.1,13331,159
+2026-09-01T08:04:21.132362+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,9.9,13336,156
+2026-09-01T08:04:21.210365+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,9.85,13326,0
+2026-09-01T08:04:47.615317+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,35.05,17830,505
+2026-09-01T08:05:07.920574+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,35.0,13378,517
+2026-09-01T08:05:08.018300+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,35.15,17846,391
+2026-09-01T08:05:10.429166+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,35.0,17841,313
+2026-09-01T08:05:26.447705+00:00,,,VOICEMAIL,Not connected,False,,,,,,,,,,,,,,19.85,17825,359
+2026-09-01T08:05:32.814317+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,15.0,8873,184
+2026-09-01T08:05:53.721668+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,35.0,17832,464
+2026-09-01T08:05:56.627015+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,35.0,13406,552
+2026-09-01T08:05:57.182882+00:00,,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,35.05,17850,684
+2026-09-01T08:08:52.662838+00:00,web-c5cb5b5268f4,,NO_OUTCOME,Connected - Call back required,False,,,,,,,,,,,,,,45.4,8837,59
+2026-09-01T08:09:51.696296+00:00,web-e7dc00e2eb78,,NOT_QUALIFIED_NO_POLICY,Connected - Not qualified,False,,,,,,,,,,,,,no_policy,35.1,22465,283
+2026-09-01T08:13:24.107352+00:00,web-a554f8563b42,,NOT_QUALIFIED_PREMIUM,Connected - Not qualified,False,,,Medibank,couple,two thousand dollars yearly,,,,,,,,premium ~$167/mo below threshold,200.9,116848,2044

@@ -1,0 +1,60 @@
+# /etc/systemd/system/smarthealth-web.service
+#
+# The BROWSER-demo agent worker. Second worker, registered under agent_name
+# "smarthealth-web". It shares /opt/livekit/bot's venv and .env with the telephony
+# worker but is a separate process with a separate name, so the two can never take
+# each other's calls: SIP dispatch asks for "smarthealth-bot", the web token asks
+# for "smarthealth-web".
+#
+# Running this does NOT affect smarthealth-bot. Stopping this does NOT affect
+# telephony. That isolation is the whole point.
+
+[Unit]
+Description=Smart Health LiveKit agent — browser demo (smarthealth-web)
+Documentation=file:///opt/smarthealth-webdemo/WEB_DEMO.md
+After=network-online.target docker.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/livekit/bot
+
+ExecStart=/opt/livekit/bot/.venv/bin/python agent_smarthealth_web.py start
+
+Environment=PYTHONUNBUFFERED=1
+Environment=OMP_NUM_THREADS=1
+# Which production agent this demo wraps. Point it at agent_smarthealth to demo the
+# Gemini build instead — no other change needed.
+Environment=DEMO_BASE_MODULE=agent_smarthealth_claude_dg
+Environment=DEMO_AGENT_NAME=smarthealth-web
+# Each worker runs a health-check HTTP server. LiveKit's default is 8081, which the
+# telephony worker already holds — leave this off 8081 or this service crash-loops
+# on EADDRINUSE and never registers.
+Environment=DEMO_WORKER_HTTP_PORT=8082
+# The machine guard exists to hang up when a DIALLED number is answered by an IVR,
+# voicemail or another company's AI. The web demo has no dialled number — the other
+# party is a human who clicked a button in a browser, so there is nothing for it to
+# catch and a false positive would kill a client demo mid-sentence. Off here, ON for
+# telephony (where it defaults to 1 and is not overridden).
+Environment=MACHINE_GUARD=0
+
+Restart=always
+RestartSec=5
+
+# Same graceful drain as the telephony worker: finish the call in progress rather
+# than cutting someone off mid-sentence during a restart.
+KillSignal=SIGINT
+TimeoutStopSec=480
+KillMode=mixed
+
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=smarthealth-web
+
+[Install]
+WantedBy=multi-user.target

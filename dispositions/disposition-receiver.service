@@ -1,0 +1,40 @@
+# /etc/systemd/system/disposition-receiver.service
+#
+# Receives disposition webhooks from both voice bots and writes them to MySQL.
+# Install: see DISPOSITION_SERVER_DEPLOY.md
+
+[Unit]
+Description=Voicebot disposition receiver (MySQL writer)
+Documentation=file:///opt/disposition-receiver/DISPOSITION_SERVER_DEPLOY.md
+# Ordering only — systemd cannot know when MySQL is ready to accept connections, so
+# the receiver retries per request rather than relying on start order.
+After=network-online.target mysql.service
+Wants=network-online.target mysql.service
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/disposition-receiver
+
+# Loopback ONLY. The bots run on this same box, so nothing external needs to reach it,
+# and an exposed endpoint would let anyone write rows into your CRM.
+ExecStart=/opt/disposition-receiver/.venv/bin/uvicorn receiver:app --host 127.0.0.1 --port 8095
+
+# .env is read by load_dotenv() in receiver.py; WorkingDirectory makes it findable.
+# Deliberately NOT EnvironmentFile= — systemd's parser rejects quoting python-dotenv
+# accepts, and a DB password is exactly the kind of value that gets quoted.
+Environment=PYTHONUNBUFFERED=1
+
+Restart=always
+RestartSec=3
+
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=disposition-receiver
+
+[Install]
+WantedBy=multi-user.target

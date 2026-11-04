@@ -1,0 +1,17 @@
+{
+  "trunk": {
+    "name": "movers-au-inbound",
+    "numbers": ["MOVERS_DID_OR_USERPART_REPLACE_ME"],
+    "allowed_addresses": ["FREESWITCH_IP_REPLACE_ME"],
+    "include_headers": "SIP_X_HEADERS",
+    "headers_to_attributes": {
+      "X-Call-Id":       "dialer.call_id",
+      "X-Prospect-Name": "dialer.prospect_name",
+      "X-Campaign":      "dialer.campaign",
+      "X-Phone":         "dialer.phone",
+      "X-Pickup":        "dialer.pickup",
+      "X-Dropoff":       "dialer.dropoff",
+      "X-Move-Date":     "dialer.move_date"
+    }
+  }
+}

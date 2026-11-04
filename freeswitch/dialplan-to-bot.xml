@@ -1,0 +1,34 @@
+<!--
+  Dialplan: bridge the "AI agent" extension to the LiveKit trunk, carrying
+  dialer call-context as X-headers (which livekit-sip maps to participant
+  attributes via trunk.json's headers_to_attributes).
+
+  Place inside your dialplan (e.g. conf/dialplan/default.xml), adjusting the
+  destination_number match to whatever number your dialer bridges the bot on
+  (here: 1000, matching the old registered-extension model).
+
+  KEY IDEA: this REPLACES the old "bot registers as ext 1000 over WebRTC".
+  To the dialer, 1000 is still "the agent". Only the media path behind it changed.
+-->
+<extension name="to_livekit_bot">
+  <condition field="destination_number" expression="^1000$">
+
+    <!-- Match the codec the dialer already emits; livekit-sip transcodes to Opus internally -->
+    <action application="set" data="absolute_codec_string=PCMA"/>
+
+    <!-- Optional: record on THIS (FreeSWITCH) side, per your plan -->
+    <action application="set" data="RECORD_STEREO=true"/>
+    <action application="record_session" data="/recordings/${strftime(%Y%m%d)}/${uuid}.wav"/>
+
+    <!-- Dialer call-context → X-headers on the outbound INVITE.
+         Replace the ${...} vars with whatever your dialer sets on the channel. -->
+    <action application="set" data="sip_h_X-Call-Id=${uuid}"/>
+    <action application="set" data="sip_h_X-Prospect-Name=${prospect_name}"/>
+    <action application="set" data="sip_h_X-Campaign=${campaign}"/>
+    <action application="set" data="sip_h_X-Phone=${caller_id_number}"/>
+
+    <!-- Bridge to the trunk. The user-part (lk-agent) becomes the To: user;
+         you can use it later for dispatch-rule matching if you want. -->
+    <action application="bridge" data="sofia/gateway/livekit/lk-agent"/>
+  </condition>
+</extension>

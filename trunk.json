@@ -1,0 +1,13 @@
+{
+  "trunk": {
+    "name": "freeswitch-inbound",
+    "allowed_addresses": ["FREESWITCH_IP_REPLACE_ME"],
+    "include_headers": "SIP_X_HEADERS",
+    "headers_to_attributes": {
+      "X-Call-Id":       "dialer.call_id",
+      "X-Prospect-Name": "dialer.prospect_name",
+      "X-Campaign":      "dialer.campaign",
+      "X-Phone":         "dialer.phone"
+    }
+  }
+}

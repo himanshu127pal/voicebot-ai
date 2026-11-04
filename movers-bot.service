@@ -1,0 +1,57 @@
+# /etc/systemd/system/movers-bot.service
+#
+# AU removalist booking agent. One of the telephony workers on this box.
+# Install: see MOVERS_AU_DEPLOY.md
+#
+# Shares /opt/livekit/bot/.venv but has its OWN WorkingDirectory and .env, because a
+# single .env cannot hold several different DISPOSITION_WEBHOOK_URLs. load_dotenv()
+# resolves relative to the script's own directory, so /opt/livekit/movers-bot/.env is
+# what this process reads — no other campaign's config is ever in scope.
+#
+# The browser demo runs the SAME agent file through voicebot-web.service. Restarting or
+# stopping this unit does not affect that, and vice versa.
+
+[Unit]
+Description=EasyMove Removals — AU removalist booking agent (movers-bot)
+Documentation=file:///opt/livekit/movers-bot/MOVERS_AU_DEPLOY.md
+After=network-online.target docker.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/livekit/movers-bot
+
+# `start` = production mode. NOT `dev` (verbose, no supervision semantics).
+# Interpreter comes from the shared venv; the script and its .env do not.
+ExecStart=/opt/livekit/bot/.venv/bin/python /opt/livekit/movers-bot/agent_movers_au.py start
+
+# .env is read by load_dotenv() inside the script. Deliberately NOT EnvironmentFile= —
+# systemd's parser is stricter than python-dotenv and rejects quoting it accepts.
+Environment=PYTHONUNBUFFERED=1
+# Silero VAD is CPU-bound and spawns threads per process. With several workers on 4 vCPU
+# the default pool thrashes and shows up in the log as "inference slower than realtime".
+# If you see that, add cores — don't tune around it.
+Environment=OMP_NUM_THREADS=1
+
+Restart=always
+RestartSec=5
+
+# ── Graceful drain — the important part for a VOICE agent ────────────────────
+# On stop/restart the worker stops accepting new jobs and finishes calls already in
+# progress. Killing it mid-call drops the caller AND loses the disposition webhook.
+# Must exceed MAX_CALL_SECONDS (480 for this script, the longest of any bot here).
+KillSignal=SIGINT
+TimeoutStopSec=540
+KillMode=mixed
+
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=movers-bot
+
+[Install]
+WantedBy=multi-user.target

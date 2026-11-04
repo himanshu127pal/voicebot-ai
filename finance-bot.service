@@ -1,0 +1,54 @@
+# /etc/systemd/system/finance-bot.service
+#
+# AU finance brokerage lead agent — the FOURTH worker on this box.
+# Install: see FINANCE_AU_DEPLOY.md
+#
+# Shares /opt/livekit/bot/.venv but has its OWN WorkingDirectory and .env, because a
+# single .env cannot hold four different DISPOSITION_WEBHOOK_URLs. load_dotenv() resolves
+# relative to the script's own directory, so /opt/livekit/finance-bot/.env is what this
+# process reads — the other campaigns' config is never in scope.
+
+[Unit]
+Description=Quick Funding — AU finance brokerage lead agent (finance-bot)
+Documentation=file:///opt/livekit/finance-bot/FINANCE_AU_DEPLOY.md
+After=network-online.target docker.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/livekit/finance-bot
+
+# `start` = production mode. NOT `dev` (verbose, no supervision semantics).
+# Interpreter comes from the shared venv; the script and its .env do not.
+ExecStart=/opt/livekit/bot/.venv/bin/python /opt/livekit/finance-bot/agent_finance_au.py start
+
+# .env is read by load_dotenv() inside the script. Deliberately NOT EnvironmentFile= —
+# systemd's parser is stricter than python-dotenv and rejects quoting it accepts.
+Environment=PYTHONUNBUFFERED=1
+# Silero VAD is CPU-bound and spawns threads per process. With FOUR workers on 4 vCPU
+# the default pool thrashes badly and shows up as "inference slower than realtime" —
+# on every campaign, not just this one.
+Environment=OMP_NUM_THREADS=1
+
+Restart=always
+RestartSec=5
+
+# ── Graceful drain — the important part for a VOICE agent ────────────────────
+# On stop/restart the worker stops accepting new jobs and finishes calls already in
+# progress. Killing it mid-call drops the caller AND loses the disposition webhook.
+# Must exceed MAX_CALL_SECONDS (420 here) so an in-flight call can end naturally.
+KillSignal=SIGINT
+TimeoutStopSec=480
+KillMode=mixed
+
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=finance-bot
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,9 @@
+{
+  "name": "naina-agent-dispatch",
+  "trunk_ids": [],
+  "rule": {
+    "dispatchRuleIndividual": {
+      "roomPrefix": "call-"
+    }
+  }
+}

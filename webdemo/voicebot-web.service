@@ -1,0 +1,78 @@
+# /etc/systemd/system/voicebot-web.service
+#
+# The BROWSER-demo agent worker for every voicebot. Registered as agent_name
+# "voicebot-web"; the page's /api/token dispatches it with {"bot": "<key>"} and the
+# worker runs that bot's production file for the call.
+#
+# Replaces smarthealth-web.service, which could only run Smart Health.
+#
+# Running this does NOT affect smarthealth-bot, roof-bot, finance-bot, movers-bot or
+# warranty-bot.
+# Stopping it does NOT affect telephony. It reads their agent files and .env files; it
+# never writes them.
+
+[Unit]
+Description=Voicebot browser demo worker — all bots (voicebot-web)
+Documentation=file:///opt/smarthealth-webdemo/WEB_DEMO.md
+After=network-online.target docker.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/livekit/web-demo
+
+# Interpreter from the shared telephony venv — it already has every plugin the bots use.
+ExecStart=/opt/livekit/bot/.venv/bin/python /opt/livekit/web-demo/agent_voicebot_web.py start
+
+Environment=PYTHONUNBUFFERED=1
+Environment=OMP_NUM_THREADS=1
+
+# Must equal DEMO_AGENT_NAME in /opt/smarthealth-webdemo/.env.
+Environment=DEMO_AGENT_NAME=voicebot-web
+# 8081 smarthealth-bot, 8082 smarthealth-web, 8083 roof-bot, 8084 finance-bot,
+# 8086 movers-bot, 8087 warranty-bot. 8085 means this can run next to smarthealth-web
+# during the switchover.
+Environment=DEMO_WORKER_HTTP_PORT=8085
+
+# LiveKit credentials for the worker itself. Each bot's own settings come from its own
+# .env, applied per call — see the module docstring.
+Environment=WEB_BASE_ENV=/opt/livekit/bot/.env
+
+# Where each bot lives. Only set these if your files are somewhere else — e.g. to demo a
+# different Smart Health build, point WEB_BOT_SMARTHEALTH_FILE at it.
+#Environment=WEB_BOT_SMARTHEALTH_FILE=/opt/livekit/bot/agent_smarthealth_claude_dg.py
+#Environment=WEB_BOT_ROOF_FILE=/opt/livekit/roof-bot/agent_roof_uk.py
+#Environment=WEB_BOT_FINANCE_FILE=/opt/livekit/finance-bot/agent_finance_au.py
+#Environment=WEB_BOT_MOVERS_FILE=/opt/livekit/movers-bot/agent_movers_au.py
+#Environment=WEB_BOT_WARRANTY_FILE=/opt/livekit/warranty-bot/agent_warranty_uk.py
+# Demo-only bots (no telephony service) live next to this worker, in
+# /opt/livekit/web-demo/bots/, each with an OPTIONAL <bot>.env (mortgage.env,
+# energy.env) for names, prices and so on. Override the location the same way:
+#Environment=WEB_BOT_MORTGAGE_FILE=/opt/livekit/web-demo/bots/agent_mortgage_leads_au.py
+
+# 0 (default): demo calls do NOT post to the production disposition webhooks, so demo
+# traffic never lands in the lead tables. Each call is written to
+# /opt/livekit/web-demo/demo-dispositions/<bot>.csv instead.
+Environment=DEMO_POST_DISPOSITIONS=0
+
+Restart=always
+RestartSec=5
+
+# Finish a demo in progress rather than cutting someone off mid-sentence on restart.
+# Must be ABOVE the longest MAX_CALL_SECONDS of any bot — 480, the movers script — or a
+# restart can cut off the one call that runs the full script.
+KillSignal=SIGINT
+TimeoutStopSec=540
+KillMode=mixed
+
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=voicebot-web
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,16 @@
+<!--
+  FreeSWITCH sofia gateway → livekit-sip trunk.
+  Place at: conf/sip_profiles/external/livekit.xml   (external profile, then `sofia profile external rescan`)
+
+  This is an IP-based trunk: register=false. FreeSWITCH just sends INVITEs to
+  the LiveKit SIP service; no auth/registration.
+-->
+<include>
+  <gateway name="livekit">
+    <param name="proxy"    value="LIVEKIT_HOST_IP_REPLACE_ME:5060"/>
+    <param name="register" value="false"/>
+    <param name="context"  value="public"/>
+    <!-- keepalive so FreeSWITCH marks the trunk UP -->
+    <param name="ping"     value="30"/>
+  </gateway>
+</include>

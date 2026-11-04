@@ -1,0 +1,54 @@
+# /etc/systemd/system/smarthealth-bot.service
+#
+# Smart Health voice agent (LiveKit Agents worker).
+# Install:  see DEPLOY_SERVICE.md
+
+[Unit]
+Description=Smart Health LiveKit voice agent (smarthealth-bot)
+Documentation=file:///opt/livekit/bot/DEPLOY_SERVICE.md
+# The worker registers with the LiveKit server; start after networking is up.
+# If LiveKit runs on this same box under docker, After=docker.service helps ordering.
+After=network-online.target docker.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/livekit/bot
+
+# `start` = production mode. NOT `dev` (verbose, deprecated, no supervision semantics).
+ExecStart=/opt/livekit/bot/.venv/bin/python agent_smarthealth_claude_v2.py start
+
+# .env is read by load_dotenv() inside the script; WorkingDirectory above is what makes
+# it findable. Do NOT also use EnvironmentFile= — systemd's parser is stricter than
+# python-dotenv (no quoting/export support) and will fail on values dotenv accepts.
+Environment=PYTHONUNBUFFERED=1
+# Silero VAD is CPU-bound and spawns threads per process. On a small box (4 vCPU) the
+# default thread pool thrashes and shows up as "inference slower than realtime".
+Environment=OMP_NUM_THREADS=1
+
+Restart=always
+RestartSec=5
+
+# ── Graceful drain — the important part for a VOICE agent ────────────────────
+# On stop/restart the worker stops accepting new jobs and finishes calls already in
+# progress. Killing it mid-call drops the caller AND loses the disposition webhook.
+# Give it longer than MAX_CALL_SECONDS (currently 420s) so an in-flight call can end
+# naturally. SIGINT is what the LiveKit CLI handles for a clean drain.
+KillSignal=SIGINT
+TimeoutStopSec=480
+# Only signal the main process; let it wind down its own per-call subprocesses.
+KillMode=mixed
+
+# ── Modest hardening (safe for this workload) ───────────────────────────────
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+
+# journald picks up stdout/stderr; view with: journalctl -u smarthealth-bot -f
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=smarthealth-bot
+
+[Install]
+WantedBy=multi-user.target

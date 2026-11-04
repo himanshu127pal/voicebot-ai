@@ -1,0 +1,39 @@
+# /etc/systemd/system/smarthealth-webdemo.service
+#
+# Token + dispatch server for the browser demo. Static files and one API.
+# Install: see WEB_DEMO.md
+
+[Unit]
+Description=Smart Health browser demo (token + dispatch server)
+Documentation=file:///opt/smarthealth-webdemo/WEB_DEMO.md
+After=network-online.target docker.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/smarthealth-webdemo
+
+# Bound to loopback on purpose: the only way in is through Caddy, which holds the TLS
+# certificate. Served over plain HTTP the browser silently refuses microphone access
+# and the demo looks broken for no visible reason.
+ExecStart=/opt/smarthealth-webdemo/.venv/bin/uvicorn server:app --host 127.0.0.1 --port 8090
+
+# .env is read by load_dotenv() in server.py; WorkingDirectory above is what makes it
+# findable. Deliberately NOT EnvironmentFile= — systemd's parser rejects quoting and
+# export syntax that python-dotenv accepts (same reasoning as smarthealth-bot.service).
+Environment=PYTHONUNBUFFERED=1
+
+Restart=always
+RestartSec=3
+
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=smarthealth-webdemo
+
+[Install]
+WantedBy=multi-user.target

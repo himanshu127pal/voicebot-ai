@@ -1,0 +1,23 @@
+# livekit-server config.
+# The SFU. Agents + the SIP service connect to it. Since everything here is
+# co-located on one host, media candidates resolve on localhost/private IP —
+# no TURN server needed.
+
+port: 7880                 # HTTP/WebSocket API (agents + lk CLI talk here)
+
+rtc:
+  tcp_port: 7881
+  port_range_start: 50000  # SFU <-> participant (agent, sip service) media — internal
+  port_range_end: 60000
+  use_external_ip: false   # co-located; keep false. Set true only if agents live off-host.
+
+redis:
+  address: 127.0.0.1:6379
+
+keys:
+  # key_name: secret   — generate a strong secret:  openssl rand -hex 32
+  # The SAME api_key/secret must appear in sip.yaml and in your agent's env.
+  APIKEY_REPLACE_ME: APISECRET_REPLACE_ME_use_openssl_rand_hex_32
+
+logging:
+  level: info

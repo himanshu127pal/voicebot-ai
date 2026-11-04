@@ -1,0 +1,491 @@
+/* BTBIZ voice demo.
+ *
+ * A committed dark theme, not a dark variant: the page is a stage for a glowing orb,
+ * and that only works on a dark ground. Every colour is painted explicitly so it holds
+ * regardless of the viewer's OS theme.
+ *
+ * Type: Archivo (display) / Source Sans 3 (body) / IBM Plex Mono (numbers).
+ */
+
+:root{
+  --ground-2:#041a17;        /* vignette edge */
+  --line:rgba(255,255,255,.10);
+  --line-2:rgba(255,255,255,.06);
+  --panel:rgba(255,255,255,.035);
+
+  --text:#e8f2ef;
+  --muted:#8fa9a3;
+  --faint:#5f7b75;
+
+  --mint:#5eead4;
+  --mint-2:#2dd4bf;
+  --mint-soft:rgba(94,234,212,.08);
+
+  --amber:#f5b73d;
+  --amber-hi:#ffc95c;
+  --ink:#0d201c;             /* text on amber / mint */
+
+  /* Semantics, lifted for a dark ground — the light-theme versions go muddy here. */
+  --ok:#4ade80; --ok-soft:rgba(74,222,128,.14);
+  --warn:#fbbf24; --warn-soft:rgba(251,191,36,.14);
+  --bad:#f87171; --bad-soft:rgba(248,113,113,.14);
+
+  --display:"Archivo","Segoe UI",system-ui,-apple-system,sans-serif;
+  --font:"Source Sans 3","Segoe UI",system-ui,-apple-system,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+
+*{box-sizing:border-box}
+/* `hidden` is UA-styled as display:none — the weakest rule there is, outranked by any
+   class that sets display. Several here do. Global and !important so hidden always
+   means hidden. */
+[hidden]{display:none !important}
+
+html,body{height:100%}
+body{
+  margin:0; font-family:var(--font); font-size:16px; color:var(--text);
+  background:var(--ground-2);
+  background-image:
+    radial-gradient(900px 620px at 50% 24%, rgba(45,212,191,.10) 0%, transparent 62%),
+    radial-gradient(1400px 900px at 50% 0%, #0a2c26 0%, var(--ground-2) 72%);
+  background-attachment:fixed;
+  -webkit-font-smoothing:antialiased; line-height:1.55;
+  display:flex; flex-direction:column; min-height:100%;
+}
+h1,h2,h3{margin:0; font-family:var(--display); letter-spacing:-.025em; line-height:1.1; text-wrap:balance}
+p{margin:0}
+.mono{font-family:var(--mono); font-variant-numeric:tabular-nums}
+:focus-visible{outline:2px solid var(--mint); outline-offset:3px; border-radius:6px}
+
+/* ── Bar ───────────────────────────────────────────────────────────────── */
+.bar{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:18px clamp(18px,4vw,40px); flex:none;
+}
+.brand{display:flex; flex-direction:column; line-height:1.25}
+.brand strong{font-family:var(--display); font-size:15px; font-weight:800; letter-spacing:.06em}
+.brand span{font-size:12.5px; color:var(--faint)}
+.bar-right{display:flex; align-items:center; gap:14px}
+.clock{font-size:14px; color:var(--muted); font-weight:500}
+.pill{
+  display:inline-flex; align-items:center; gap:8px; padding:6px 14px 6px 11px;
+  border-radius:999px; font-size:12.5px; font-weight:600;
+  border:1px solid var(--line); background:rgba(255,255,255,.04); color:var(--muted);
+}
+.pill .dot{width:7px; height:7px; border-radius:50%; background:currentColor; flex:none}
+.pill-live{color:var(--ok); border-color:rgba(74,222,128,.32); background:var(--ok-soft)}
+.pill-live .dot{animation:beat 1.7s ease-out infinite}
+.pill-wait{color:var(--warn); border-color:rgba(251,191,36,.32); background:var(--warn-soft)}
+.pill-bad{color:var(--bad); border-color:rgba(248,113,113,.32); background:var(--bad-soft)}
+@keyframes beat{0%{box-shadow:0 0 0 0 rgba(74,222,128,.5)}70%{box-shadow:0 0 0 8px rgba(74,222,128,0)}100%{box-shadow:0 0 0 0 rgba(74,222,128,0)}}
+
+/* ── Stage ─────────────────────────────────────────────────────────────── */
+.stage{
+  flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  padding:0 clamp(16px,4vw,40px) clamp(32px,6vh,64px); text-align:center;
+}
+
+/* ── Orb ───────────────────────────────────────────────────────────────── */
+.orbwrap{
+  flex:none; display:grid; place-items:center;
+  height:clamp(260px,34vh,360px); width:100%;
+  transition:height .55s cubic-bezier(.22,1,.36,1);
+}
+.orbwrap.compact{height:clamp(200px,26vh,270px)}
+.orb{position:relative; display:grid; place-items:center; width:200px; height:200px;
+  transition:transform .55s cubic-bezier(.22,1,.36,1)}
+.halo{
+  position:absolute; inset:0; border-radius:50%;
+  border:1px solid rgba(94,234,212,.16); opacity:0; transform:scale(.85);
+}
+.orb.on .halo{animation:ripple 3.4s cubic-bezier(.2,.6,.3,1) infinite}
+.orb.on .h2{animation-delay:1.13s}
+.orb.on .h3{animation-delay:2.26s}
+@keyframes ripple{
+  0%{transform:scale(.62); opacity:0}
+  18%{opacity:.75}
+  100%{transform:scale(1.5); opacity:0}
+}
+.core{
+  width:120px; height:120px; border-radius:50%;
+  background:radial-gradient(circle at 36% 30%, #b6fbef 0%, var(--mint) 34%, var(--mint-2) 66%, #14a89a 100%);
+  box-shadow:
+    0 0 44px 6px rgba(45,212,191,.34),
+    0 0 130px 26px rgba(45,212,191,.16),
+    inset -10px -14px 34px rgba(3,60,54,.42);
+  /* Scale is driven from the audio analyser while the agent speaks — see app.js. */
+  transform:scale(var(--amp,1));
+  transition:transform .09s linear, box-shadow .4s ease;
+}
+.orb.idle .core{animation:drift 5.5s ease-in-out infinite}
+@keyframes drift{0%,100%{transform:scale(1)}50%{transform:scale(1.045)}}
+.orb.thinking .core{animation:think 1.25s ease-in-out infinite}
+@keyframes think{0%,100%{transform:scale(1); filter:saturate(1)}50%{transform:scale(1.06); filter:saturate(1.35)}}
+.orb.muted .core{filter:grayscale(.72) brightness(.72)}
+
+/* Smaller orb while there's a form below it — the form, not the orb, is the task. */
+.orbwrap.mini{height:clamp(118px,15vh,158px)}
+.orbwrap.mini .orb{transform:scale(.6)}
+
+/* ── Views ─────────────────────────────────────────────────────────────── */
+.view{
+  display:flex; flex-direction:column; align-items:center;
+  width:100%; max-width:660px; animation:rise .5s cubic-bezier(.22,1,.36,1);
+}
+@keyframes rise{from{opacity:0; transform:translateY(12px)}to{opacity:1; transform:none}}
+
+#viewIdle h1{font-size:clamp(30px,5.2vw,50px); font-weight:800; margin-bottom:18px; letter-spacing:-.032em}
+.lede{color:var(--muted); font-size:clamp(15px,1.7vw,17.5px); max-width:52ch; margin-bottom:34px}
+
+.cta{
+  display:inline-flex; align-items:center; gap:11px; cursor:pointer;
+  font-family:var(--font); font-size:17px; font-weight:600;
+  padding:17px 34px; border-radius:999px; border:none;
+  background:linear-gradient(180deg,var(--amber-hi),var(--amber)); color:var(--ink);
+  box-shadow:0 10px 30px -10px rgba(245,183,61,.66), inset 0 1px 0 rgba(255,255,255,.4);
+  transition:transform .12s cubic-bezier(.22,1,.36,1), box-shadow .2s;
+}
+.cta svg{width:19px; height:19px}
+.cta:hover:not(:disabled){transform:translateY(-2px); box-shadow:0 16px 38px -12px rgba(245,183,61,.75)}
+.cta:active:not(:disabled){transform:translateY(0)}
+.cta:disabled{opacity:.5; cursor:not-allowed; box-shadow:none}
+.cta-sm{font-size:15px; padding:12px 26px}
+.cta.busy{opacity:.75; cursor:progress}
+
+.hint{margin-top:18px; font-size:13px; color:var(--faint)}
+.err{
+  margin-top:16px; font-size:14px; color:var(--bad); background:var(--bad-soft);
+  border:1px solid rgba(248,113,113,.3); padding:11px 15px; border-radius:10px; max-width:46ch;
+}
+
+/* ── Signup ────────────────────────────────────────────────────────────── */
+.step{display:flex; flex-direction:column; align-items:center; width:100%;
+  animation:rise .45s cubic-bezier(.22,1,.36,1)}
+#stepDetails h1, #stepCode h1{font-size:clamp(26px,4.2vw,40px); margin-bottom:14px}
+#stepDetails .lede, #stepCode .lede{margin-bottom:26px}
+.lede b{color:var(--text); font-weight:600; white-space:nowrap}
+
+.form{width:100%; max-width:560px; display:flex; flex-direction:column; gap:14px; text-align:left}
+.form-narrow{max-width:340px}
+.row{display:grid; grid-template-columns:1fr 1fr; gap:14px}
+.fld{display:flex; flex-direction:column; gap:6px; min-width:0; text-align:left}
+.fld > span{font-size:12.5px; font-weight:600; color:var(--muted); letter-spacing:.01em}
+
+.fld input, .fld select, .fld textarea, .code{
+  width:100%; font-family:var(--font); font-size:15.5px; color:var(--text);
+  background:rgba(255,255,255,.05); border:1px solid var(--line); border-radius:12px;
+  padding:12px 14px; outline:none;
+  transition:border-color .15s, box-shadow .15s, background .15s;
+}
+.fld textarea{resize:vertical; min-height:86px; line-height:1.45}
+.fld input::placeholder, .fld textarea::placeholder{color:var(--faint)}
+.fld input:focus, .fld select:focus, .fld textarea:focus, .code:focus{
+  border-color:var(--mint-2); background:rgba(255,255,255,.07);
+  box-shadow:0 0 0 3px rgba(45,212,191,.16);
+}
+.fld select{
+  appearance:none; -webkit-appearance:none; cursor:pointer; padding-right:36px;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238fa9a3' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat:no-repeat; background-position:right 12px center; background-size:16px;
+}
+/* The native option popup ignores the select's translucent background on Windows. */
+.fld select option{background:#0b2521; color:var(--text)}
+.fld [aria-invalid="true"]{border-color:rgba(248,113,113,.65)}
+.ferr{font-size:12.5px; color:var(--bad); line-height:1.4}
+
+.phone{display:flex; gap:8px}
+.phone input{flex:1; min-width:0}
+
+/* ── Country picker ───────────────────────────────────────────────────────
+   A button that opens a filtered list. `position:relative` on the wrapper and a
+   z-index above the form keep the popup over the fields below it rather than
+   pushing them down — the phone row is the last thing above the send button, and
+   a list that reflows the form moves that button under the user's finger. */
+.cc{position:relative; flex:none}
+.cc-btn{
+  display:flex; align-items:center; gap:7px; height:100%; min-height:46px;
+  padding:0 10px 0 12px; cursor:pointer;
+  font:600 14px/1 var(--font); color:var(--text);
+  background:rgba(255,255,255,.05); border:1px solid var(--line); border-radius:12px;
+  transition:border-color .15s, background .15s;
+}
+.cc-btn:hover{background:rgba(255,255,255,.07)}
+.cc-btn:focus-visible{border-color:var(--mint-2); box-shadow:0 0 0 3px rgba(45,212,191,.16); outline:none}
+.cc-iso{
+  font:700 11px/1 var(--mono); letter-spacing:.06em; color:var(--ink);
+  background:var(--mint); border-radius:5px; padding:4px 5px;
+}
+.cc-dial{font-family:var(--mono); font-size:14px; color:var(--muted)}
+.cc-arrow{width:15px; height:15px; color:var(--faint); flex:none}
+.cc-btn[aria-expanded="true"] .cc-arrow{transform:rotate(180deg)}
+
+.cc-pop{
+  position:absolute; z-index:40; top:calc(100% + 6px); left:0; width:288px; max-width:78vw;
+  padding:8px; border:1px solid var(--line); border-radius:14px;
+  background:#0b2521; box-shadow:0 18px 44px rgba(0,0,0,.55);
+}
+.cc-pop input{
+  width:100%; font:15px/1.2 var(--font); color:var(--text);
+  background:rgba(255,255,255,.05); border:1px solid var(--line); border-radius:10px;
+  padding:10px 12px; outline:none;
+}
+.cc-pop input:focus{border-color:var(--mint-2); box-shadow:0 0 0 3px rgba(45,212,191,.16)}
+.cc-list{list-style:none; margin:6px 0 0; padding:0; max-height:264px; overflow-y:auto}
+.cc-opt{
+  display:flex; align-items:center; justify-content:space-between; gap:10px;
+  padding:9px 10px; border-radius:9px; cursor:pointer; font-size:14.5px;
+}
+.cc-opt:hover, .cc-opt.on{background:var(--mint-soft)}
+.cc-opt[aria-selected="true"] .cc-name{color:var(--mint); font-weight:600}
+.cc-name{color:var(--text); overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.cc-code{font-family:var(--mono); font-size:13px; color:var(--faint); flex:none}
+.cc-none{margin:10px 6px 6px; font-size:13px; color:var(--faint)}
+
+.attempts{color:var(--muted)}
+.attempts.warn{color:var(--warn)}
+
+/* ── Lockout / limit popup ────────────────────────────────────────────────
+   The only modal on the page. It appears when the visitor is stopped by something
+   waiting won't fix in a second — a locked number, a spent allowance — so it says
+   what happened, how long it lasts, and offers the one way round it (message us). */
+.modal{
+  position:fixed; inset:0; z-index:90; display:flex; align-items:center;
+  justify-content:center; padding:20px;
+  background:rgba(2,12,10,.72); backdrop-filter:blur(3px);
+  animation:fadein .16s ease-out;
+}
+.modal[hidden]{display:none}
+.modal-card{
+  width:100%; max-width:400px; text-align:center;
+  padding:26px 24px 20px; border:1px solid var(--line); border-radius:18px;
+  background:linear-gradient(180deg,#0d2a25,#0a211d);
+  box-shadow:0 26px 64px rgba(0,0,0,.6);
+  animation:pop .18s cubic-bezier(.2,.9,.3,1.2);
+}
+.modal-icon{
+  width:44px; height:44px; margin:0 auto 14px; display:grid; place-items:center;
+  border-radius:50%; color:var(--warn); background:var(--warn-soft);
+}
+.modal-icon svg{width:22px; height:22px}
+.modal-card h2{margin:0 0 8px; font-size:19px; font-weight:650; letter-spacing:-.01em}
+.modal-card > p{margin:0; font-size:14.5px; line-height:1.55; color:var(--muted)}
+.lock-count{
+  margin:14px auto 0; display:inline-flex; align-items:center; gap:8px;
+  padding:8px 14px; border-radius:999px;
+  background:var(--warn-soft); color:var(--warn); font-size:13.5px;
+}
+.lock-count b{font-family:var(--mono); font-size:15px; font-weight:600}
+.modal-card .fine{margin-top:12px; text-align:center}
+.modal-actions{display:flex; align-items:center; justify-content:center; gap:14px; margin-top:18px}
+.modal-actions .ghost{
+  font-size:14px; color:var(--muted); text-decoration:none; border-bottom:1px solid var(--line);
+  padding-bottom:1px;
+}
+.modal-actions .ghost:hover{color:var(--text)}
+@keyframes fadein{from{opacity:0} to{opacity:1}}
+@keyframes pop{from{opacity:0; transform:translateY(8px) scale(.97)} to{opacity:1; transform:none}}
+
+/* Honeypot: off-screen rather than display:none, which some bots detect and skip. */
+.hp{position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden}
+
+.form .cta{width:100%; justify-content:center; margin-top:6px}
+.fine{margin-top:4px; font-size:12px; color:var(--faint); line-height:1.5; text-align:center}
+.step > .fine{margin-top:10px; max-width:40ch}
+
+.code{
+  text-align:center; font-family:var(--mono); font-size:28px; font-weight:500;
+  letter-spacing:.45em; padding:14px 10px 14px calc(10px + .45em);
+}
+
+.links{margin-top:18px; font-size:14px; color:var(--faint);
+  display:flex; gap:8px; justify-content:center; align-items:center; flex-wrap:wrap}
+.link{background:none; border:none; padding:4px; cursor:pointer;
+  font-family:var(--font); font-size:14px; font-weight:600; color:var(--mint)}
+a.link{text-decoration:none}
+.link:hover:not(:disabled){color:var(--mint-2); text-decoration:underline}
+.link:disabled{color:var(--faint); cursor:default}
+
+/* ── Bot picker ────────────────────────────────────────────────────────── */
+#stepReady .lede{margin-bottom:24px}
+.picker{width:100%; max-width:540px; display:flex; flex-direction:column; gap:12px;
+  text-align:left; margin-bottom:26px}
+.picker select{font-weight:600}
+.botcard{border:1px solid var(--line); background:var(--panel); border-radius:16px; padding:16px 18px}
+.bc-tag{font-size:15px; color:var(--text); line-height:1.5}
+.bc-meta{list-style:none; padding:0; margin:12px 0 0; display:flex; flex-wrap:wrap; gap:6px}
+.bc-meta li{font-size:12px; color:var(--muted); border:1px solid var(--line);
+  border-radius:999px; padding:3px 10px; background:rgba(255,255,255,.03)}
+.bc-meta li:empty{display:none}
+.bc-persona{margin-top:14px; padding-top:12px; border-top:1px solid var(--line-2);
+  font-size:14px; color:var(--muted)}
+
+/* "Live with our clients" — sits between the bot card and Start. */
+.notice{width:100%; max-width:540px; text-align:left; margin:-10px 0 26px;
+  padding:14px 16px 15px; border:1px solid rgba(74,222,128,.24); border-radius:14px;
+  background:linear-gradient(180deg, rgba(74,222,128,.08), rgba(74,222,128,.03));
+  font-size:14px; line-height:1.55; color:var(--muted)}
+.notice b{color:var(--text); font-weight:600}
+.notice-head{display:flex; align-items:center; gap:8px; margin-bottom:6px;
+  font:700 10.5px/1 var(--font); text-transform:uppercase; letter-spacing:.14em; color:var(--ok)}
+.live-dot{flex:none; width:7px; height:7px; border-radius:50%; background:var(--ok);
+  animation:beat 1.7s ease-out infinite}
+
+.k{display:block; font-size:10.5px; text-transform:uppercase; letter-spacing:.14em;
+  color:var(--mint); font-weight:700; margin-bottom:3px}
+
+@media (max-width:560px){
+  /* The popup would otherwise start at the picker's left edge and run off-screen. */
+  .cc-pop{width:min(300px, calc(100vw - 48px))}
+  .modal-card{padding:22px 18px 16px}
+
+  .row{grid-template-columns:1fr}
+  .orbwrap.mini{height:96px}
+  .orbwrap.mini .orb{transform:scale(.48)}
+  /* A scaled orb keeps its full layout box, so the shrunk one sits closer to whatever
+     follows than its height suggests. Buy the heading a little air. */
+  #stepDetails h1, #stepCode h1, #stepReady h1{margin-top:10px}
+}
+
+/* ── In call ───────────────────────────────────────────────────────────── */
+/* Top-aligned during a call (see showView): centring would move the controls whenever
+   the visible panel changes height. */
+.stage.stage-live{justify-content:flex-start; padding-top:4px}
+#viewLive{max-width:1240px}
+.live{display:grid; grid-template-columns:minmax(0,1fr); gap:18px; width:100%; text-align:left}
+.live-center{order:-1; display:flex; flex-direction:column; align-items:center; text-align:center; min-width:0}
+.live-center .orbwrap.compact{height:clamp(170px,24vh,240px)}
+
+.botchip{
+  font-size:12.5px; font-weight:600; color:var(--muted); max-width:100%;
+  border:1px solid var(--line); border-radius:999px; padding:5px 13px;
+  background:rgba(255,255,255,.04);
+}
+.botchip:empty{display:none}
+
+/* The agent's lifecycle, in one word, under the orb. */
+.state{
+  font-size:13px; text-transform:uppercase; letter-spacing:.16em; color:var(--mint);
+  font-weight:600; margin-bottom:26px;
+}
+
+.controls{display:flex; gap:12px}
+.ctl{
+  display:inline-flex; align-items:center; gap:9px; cursor:pointer;
+  font-family:var(--font); font-size:14.5px; font-weight:600; padding:12px 22px;
+  border-radius:999px; border:1px solid var(--line); background:rgba(255,255,255,.05);
+  color:var(--text); transition:background .15s, border-color .15s, color .15s;
+}
+.ctl svg{width:17px; height:17px}
+.ctl:hover{background:rgba(255,255,255,.1)}
+.ctl[aria-pressed="true"]{background:var(--warn-soft); border-color:rgba(251,191,36,.34); color:var(--warn)}
+.ctl-end{background:var(--bad-soft); border-color:rgba(248,113,113,.32); color:var(--bad)}
+.ctl-end:hover{background:rgba(248,113,113,.24)}
+
+.tabs{display:flex; gap:4px; padding:4px; margin-top:24px; border-radius:999px;
+  border:1px solid var(--line); background:rgba(255,255,255,.04)}
+.tab{font:600 14px/1 var(--font); color:var(--muted); background:none; border:0;
+  border-radius:999px; padding:10px 18px; cursor:pointer; transition:background .15s, color .15s}
+.tab[aria-selected="true"]{background:rgba(94,234,212,.16); color:var(--mint)}
+.tab .count{font-family:var(--mono); font-size:12px; margin-left:5px; opacity:.85}
+
+/* Panels */
+.panel{position:relative; background:var(--panel); border:1px solid var(--line);
+  border-radius:18px; padding:18px 18px 16px; min-width:0}
+.ph{display:flex; align-items:baseline; justify-content:space-between; gap:12px; margin-bottom:12px}
+.ph h3{font-size:15.5px; font-weight:700; letter-spacing:-.01em}
+.ph-sub{font-size:12px; color:var(--faint); font-family:var(--mono); white-space:nowrap}
+.persona{font-size:14px; color:var(--muted); background:var(--mint-soft);
+  border:1px solid rgba(94,234,212,.16); border-radius:12px; padding:10px 13px; margin-bottom:12px}
+
+/* Script */
+.steps{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:2px}
+.stp{display:grid; grid-template-columns:26px minmax(0,1fr); gap:11px; padding:10px 10px 11px;
+  border-radius:12px; border:1px solid transparent;
+  transition:background .3s, border-color .3s, opacity .3s}
+.stp .n{width:24px; height:24px; border-radius:50%; display:grid; place-items:center;
+  font:600 11.5px/1 var(--mono); color:var(--faint); border:1px solid var(--line); margin-top:1px}
+.stp .say{font-size:13.5px; color:var(--muted); line-height:1.45}
+.stp .say b{color:var(--text); font-weight:600}
+.stp .you{margin-top:7px; font-size:15px; color:var(--text); line-height:1.4;
+  display:flex; gap:8px; align-items:baseline}
+.stp .tag{flex:none; font:700 10px/1 var(--font); text-transform:uppercase; letter-spacing:.1em;
+  color:var(--ink); background:var(--amber); border-radius:5px; padding:4px 6px 3px;
+  position:relative; top:-1px}
+.stp .tip{margin-top:7px; font-size:12.5px; color:var(--faint); display:none}
+.stp.now{background:rgba(94,234,212,.07); border-color:rgba(94,234,212,.30)}
+.stp.now .n{background:var(--mint); color:var(--ink); border-color:var(--mint)}
+.stp.now .tip{display:block}
+.stp.done{opacity:.46}
+.stp.done .n{color:var(--ok); border-color:rgba(74,222,128,.45)}
+.stp.done .you .tag{background:rgba(245,183,61,.5)}
+
+.try{margin-top:12px; border-top:1px solid var(--line-2); padding-top:12px}
+.try summary{cursor:pointer; list-style:none; font-size:13.5px; font-weight:600; color:var(--mint);
+  display:flex; align-items:center; gap:6px}
+.try summary::-webkit-details-marker{display:none}
+.try summary::before{content:"+"; font-family:var(--mono); width:14px}
+.try[open] summary::before{content:"\2212"}
+.try ul{list-style:none; margin:12px 0 0; padding:0; display:flex; flex-direction:column; gap:12px}
+.try .t-say{font-size:14px; color:var(--text)}
+.try .t-exp{font-size:12.5px; color:var(--faint); margin-top:2px}
+
+/* Captured data */
+.chips{display:flex; flex-wrap:wrap; gap:6px; margin-bottom:10px}
+.chip{font-size:12px; font-weight:600; padding:4px 11px; border-radius:999px; line-height:1.4;
+  border:1px solid var(--line); color:var(--muted); background:rgba(255,255,255,.04)}
+.chip.good{color:var(--ok); border-color:rgba(74,222,128,.32); background:var(--ok-soft)}
+.chip.warn{color:var(--warn); border-color:rgba(251,191,36,.32); background:var(--warn-soft)}
+.chip.bad{color:var(--bad); border-color:rgba(248,113,113,.32); background:var(--bad-soft)}
+
+.kv{margin:0; display:flex; flex-direction:column}
+.kvr{display:grid; grid-template-columns:minmax(96px,38%) minmax(0,1fr); gap:12px;
+  padding:9px 6px; margin:0 -6px; border-bottom:1px solid var(--line-2); align-items:baseline;
+  border-radius:8px}
+.kvr:last-child{border-bottom:0}
+.kvr dt{font-size:12.5px; color:var(--faint)}
+.kvr dd{margin:0; font-size:14.5px; color:var(--text); overflow-wrap:anywhere}
+.kvr.empty dd{color:var(--faint)}
+.req{display:inline-block; width:5px; height:5px; border-radius:50%; background:var(--amber);
+  margin-left:6px; vertical-align:middle; position:relative; top:-1px}
+.kvr.flash{animation:flash 1.6s ease-out}
+@keyframes flash{0%{background:rgba(94,234,212,.24)}100%{background:transparent}}
+/* Worked-out rows sit above the fields, set off by a stronger rule. */
+.kv-derived:not(:empty){border-bottom:1px solid var(--line); margin-bottom:2px}
+.kvr.derived dd{font-size:13.5px}
+.kvr.derived.good dd{color:var(--ok)}
+.kvr.derived.bad dd{color:var(--bad)}
+.kv-note{font-size:12px; color:var(--faint); margin-top:10px}
+
+@media (min-width:1080px){
+  .live{grid-template-columns:minmax(300px,370px) minmax(260px,1fr) minmax(300px,370px);
+    gap:28px; align-items:start}
+  .live-center{order:0; position:sticky; top:12px; padding-top:8px}
+  .tabs{display:none}
+  .panel{max-height:calc(100vh - 120px); overflow:auto; scrollbar-width:thin;
+    scrollbar-color:rgba(255,255,255,.14) transparent}
+}
+/* One panel at a time on narrow screens — the tab strip picks which. */
+@media (max-width:1079.98px){
+  .live[data-tab="script"] .p-data{display:none}
+  .live[data-tab="data"] .p-script{display:none}
+  .live{max-width:640px; margin:0 auto}
+}
+
+/* ── After the call ────────────────────────────────────────────────────── */
+#viewEnded h2{font-size:clamp(24px,3.4vw,32px); font-weight:700; margin-bottom:12px}
+#viewEnded .lede{margin-bottom:24px}
+.p-summary{width:100%; max-width:560px; text-align:left; margin-bottom:26px}
+
+/* ── Responsive ────────────────────────────────────────────────────────── */
+@media (max-width:640px){
+  .orbwrap{height:clamp(200px,26vh,260px)}
+  .orb{width:160px; height:160px}
+  .core{width:96px; height:96px}
+  .live-center .orbwrap.compact{height:150px}
+  .live-center .orb{transform:scale(.8)}
+  .state{margin-bottom:18px}
+  .panel{padding:16px 14px 14px}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none !important; transition:none !important}
+}

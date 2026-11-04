@@ -1,0 +1,6 @@
+# Disposition receiver only. Its own venv — do NOT install these into the agent venv
+# or the agent's into this one.
+fastapi>=0.110
+uvicorn[standard]>=0.27
+PyMySQL>=1.1
+python-dotenv>=1.0

@@ -1,0 +1,53 @@
+# /etc/systemd/system/roof-bot.service
+#
+# UK roof assessment agent — the THIRD worker on this box.
+# Install: see ROOF_UK_DEPLOY.md
+#
+# Shares /opt/livekit/bot/.venv but has its OWN WorkingDirectory and .env, because a
+# single .env cannot hold two different DISPOSITION_WEBHOOK_URLs. load_dotenv() resolves
+# relative to the script's own directory, so /opt/livekit/roof-bot/.env is what this
+# process reads — the Smart Health config is never in scope.
+
+[Unit]
+Description=Building Regulatory Services — UK roof assessment agent (roof-bot)
+Documentation=file:///opt/livekit/roof-bot/ROOF_UK_DEPLOY.md
+After=network-online.target docker.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/livekit/roof-bot
+
+# `start` = production mode. NOT `dev` (verbose, no supervision semantics).
+# Interpreter comes from the shared venv; the script and its .env do not.
+ExecStart=/opt/livekit/bot/.venv/bin/python /opt/livekit/roof-bot/agent_roof_uk.py start
+
+# .env is read by load_dotenv() inside the script. Deliberately NOT EnvironmentFile= —
+# systemd's parser is stricter than python-dotenv and rejects quoting it accepts.
+Environment=PYTHONUNBUFFERED=1
+# Silero VAD is CPU-bound and spawns threads per process. With three workers on 4 vCPU
+# the default pool thrashes and shows up as "inference slower than realtime".
+Environment=OMP_NUM_THREADS=1
+
+Restart=always
+RestartSec=5
+
+# ── Graceful drain — the important part for a VOICE agent ────────────────────
+# On stop/restart the worker stops accepting new jobs and finishes calls already in
+# progress. Killing it mid-call drops the caller AND loses the disposition webhook.
+# Must exceed MAX_CALL_SECONDS (300 here) so an in-flight call can end naturally.
+KillSignal=SIGINT
+TimeoutStopSec=360
+KillMode=mixed
+
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=roof-bot
+
+[Install]
+WantedBy=multi-user.target
