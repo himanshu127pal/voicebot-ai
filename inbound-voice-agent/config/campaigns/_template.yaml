@@ -1,0 +1,78 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# CAMPAIGN SCRIPT TEMPLATE
+# Copy this file to <campaign_key>.yaml and fill it in. Files starting with "_"
+# are ignored by the agent. Full guide: docs/SCRIPT_GUIDE.md
+# Changes go live on the next call — no restart needed.
+# ─────────────────────────────────────────────────────────────────────────────
+
+# Unique id (letters, digits, underscore). Shows up in logs and the webhook.
+key: my_campaign
+
+# Exactly ONE campaign should be the default — used when a DID matches nothing.
+default: false
+
+# The numbers customers call back on. Any format: "+44 20 7946 0000", "02079460000".
+dids:
+  - "+44 20 0000 0000"
+
+# Spoken identity.
+company: REPLACE Company Ltd
+agent_name: Emma
+
+# What we originally called about. Spoken in the greeting as:
+#   "We'd tried giving you a call about <purpose>."
+purpose: REPLACE a free home energy check
+
+# One line: the main benefit to the customer.
+benefit: REPLACE It's free and there's no obligation.
+
+# Optional — the exact opening line. Leave out to use the standard one built from
+# company / agent_name / purpose.
+# greeting: >
+#   Hi, thanks for calling ... this is Emma. We'd called you about ...
+#   Is now a good time for a quick minute?
+
+# The ONLY product facts the agent may state. Anything not here → "a specialist will
+# follow up". Keep each to one sentence.
+facts:
+  - REPLACE The check takes about 20 minutes.
+
+# Common questions with approved answers.
+faq:
+  - q: How did you get my number?
+    a: REPLACE approved answer.
+
+# Optional. IANA timezone of the customers (Europe/London, Australia/Sydney, …). Lets the
+# greeting start with `{time_greeting}` → "Good morning" / "Good afternoon" / "Good evening".
+# timezone: Europe/London
+
+# Optional. Details to collect once the caller is interested — asked one per turn, in order,
+# and saved under `field` (lowercase_with_underscores) in the disposition's `answers`.
+# questions:
+#   - field: move_date
+#     ask: What date are you planning to move?
+
+# Anything else from the script the agent must follow (tone, must-say lines, don'ts).
+extra_instructions: ""
+
+# Offer the details on these channels when the caller doesn't want calls.
+channels:
+  whatsapp: true
+  email: true
+
+# Optional: where transfer_to_human sends the caller (SIP URI / tel:).
+# Blank = HUMAN_TRANSFER_URI from .env; if that is blank too, the agent offers a callback.
+human_transfer_uri: ""
+
+# Voice stack:
+#   sarvam   — Hindi/English, auto-detects the caller's language (Naina voice)
+#   deepgram — English only; set stt_language + tts_voice:
+#                en-AU  aura-2-theia-en      en-GB  aura-2-pandora-en
+#                en-US  aura-2-thalia-en
+#              optional keyterms: words the speech-to-text must not mishear (brands,
+#              products). Company and agent name are added automatically.
+voice:
+  stack: deepgram
+  stt_language: en-GB
+  tts_voice: aura-2-pandora-en
+  # keyterms: [REPLACE_BRAND]

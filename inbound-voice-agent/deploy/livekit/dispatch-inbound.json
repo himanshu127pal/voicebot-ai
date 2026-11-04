@@ -1,0 +1,14 @@
+{
+  "name": "inbound-callbacks-dispatch",
+  "trunk_ids": ["ST_REPLACE_WITH_INBOUND_TRUNK_ID"],
+  "rule": {
+    "dispatchRuleIndividual": {
+      "roomPrefix": "inbound-"
+    }
+  },
+  "room_config": {
+    "agents": [
+      { "agent_name": "inbound-bot" }
+    ]
+  }
+}

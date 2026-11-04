@@ -1,0 +1,39 @@
+# /etc/systemd/system/inbound-agent.service
+# Install steps: docs/DEPLOYMENT.md
+
+[Unit]
+Description=Inbound call-back AI voice agent (inbound-bot)
+After=network-online.target docker.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/livekit/inbound-voice-agent
+ExecStart=/opt/livekit/inbound-voice-agent/.venv/bin/python -m inbound_agent start
+
+# .env is read by python-dotenv from WorkingDirectory (not EnvironmentFile=: systemd's
+# parser rejects quoting that dotenv accepts).
+Environment=PYTHONUNBUFFERED=1
+# Silero VAD spawns a thread pool per process; on a shared small box it thrashes.
+Environment=OMP_NUM_THREADS=1
+
+Restart=always
+RestartSec=5
+
+# Graceful drain: stop taking new calls and finish in-flight ones, so no caller is cut
+# off and no disposition is lost. Must exceed MAX_CALL_SECONDS (300).
+KillSignal=SIGINT
+TimeoutStopSec=360
+KillMode=mixed
+
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=inbound-agent
+
+[Install]
+WantedBy=multi-user.target

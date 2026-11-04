@@ -1,0 +1,36 @@
+<!--
+  Route call-backs on our outbound DIDs to the AI agent instead of the IVR.
+
+  Place in the context your carrier delivers DIDs into (usually conf/dialplan/public.xml),
+  ABOVE the existing IVR extension, then run `reloadxml`.
+
+  - destination_number = DID the customer dialled → X-DID    → campaign lookup
+  - caller_id_number   = customer's number        → X-Caller → WhatsApp opt-in / DNC
+  - Bridged to user-part "inbound-ai", which must equal "numbers" in trunk-inbound.json,
+    so this trunk never collides with the outbound-campaign trunks on the same host.
+
+  Rollout: list one or two DIDs in the expression first; the rest keep the IVR.
+-->
+<extension name="did_callback_to_ai_agent">
+  <condition field="destination_number" expression="^\+?(REPLACE_DID_1|REPLACE_DID_2)$">
+
+    <action application="set" data="absolute_codec_string=PCMA"/>
+
+    <action application="set" data="RECORD_STEREO=true"/>
+    <action application="set" data="rec_file=/recordings/inbound/${strftime(%Y%m%d)}/${uuid}.wav"/>
+    <action application="record_session" data="${rec_file}"/>
+
+    <action application="set" data="sip_h_X-Call-Id=${uuid}"/>
+    <action application="set" data="sip_h_X-DID=${destination_number}"/>
+    <action application="set" data="sip_h_X-Caller=${caller_id_number}"/>
+    <action application="set" data="sip_h_X-Recording=${rec_file}"/>
+    <!-- Optional: force a campaign key instead of the DID lookup -->
+    <!-- <action application="set" data="sip_h_X-Campaign=roof_uk"/> -->
+
+    <!-- If the AI leg fails, fall back to the IVR so no caller is ever stranded. -->
+    <action application="set" data="continue_on_fail=true"/>
+    <action application="set" data="hangup_after_bridge=true"/>
+    <action application="bridge" data="sofia/gateway/livekit/inbound-ai"/>
+    <action application="transfer" data="REPLACE_IVR_EXTENSION XML default"/>
+  </condition>
+</extension>

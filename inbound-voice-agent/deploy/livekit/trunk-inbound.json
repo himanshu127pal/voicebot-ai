@@ -1,0 +1,15 @@
+{
+  "trunk": {
+    "name": "inbound-callbacks",
+    "numbers": ["inbound-ai"],
+    "allowed_addresses": ["FREESWITCH_IP_REPLACE_ME"],
+    "include_headers": "SIP_X_HEADERS",
+    "headers_to_attributes": {
+      "X-Call-Id":   "inbound.call_id",
+      "X-DID":       "inbound.did",
+      "X-Caller":    "inbound.caller",
+      "X-Campaign":  "inbound.campaign",
+      "X-Recording": "inbound.recording"
+    }
+  }
+}

@@ -1,0 +1,36 @@
+# Default campaign — answers any DID that no other campaign claims.
+# Naina voice stack (Hindi/English, auto-detect).
+# TODO: replace the REPLACE fields with the final script from Rajesh.
+
+key: naina_default
+default: true
+
+dids: []
+
+company: REPLACE Company Name
+agent_name: Naina
+
+purpose: REPLACE what we called about
+benefit: ""
+
+greeting: >
+  Hello, thanks for calling REPLACE Company Name, this is Naina.
+  We had given you a call earlier — is now a good time for a quick minute?
+
+facts: []
+
+faq:
+  - q: Why did you call me?
+    a: REPLACE approved answer.
+
+extra_instructions: ""
+
+channels:
+  whatsapp: true
+  email: false
+
+human_transfer_uri: ""
+
+voice:
+  stack: sarvam
+  tts_language: hi-IN
