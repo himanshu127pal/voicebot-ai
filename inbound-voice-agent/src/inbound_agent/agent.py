@@ -9,7 +9,7 @@ from .numbers import convert_numbers_in_stream
 from .prompts import build_instructions
 from .redaction import REDACTION_NOTE, has_sensitive_number, redact_numbers
 from .settings import get_settings
-from .tools import ALL_TOOLS
+from .tools import tools_for
 
 log = logging.getLogger(__name__)
 
@@ -31,8 +31,8 @@ class InboundAgent(Agent):
     def __init__(self, state: CallState):
         can_transfer = bool(state.campaign.human_transfer_uri or get_settings().human_transfer_uri)
         super().__init__(
-            instructions=build_instructions(state.campaign, state.caller, can_transfer),
-            tools=ALL_TOOLS,
+            instructions=build_instructions(state.campaign, state.caller_phone, can_transfer),
+            tools=tools_for(state.campaign),
         )
 
     async def on_user_turn_completed(self, turn_ctx, new_message) -> None:

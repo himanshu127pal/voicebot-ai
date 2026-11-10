@@ -36,6 +36,7 @@ class Settings:
 
     campaigns_dir: Path
     console_campaign: str
+    console_caller: str
     llm_provider: str
     gemini_model: str
     anthropic_model: str
@@ -48,6 +49,7 @@ class Settings:
     webhook_url: str
     webhook_token: str
     transcript_log_path: str
+    postcode_api_url: str
 
     vad_activation_threshold: float
     vad_min_speech_duration: float
@@ -71,16 +73,23 @@ def get_settings() -> Settings:
                                 str(PROJECT_ROOT / "config" / "campaigns"))),
         # Console mode has no DID, so this picks the campaign. Ignored on real calls.
         console_campaign=_str("CONSOLE_CAMPAIGN"),
+        # Console mode has no caller ID either; this stands in for it (mobile/landline tests).
+        console_caller=_str("CONSOLE_CALLER"),
         llm_provider=_str("LLM_PROVIDER", "google").lower(),
         gemini_model=_str("GEMINI_MODEL", "gemini-2.5-flash"),
         anthropic_model=_str("ANTHROPIC_MODEL", "claude-haiku-4-5"),
-        max_call_seconds=_float("MAX_CALL_SECONDS", 300),
+        # A full appliance-cover call runs 5–7 minutes; 10 leaves room for repeats.
+        max_call_seconds=_float("MAX_CALL_SECONDS", 600),
         nudge_after_seconds=_float("NUDGE_AFTER_SECONDS", 10),
         max_nudges=_int("MAX_NUDGES", 3),
         human_transfer_uri=_str("HUMAN_TRANSFER_URI"),
         webhook_url=_str("DISPOSITION_WEBHOOK_URL"),
         webhook_token=_str("DISPOSITION_WEBHOOK_TOKEN"),
         transcript_log_path=_str("TRANSCRIPT_LOG_PATH"),
+        # UK postcode checker (free, no key). Set to "off" to skip the lookup — the agent
+        # then just reads the postcode back.
+        postcode_api_url=("" if _str("POSTCODE_API_URL").lower() == "off"
+                          else _str("POSTCODE_API_URL", "https://api.postcodes.io")),
         # 0.6 rejects quiet background chatter without dropping soft speakers (default 0.5).
         vad_activation_threshold=_float("VAD_ACTIVATION_THRESHOLD", 0.6),
         vad_min_speech_duration=_float("VAD_MIN_SPEECH_DURATION", 0.10),

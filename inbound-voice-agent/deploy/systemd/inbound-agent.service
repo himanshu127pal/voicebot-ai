@@ -21,9 +21,9 @@ Restart=always
 RestartSec=5
 
 # Graceful drain: stop taking new calls and finish in-flight ones, so no caller is cut
-# off and no disposition is lost. Must exceed MAX_CALL_SECONDS (300).
+# off and no disposition is lost. Must exceed MAX_CALL_SECONDS (600).
 KillSignal=SIGINT
-TimeoutStopSec=360
+TimeoutStopSec=660
 KillMode=mixed
 
 NoNewPrivileges=true

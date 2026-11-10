@@ -36,8 +36,8 @@ Customer dials our DID
 |---|---|
 | "Who is this?" / doesn't remember | Who we are + why we called, ask if they want to hear more |
 | Interested | One benefit → `mark_interested` → `book_callback` or `transfer_to_human` |
-| Busy | WhatsApp/email details, or a callback |
-| Not interested / no calls | Offer WhatsApp/email **once** → `share_details` or `opt_out` |
+| Busy | WhatsApp details (email only if no WhatsApp), or a callback |
+| Not interested / no calls | Offer WhatsApp **once**, then email once if no → `share_details` or `opt_out` |
 | Annoyed / "spam?" | Apologise, confirm legitimacy, `opt_out` immediately, no pitch |
 | Wrong number | Apologise, `opt_out` |
 | Wants a person | `transfer_to_human` (falls back to a callback if not configured) |
@@ -56,6 +56,9 @@ most. Keep the final block last when editing.
 | `prompts.py` | System prompt + greeting | no |
 | `disposition.py` | Report payload, webhook, JSONL | no |
 | `numbers.py` | Digits → English words (streaming) | no |
+| `phones.py` | Number → valid / country / mobile or landline (libphonenumber) | no |
+| `postcodes.py` | Spoken UK postcode → clean postcode → postcodes.io | no |
+| `validation.py` | Full-name and spoken-email checks | no |
 | `pipeline.py` | STT / LLM / TTS / VAD | yes |
 | `telephony.py` | Hang-up, SIP REFER transfer | yes |
 | `tools.py` | LLM function tools (state via session userdata) | yes |
@@ -65,6 +68,11 @@ most. Keep the final block last when editing.
 
 Business logic is kept out of the LiveKit-facing modules so it is unit-tested without a
 server.
+
+Hard rules (WhatsApp only to a mobile, email only without WhatsApp, full name, postcode
+check) are enforced inside the tools, not just asked for in the
+prompt — a tool refuses with `NOT SAVED — …` and tells the model what to ask instead.
+See [DATA_CHECKS.md](DATA_CHECKS.md).
 
 ## Campaign resolution
 

@@ -83,4 +83,5 @@ On start you should see `loaded N campaign(s)` and no `skipping campaign file` e
 
 - **Script change:** edit the YAML in `config/campaigns/` — applies on the next call.
 - **Code change:** `git pull && sudo systemctl restart inbound-agent`. The service drains
-  in-flight calls first (`TimeoutStopSec=360`).
+  in-flight calls first (`TimeoutStopSec=660`, above `MAX_CALL_SECONDS=600`). After
+  changing the unit file: `sudo systemctl daemon-reload`.

@@ -11,6 +11,7 @@ from .call_guards import SilenceNudger, start_max_duration_guard
 from .call_state import CallState, usable_phone
 from .campaigns import CampaignRegistry
 from .disposition import DispositionReporter
+from .phones import check_phone
 from .pipeline import build_llm, build_stt, build_tts, build_turn_handling, load_vad
 from .prompts import build_greeting
 from .settings import get_settings
@@ -35,13 +36,17 @@ def _build_call_state(ctx: JobContext, attrs: dict) -> CallState:
     settings = get_settings()
     did = _first(attrs, ATTR_DID)
     hint = _first(attrs, ATTR_CAMPAIGN)
-    if ctx.is_fake_job() and not hint:
-        hint = settings.console_campaign
+    caller_attr = _first(attrs, ATTR_CALLER)
+    if ctx.is_fake_job():
+        hint = hint or settings.console_campaign
+        caller_attr = caller_attr or settings.console_caller
     registry = CampaignRegistry.load(settings.campaigns_dir)
     campaign = registry.resolve(did=did, hint=hint)
+    caller = usable_phone(caller_attr)
     return CallState(
         campaign=campaign,
-        caller=usable_phone(_first(attrs, ATTR_CALLER)),
+        caller=caller,
+        caller_phone=check_phone(caller, campaign.country),
         did=did,
         call_id=_first(attrs, ATTR_CALL_ID),
         room=ctx.room.name,
@@ -57,9 +62,9 @@ async def entrypoint(ctx: JobContext) -> None:
     # Console mode hands us a mock participant whose attributes are not a real dict.
     attrs = participant.attributes if isinstance(participant.attributes, dict) else {}
     state = _build_call_state(ctx, attrs)
-    log.info("call room=%s did=%r caller=…%s campaign=%s stack=%s llm=%s", state.room,
-             state.did, state.caller[-4:], state.campaign.key, state.campaign.voice.stack,
-             settings.llm_provider)
+    log.info("call room=%s did=%r caller=…%s (%s) campaign=%s stack=%s llm=%s", state.room,
+             state.did, state.caller[-4:], state.caller_phone.kind, state.campaign.key,
+             state.campaign.voice.stack, settings.llm_provider)
 
     campaign = state.campaign
     session = AgentSession(

@@ -26,7 +26,9 @@ How to turn a campaign script into a file the agent can use. No coding needed.
 | `extra_instructions` | Any other rule from the script | `Never quote prices.` |
 | `channels` | Offer details on WhatsApp / email? | `whatsapp: true` |
 | `human_transfer_uri` | *Optional.* Where "talk to a person" goes | ask the tech team |
+| `country` | *Optional.* 2-letter country code. Reads local phone numbers (`07…`) and spots mobile vs landline; `GB` + an `address` question also turns on the postcode check | `GB` |
 | `voice` | `sarvam` (Hindi/English) or `deepgram` (English) | see template |
+| `voice.tts_speed` | *Optional, deepgram only.* Speaking rate 0.7–1.5 (1.0 = normal) | `0.9` |
 
 ```yaml
 faq:
@@ -56,6 +58,13 @@ questions:
 - Says yes if asked whether it's an AI; never takes card/bank details (card-length
   numbers are stripped before they reach the AI model).
 - Speaks numbers correctly — write numbers as digits (`499`, `20 minutes`).
+- Works out whether a phone number is a mobile or a landline — don't add a "mobile or
+  landline?" question. WhatsApp is only ever taken on a mobile.
+- WhatsApp first; email only if they don't want WhatsApp — never both.
+- `full_name` must be first name + surname: a lone "Robert" is sent back for the surname.
+- With `country: GB` and an `address` question: checks the postcode is real and reads
+  it back with its area, then takes the first line (street) as said.
+  Details: [DATA_CHECKS.md](DATA_CHECKS.md).
 
 ## Writing tips
 

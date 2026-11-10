@@ -11,6 +11,7 @@ from datetime import datetime, timezone
 from zoneinfo import ZoneInfo
 
 from .campaigns import Campaign
+from .phones import PhoneInfo, check_phone
 
 
 def time_greeting(tz_name: str, now: datetime | None = None) -> str:
@@ -33,9 +34,14 @@ def build_greeting(c: Campaign, now: datetime | None = None) -> str:
             f"Is now an okay time for a quick minute?")
 
 
-def _channels(c: Campaign) -> str:
-    names = [n for n, on in (("WhatsApp", c.whatsapp_enabled), ("email", c.email_enabled)) if on]
-    return " or ".join(names)
+def _channels(c: Campaign) -> tuple[str, str]:
+    """(channel to offer first, fallback rule). WhatsApp first; email only after a no to
+    WhatsApp — never both in the same question."""
+    if c.whatsapp_enabled and c.email_enabled:
+        return "WhatsApp", "No to WhatsApp, or no mobile → offer email once, in your next turn."
+    if c.whatsapp_enabled:
+        return "WhatsApp", ""
+    return ("email", "") if c.email_enabled else ("", "")
 
 
 def _language_rule(c: Campaign) -> tuple[str, str]:
@@ -111,14 +117,17 @@ _HOW_YOU_TALK = (
 
 
 def _call_handling(c: Campaign, can_transfer: bool) -> str:
-    channels = _channels(c)
-    if channels:
-        no_calls = (f"ask ONCE: \"Would you prefer we send you the details on {channels} "
-                    f"instead of calling?\" If yes → share_details. If no → opt_out")
-        busy = f"offer the details on {channels}, or a callback at a time that suits them"
+    channel, fallback = _channels(c)
+    if channel:
+        no_calls = " ".join(filter(None, (
+            f"ask ONCE: \"Would you prefer we send you the details on {channel} instead of "
+            f"calling?\" If yes → share_details.", fallback, "If no → opt_out")))
+        busy = " ".join(filter(None, (
+            f"offer the details on {channel}, or a callback at a time that suits them.",
+            fallback)))
     else:
         no_calls = "opt_out"
-        busy = "offer a callback at a time that suits them"
+        busy = "offer a callback at a time that suits them."
 
     next_step = ("a specialist calling them back (book_callback) or, if they want to talk "
                  "now, transfer_to_human" if can_transfer else
@@ -135,7 +144,7 @@ def _call_handling(c: Campaign, can_transfer: bool) -> str:
         "- \"Who is this?\" / doesn't remember our call → say who we are and why we called, "
         "then ask if they'd like to hear a little more.\n"
         f"- Interested → {interested}.\n"
-        f"- Busy / not now → {busy}.\n"
+        f"- Busy / not now → {busy}\n"
         f"- Not interested, or doesn't want phone calls → {no_calls}, and reassure them "
         "nobody will call again about this unless they ask.\n"
         "- Annoyed, \"stop calling me\", \"is this spam?\" → apologise sincerely, confirm we "
@@ -149,6 +158,12 @@ def _call_handling(c: Campaign, can_transfer: bool) -> str:
 def _tools(c: Campaign, can_transfer: bool) -> str:
     save_answer = ("- save_answer(field, answer) — save each answer to the QUESTIONS.\n"
                    if c.questions else "")
+    address = (
+        "- check_postcode(postcode) — checks the UK postcode is real and finds its area.\n"
+        "- save_address(first_line) — saves the first line of the address, after the "
+        "postcode check.\n"
+        if c.checks_uk_address else ""
+    )
     transfer = (
         "- transfer_to_human — first say one short line like \"Sure, let me put you "
         "through\", then call it.\n"
@@ -159,12 +174,13 @@ def _tools(c: Campaign, can_transfer: bool) -> str:
     )
     return (
         "## TOOLS:\n"
-        "- share_details(channel, contact) — they agreed to get the details on WhatsApp or "
-        "email.\n"
+        "- share_details(channel, contact) — they agreed to get the details on WhatsApp (a "
+        "mobile only), or by email if they don't want WhatsApp.\n"
         "- opt_out — they don't want any more calls.\n"
         "- book_callback(when) — they want a call at a specific time.\n"
         "- mark_interested(notes) — they're interested; notes = one line for the specialist.\n"
         f"{save_answer}"
+        f"{address}"
         f"{transfer}"
         "- set_disposition(outcome, reason) — only for NOT_INTERESTED, WRONG_NUMBER or "
         "INFO_ONLY when no other tool fits.\n"
@@ -172,14 +188,22 @@ def _tools(c: Campaign, can_transfer: bool) -> str:
     )
 
 
-def build_instructions(c: Campaign, caller_number: str = "", can_transfer: bool = True) -> str:
+def _caller_clause(phone: PhoneInfo) -> str:
+    if not phone.valid:
+        return "The caller's number is withheld — if they want WhatsApp, ask for a mobile number."
+    if phone.can_whatsapp:
+        return (f"The caller is ringing from {phone.describe()} ending in {phone.last4}. For "
+                "WhatsApp, assume this number unless they give another.")
+    return (f"The caller is ringing from {phone.describe()} ending in {phone.last4} — "
+            "WhatsApp does NOT work on it. Never offer WhatsApp to this number; for WhatsApp, "
+            "ask for a mobile number.")
+
+
+def build_instructions(c: Campaign, caller: PhoneInfo | str = "",
+                       can_transfer: bool = True) -> str:
     language_rule, language_reminder = _language_rule(c)
-    caller_clause = (
-        f"The caller is ringing from a number ending in {caller_number[-4:]}. For WhatsApp, "
-        "assume this number unless they give another."
-        if caller_number else
-        "The caller's number is withheld — if they want WhatsApp, ask for the number."
-    )
+    phone = caller if isinstance(caller, PhoneInfo) else check_phone(caller, c.country)
+    caller_clause = _caller_clause(phone)
     extra = f"## CAMPAIGN NOTES:\n{c.extra_instructions}\n\n" if c.extra_instructions else ""
 
     return (

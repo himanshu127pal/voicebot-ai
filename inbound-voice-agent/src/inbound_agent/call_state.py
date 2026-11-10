@@ -7,6 +7,7 @@ from dataclasses import dataclass, field
 from datetime import datetime, timezone
 
 from .campaigns import Campaign, digits_only
+from .phones import PhoneInfo
 from .redaction import REDACTION_NOTE, redact_numbers
 
 
@@ -41,6 +42,9 @@ def _now() -> datetime:
 class CallState:
     campaign: Campaign
     caller: str = ""
+    caller_phone: PhoneInfo = field(default_factory=PhoneInfo)   # mobile / landline / …
+    # The best number they confirmed (caller ID or one they gave) — "same number" later.
+    contact_phone: PhoneInfo = field(default_factory=PhoneInfo)
     did: str = ""
     call_id: str = ""
     room: str = ""
@@ -56,6 +60,16 @@ class CallState:
     transferred: bool = False
     notes: str = ""
     answers: dict[str, str] = field(default_factory=dict)   # campaign question field → answer
+
+    # Validation progress — how many times a detail was rejected, so the agent stops
+    # pushing after a couple of tries instead of annoying the caller.
+    name_rejections: int = 0
+    email_rejections: int = 0
+    postcode_checks: int = 0
+    postcode: str = ""             # "SW1A 1AA"
+    postcode_area: str = ""        # "Westminster, London" (from postcodes.io)
+    postcode_verified: bool = False
+
     # What the LLM has said so far in its current reply (set by InboundAgent.llm_node).
     reply_text: str = ""
 
@@ -65,6 +79,11 @@ class CallState:
         text = redact_numbers((text or "").replace(REDACTION_NOTE, "")).strip()
         if text:
             self.transcript.append({"role": role, "text": text, "at": _now().isoformat()})
+
+    def recent_caller_turns(self, count: int = 4) -> list[str]:
+        """What the caller said in their last few turns — a number is often spread over
+        two ('zero seven four…' / '…one two three')."""
+        return [t["text"] for t in self.transcript if t["role"] == "user"][-count:]
 
     def add_note(self, note: str) -> None:
         note = (note or "").strip()

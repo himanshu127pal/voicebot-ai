@@ -37,6 +37,9 @@ needed. Only the model keys are required (LLM + the campaign's voice stack).
 .venv/bin/python -m inbound_agent console --list-devices
 ```
 
+Console mode has no caller ID. To test the mobile/landline check, set `CONSOLE_CALLER` in
+`.env`: `+442079460123` (UK landline), `+447400123456` (UK mobile), or blank (withheld).
+
 In `--text` mode set `NUDGE_AFTER_SECONDS=60` so the silence check-in doesn't fire while
 you're typing. Hang-up and transfer are simulated in console mode; outcomes are still written to
 `TRANSCRIPT_LOG_PATH`. `cloud turn detector failed (401)` / `Adaptive Interruption … 401`
@@ -51,7 +54,11 @@ src/inbound_agent/
   worker.py            LiveKit entrypoint: one run per call
   agent.py             InboundAgent (prompt + tools + number-to-words TTS filter)
   tools.py             share_details, opt_out, book_callback, mark_interested,
+                       save_answer, check_postcode, save_address,
                        transfer_to_human, set_disposition, end_call
+  phones.py            Phone number → valid? country? mobile or landline?
+  postcodes.py         Spoken UK postcode → clean postcode → postcodes.io lookup
+  validation.py        Full-name and spoken-email checks
   prompts.py           System prompt + greeting, built from the campaign
   campaigns.py         YAML loading, validation, DID → campaign lookup
   call_state.py        Per-call state and outcome rules
@@ -65,7 +72,7 @@ deploy/
   livekit/             SIP inbound trunk + dispatch rule
   freeswitch/          Dialplan: DID → agent (IVR as fallback)
   systemd/             Service unit
-docs/                  ARCHITECTURE · DEPLOYMENT · SCRIPT_GUIDE
+docs/                  ARCHITECTURE · DEPLOYMENT · SCRIPT_GUIDE · DATA_CHECKS · CHANGELOG
 tests/                 Unit tests (no LiveKit/network needed)
 ```
 
@@ -74,6 +81,9 @@ tests/                 Unit tests (no LiveKit/network needed)
 - [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) — call flow, modules, outcome rules
 - [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) — server setup, LiveKit, FreeSWITCH, systemd
 - [docs/SCRIPT_GUIDE.md](docs/SCRIPT_GUIDE.md) — writing a campaign script (for the script team)
+- [docs/DATA_CHECKS.md](docs/DATA_CHECKS.md) — mobile/landline, postcode, name and email
+  checks, and the free (and paid) services behind them
+- [docs/CHANGELOG.md](docs/CHANGELOG.md) — what changed, when, and why
 
 ## Status
 

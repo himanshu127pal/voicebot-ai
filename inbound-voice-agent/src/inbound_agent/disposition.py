@@ -47,6 +47,7 @@ def build_payload(state: CallState, agent_name: str, ended_at: datetime | None =
         "company":            state.campaign.company,
         "did":                state.did,
         "caller_number":      state.caller,
+        "caller_line_type":   state.caller_phone.kind,   # mobile / landline / other / invalid
         "outcome":            outcome,
         "disposition_code":   OUTCOME_TO_CODE.get(outcome, "Follow-up"),
         "do_not_call":        state.do_not_call,
@@ -60,6 +61,8 @@ def build_payload(state: CallState, agent_name: str, ended_at: datetime | None =
         "transferred":        state.transferred,
         "notes":              state.notes,
         "answers":            state.answers,
+        "postcode":           state.postcode,
+        "postcode_verified":  state.postcode_verified,   # found on postcodes.io
         "recording":          state.recording,
         "room":               state.room,
         "started_at":         state.started_at.isoformat(),

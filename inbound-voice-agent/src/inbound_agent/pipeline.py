@@ -73,7 +73,7 @@ def build_tts(voice: VoiceConfig):
         log.error("tts_voice %r is not a Deepgram Aura voice — using %s", model,
                   _DEFAULT_AURA_VOICE)
         model = _DEFAULT_AURA_VOICE
-    return deepgram.TTS(model=model)
+    return deepgram.TTS(model=model, speed=voice.tts_speed)
 
 
 def build_llm(settings: Settings):

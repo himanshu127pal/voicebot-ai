@@ -84,6 +84,20 @@ def test_compliance_rules_present(english_campaign):
     assert "Never claim to be human" in prompt
 
 
+def test_caller_line_type_in_prompt(english_campaign):
+    c = replace(english_campaign, country="GB")
+    assert "a UK mobile ending in 3456" in build_instructions(c, "07400123456")
+    landline = build_instructions(c, "02079460000")
+    assert "a UK landline ending in 0000" in landline
+    assert "WhatsApp does NOT work on it" in landline
+
+
+def test_whatsapp_and_email_never_offered_together(english_campaign):
+    prompt = build_instructions(english_campaign)
+    assert "WhatsApp or email" not in prompt
+    assert "offer email once, in your next turn" in prompt
+
+
 def test_channels_disabled_skips_whatsapp_offer(english_campaign):
     c = replace(english_campaign, whatsapp_enabled=False, email_enabled=False)
     handling = build_instructions(c).split("## HOW TO HANDLE THE CALL:")[1].split("## TOOLS:")[0]

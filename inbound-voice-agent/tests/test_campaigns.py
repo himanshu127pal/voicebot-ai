@@ -28,6 +28,19 @@ def test_appliance_cover_campaign(campaigns_dir):
     assert c.agent_name == "Stacy" and c.timezone == "Europe/London"
     assert [q.field for q in c.questions][:3] == ["full_name", "machine_working", "machine_make"]
     assert c.voice.stt_language == "en-GB"
+    assert c.country == "GB" and c.checks_uk_address
+    assert c.voice.tts_speed == 0.9
+    assert "number_type" not in [q.field for q in c.questions]   # detected, never asked
+
+
+def test_tts_speed_and_country_validation():
+    base = {"key": "k", "company": "c", "agent_name": "a", "purpose": "p"}
+    assert Campaign.from_dict({**base, "country": "gb"}).country == "GB"
+    with pytest.raises(CampaignError, match="country"):
+        Campaign.from_dict({**base, "country": "UK1"})
+    assert VoiceConfig.from_dict({"stack": "deepgram"}).tts_speed is None
+    with pytest.raises(CampaignError, match="tts_speed"):
+        VoiceConfig.from_dict({"stack": "deepgram", "tts_speed": 2})
 
 
 def test_unknown_timezone_rejected():

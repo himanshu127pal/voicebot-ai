@@ -28,6 +28,9 @@ _PLACEHOLDER = "REPLACE"
 _DID_SUFFIX_LEN = 9
 _MIN_DID_DIGITS = 6
 _FIELD_RE = re.compile(r"^[a-z][a-z0-9_]{0,40}$")
+_COUNTRY_RE = re.compile(r"^[A-Z]{2}$")
+# Deepgram Aura accepts 0.7–1.5; 1.0 is its normal rate.
+_MIN_TTS_SPEED, _MAX_TTS_SPEED = 0.7, 1.5
 
 
 class CampaignError(ValueError):
@@ -46,6 +49,7 @@ class VoiceConfig:
     tts_voice: str = ""
     speaker: str = ""
     keyterms: tuple[str, ...] = ()   # deepgram: words STT must not mishear (names, brands)
+    tts_speed: float | None = None   # deepgram: speaking rate, 0.7–1.5 (None = 1.0)
 
     @property
     def bilingual(self) -> bool:
@@ -72,7 +76,21 @@ class VoiceConfig:
             stt_language=str(data.get("stt_language", "en-US")),
             tts_voice=str(data.get("tts_voice", "aura-2-thalia-en")),
             keyterms=tuple(str(k).strip() for k in keyterms if str(k).strip()),
+            tts_speed=_parse_tts_speed(data.get("tts_speed")),
         )
+
+
+def _parse_tts_speed(raw) -> float | None:
+    if raw is None or str(raw).strip() == "":
+        return None
+    try:
+        speed = float(raw)
+    except (TypeError, ValueError) as e:
+        raise CampaignError(f"voice.tts_speed must be a number, got {raw!r}") from e
+    if not _MIN_TTS_SPEED <= speed <= _MAX_TTS_SPEED:
+        raise CampaignError(f"voice.tts_speed must be between {_MIN_TTS_SPEED} and "
+                            f"{_MAX_TTS_SPEED}, got {speed}")
+    return speed
 
 
 @dataclass(frozen=True)
@@ -105,6 +123,13 @@ def _parse_questions(raw) -> tuple[Question, ...]:
     return tuple(questions)
 
 
+def _parse_country(raw) -> str:
+    code = str(raw or "").strip().upper()
+    if code and not _COUNTRY_RE.match(code):
+        raise CampaignError(f"country must be a 2-letter code like GB, AU or US, got {raw!r}")
+    return code
+
+
 def _parse_timezone(raw) -> str:
     name = str(raw or "").strip()
     if name:
@@ -133,7 +158,14 @@ class Campaign:
     email_enabled: bool = True
     human_transfer_uri: str = ""
     timezone: str = ""   # IANA name, e.g. Europe/London — drives {time_greeting}
+    # ISO code, e.g. GB. Reads national phone numbers ("07…"); GB also turns on the
+    # postcode check (check_postcode / save_address).
+    country: str = ""
     voice: VoiceConfig = field(default_factory=VoiceConfig)
+
+    @property
+    def checks_uk_address(self) -> bool:
+        return self.country == "GB" and any(q.field == "address" for q in self.questions)
 
     @classmethod
     def from_dict(cls, data: dict) -> "Campaign":
@@ -166,6 +198,7 @@ class Campaign:
             email_enabled=bool(channels.get("email", True)),
             human_transfer_uri=str(data.get("human_transfer_uri") or "").strip(),
             timezone=_parse_timezone(data.get("timezone")),
+            country=_parse_country(data.get("country")),
             voice=VoiceConfig.from_dict(data.get("voice")),
         )
 
