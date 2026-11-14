@@ -2,6 +2,38 @@
 
 What changed in the inbound agent, when, and why. Newest first.
 
+## 2026-11-12 — Per-call cost
+
+- **Every call log line now says what the call cost.** `usage` = LiveKit's per-model
+  counts (LLM tokens incl. cached, TTS characters, STT audio seconds); `cost` = those
+  priced at pay-as-you-go rates (`costs.py`) in USD, split STT / TTS / LLM / telephony,
+  plus the ₹ total. Also sent to the webhook, and the `call ended` log line shows it.
+- `python -m inbound_agent.costs` totals the log: per call, per minute, per campaign.
+  Calls logged before this change are skipped.
+- New settings: `USD_INR_RATE` (Sarvam bills in rupees), `TELEPHONY_USD_PER_MINUTE`
+  (carrier rate from its invoice; 0 = AI cost only). Server and DID rental are fixed
+  monthly costs and are not in the per-call figure.
+- `gemini-2.5-flash` is deprecated; from 2026-12-01 Google routes it to
+  `gemini-3.5-flash-lite` at the same price. Test the bot on it before then.
+
+## 2026-11-12 — Client feedback round 2 (inbound call-backs)
+
+- **Name and address confirmed, not asked.** We rang the caller first, so their record
+  exists. The caller ID is looked up in `LEADS_FILE` (`leads.py`). With a record, Stacy
+  asks *"Am I speaking with Daniel Whitmore?"*, then reads the address back and calls
+  `confirm_address` on a yes. No postcode is asked unless they've moved. Nothing is read
+  out before the name is confirmed. No record → asks as before.
+  `config/test_leads.yaml` holds fake customers for console tests. Report: `lead_found`,
+  `address_on_file`.
+- **No "is this a convenient time?" on a call-back.** The caller rang us. The
+  `appliance_cover_uk` greeting and the default greeting now end with *"Would you like
+  to hear a little more about it?"*.
+- **Stacy says what kind of line it is.** *"I can see you're calling from a landline, so
+  I can't send WhatsApp messages to it — do you have a mobile…?"* (and *"…from a mobile
+  ending in 3456"*). Before, she knew but only asked for a mobile.
+- **WhatsApp first, then email, nothing else.** The "we'll post the details" fallback is
+  gone.
+
 ## 2026-11-10 (after the first console test)
 
 Test call: 9 minutes, `data/calls.jsonl` (13:39–13:48 IST).

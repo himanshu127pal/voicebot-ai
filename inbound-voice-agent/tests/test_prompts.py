@@ -2,6 +2,7 @@ from dataclasses import replace
 from datetime import datetime, timezone
 
 from inbound_agent.campaigns import Campaign, FaqItem, Question, VoiceConfig
+from inbound_agent.leads import Lead
 from inbound_agent.prompts import build_greeting, build_instructions
 
 
@@ -86,10 +87,44 @@ def test_compliance_rules_present(english_campaign):
 
 def test_caller_line_type_in_prompt(english_campaign):
     c = replace(english_campaign, country="GB")
-    assert "a UK mobile ending in 3456" in build_instructions(c, "07400123456")
+    mobile = build_instructions(c, "07400123456")
+    assert "a UK mobile ending in 3456" in mobile
+    assert "I can see you're calling from a mobile ending in 3456" in mobile
     landline = build_instructions(c, "02079460000")
     assert "a UK landline ending in 0000" in landline
     assert "WhatsApp does NOT work on it" in landline
+    assert "I can see you're calling from a landline" in landline
+
+
+def test_default_greeting_does_not_ask_if_it_is_a_good_time(english_campaign):
+    greeting = build_greeting(english_campaign).lower()
+    assert "okay time" not in greeting and "convenient" not in greeting
+
+
+def _cover():
+    return Campaign(key="c", company="Acme", agent_name="Stacy", purpose="p", country="GB",
+                    questions=(Question("full_name", "Your name?"),
+                               Question("address", "Your postcode?")))
+
+
+def test_details_on_file_are_confirmed_not_asked():
+    lead = Lead("Daniel Whitmore", "14 Hawthorn Grove", "Stretford", "M32 0JG")
+    prompt = build_instructions(_cover(), "07400123456", lead=lead)
+    assert "## ON FILE" in prompt
+    assert "Am I speaking with Daniel Whitmore?" in prompt
+    assert "save_answer full_name \"Daniel Whitmore\"" in prompt
+    assert "14 Hawthorn Grove, Stretford, M 3 2, 0 J G — is that still right?" in prompt
+    assert "confirm_address" in prompt.split("## TOOLS:")[1]
+    assert "only once they've confirmed their name" in prompt
+    assert prompt.index("## ON FILE") < prompt.index("MOST IMPORTANT")
+
+
+def test_nothing_on_file_means_no_on_file_block():
+    prompt = build_instructions(_cover(), "07400123456")
+    assert "## ON FILE" not in prompt and "confirm_address" not in prompt
+    name_only = build_instructions(_cover(), lead=Lead(full_name="Daniel Whitmore"))
+    assert "Am I speaking with Daniel Whitmore?" in name_only
+    assert "confirm_address" not in name_only
 
 
 def test_whatsapp_and_email_never_offered_together(english_campaign):

@@ -75,7 +75,7 @@ rest.
   can't be sure. To know for certain you need a paid carrier lookup (below).
 - It can't tell whether a number **has WhatsApp installed**. No free official check
   exists. The backend should treat a failed WhatsApp send as a signal to fall back to
-  email or post.
+  email.
 - It checks the number *range* is real. It doesn't check that the line is switched on;
   that needs a paid HLR lookup.
 
@@ -100,6 +100,15 @@ data), which is refreshed every quarter.
 
 Example result for `SW1A 1AA`: `admin_district: Westminster`, `region: London`,
 `country: England`.
+
+**Address already on file (we called them first):** the caller's number is looked up in
+`LEADS_FILE` (`leads.py`; `config/test_leads.yaml` holds fake customers for console
+tests). If there's a record, the agent first confirms the name (*"Am I speaking with
+Daniel Whitmore?"*), then reads the address back (*"I have your address as 14 Hawthorn
+Grove, Stretford, M 3 2, 0 J G. Is that still right?"*) and calls `confirm_address` on
+a yes, without asking for the postcode. Nothing on file is read out until the name is
+confirmed, since whoever answers might not be the customer. If the caller has moved, or
+there's no record, the steps below apply.
 
 **How the agent uses it:**
 
@@ -129,8 +138,9 @@ Example result for `SW1A 1AA`: `admin_district: Westminster`, `region: London`,
 **Fails soft:** if postcodes.io is slow (over 3 seconds) or down, the agent just reads the
 postcode back and carries on. `POSTCODE_API_URL=off` in `.env` turns the lookup off.
 
-**Report fields:** `postcode`, `postcode_verified` (found on postcodes.io), and
-`answers.address` (first line, area, postcode).
+**Report fields:** `postcode`, `postcode_verified` (found on postcodes.io),
+`lead_found`, `address_on_file` (confirmed from the record), and `answers.address`
+(first line, area, postcode).
 
 **Accuracy and limits:**
 
@@ -178,8 +188,8 @@ your surname, please?"*. After 2 refusals it saves what it has, marked
   `john.smith@gmail.com`) and checks the format. An unclear address is refused rather
   than guessed.
 - reads the address back to the caller.
-- after 3 unclear attempts, stops asking, notes what was heard, and says the details
-  will come by post.
+- after 3 unclear attempts, stops asking, notes what was heard, and carries on. It never
+  offers post: WhatsApp first, email if not, nothing else (client decision, 2026-11-12).
 
 ## 6. Speaking speed
 

@@ -31,8 +31,9 @@ class InboundAgent(Agent):
     def __init__(self, state: CallState):
         can_transfer = bool(state.campaign.human_transfer_uri or get_settings().human_transfer_uri)
         super().__init__(
-            instructions=build_instructions(state.campaign, state.caller_phone, can_transfer),
-            tools=tools_for(state.campaign),
+            instructions=build_instructions(state.campaign, state.caller_phone, can_transfer,
+                                            lead=state.lead),
+            tools=tools_for(state.campaign, state.lead),
         )
 
     async def on_user_turn_completed(self, turn_ctx, new_message) -> None:

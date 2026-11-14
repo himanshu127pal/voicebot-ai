@@ -7,6 +7,7 @@ from dataclasses import dataclass, field
 from datetime import datetime, timezone
 
 from .campaigns import Campaign, digits_only
+from .leads import Lead
 from .phones import PhoneInfo
 from .redaction import REDACTION_NOTE, redact_numbers
 
@@ -45,6 +46,7 @@ class CallState:
     caller_phone: PhoneInfo = field(default_factory=PhoneInfo)   # mobile / landline / …
     # The best number they confirmed (caller ID or one they gave) — "same number" later.
     contact_phone: PhoneInfo = field(default_factory=PhoneInfo)
+    lead: Lead | None = None   # our record for this number (we called them first)
     did: str = ""
     call_id: str = ""
     room: str = ""
@@ -69,6 +71,7 @@ class CallState:
     postcode: str = ""             # "SW1A 1AA"
     postcode_area: str = ""        # "Westminster, London" (from postcodes.io)
     postcode_verified: bool = False
+    address_on_file: bool = False   # caller confirmed the address from their record
 
     # What the LLM has said so far in its current reply (set by InboundAgent.llm_node).
     reply_text: str = ""

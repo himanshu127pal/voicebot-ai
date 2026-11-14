@@ -63,6 +63,7 @@ src/inbound_agent/
   campaigns.py         YAML loading, validation, DID → campaign lookup
   call_state.py        Per-call state and outcome rules
   disposition.py       End-of-call report → webhook + JSONL log
+  costs.py             Per-call cost from model usage; `python -m inbound_agent.costs`
   call_guards.py       Silence nudge + max call duration
   pipeline.py          STT / LLM / TTS / VAD construction
   telephony.py         Hang-up and SIP transfer

@@ -7,6 +7,7 @@ import pytest
 from inbound_agent import tools
 from inbound_agent.call_state import CallState
 from inbound_agent.campaigns import CampaignRegistry
+from inbound_agent.leads import Lead
 from inbound_agent.phones import check_phone
 from inbound_agent.postcodes import FOUND, NOT_FOUND, UNAVAILABLE, PostcodeResult
 
@@ -105,7 +106,8 @@ async def test_unclear_email_gives_up_after_two_tries(cover):
     ctx, state = _ctx(cover)
     for _ in range(tools.MAX_EMAIL_REJECTIONS):
         assert "spell it" in await tools.share_details(ctx, "email", "john at gmail")
-    assert "post" in await tools.share_details(ctx, "email", "john at gmail")
+    result = await tools.share_details(ctx, "email", "john at gmail")
+    assert "Don't ask again" in result and "don't offer post" in result
     assert state.email == "" and "email unclear" in state.notes
 
 
@@ -242,3 +244,37 @@ async def test_postcode_checker_down_does_not_block(cover, monkeypatch):
 def test_address_tools_only_for_uk_campaigns(cover, english_campaign):
     assert tools.check_postcode in tools.tools_for(cover)
     assert tools.check_postcode not in tools.tools_for(english_campaign)
+
+
+# ── Address on file (we called them first) ──
+
+DANIEL = Lead("Daniel Whitmore", "14 Hawthorn Grove", "Stretford, Manchester", "M32 0JG")
+
+
+async def test_address_on_file_confirmed_without_postcode(cover):
+    ctx, state = _ctx(cover)
+    state.lead = DANIEL
+    await tools.confirm_address(ctx)
+    assert state.answers["address"] == "14 Hawthorn Grove, Stretford, Manchester, M32 0JG"
+    assert state.postcode == "M32 0JG" and state.address_on_file
+    assert not state.postcode_verified
+
+
+async def test_confirm_address_needs_a_record(cover):
+    ctx, state = _ctx(cover)
+    assert (await tools.confirm_address(ctx)).startswith("NOT SAVED")
+    assert "address" not in state.answers
+
+
+async def test_moved_caller_still_uses_postcode_check(cover):
+    ctx, state = _ctx(cover)
+    state.lead = DANIEL
+    assert "confirm_address" in await tools.save_answer(ctx, "address", "5 New Road")
+    assert "address" not in state.answers
+
+
+def test_confirm_address_tool_only_with_an_address_on_file(cover, english_campaign):
+    assert tools.confirm_address in tools.tools_for(cover, DANIEL)
+    assert tools.confirm_address not in tools.tools_for(cover)
+    assert tools.confirm_address not in tools.tools_for(cover, Lead(full_name="A B"))
+    assert tools.confirm_address not in tools.tools_for(english_campaign, DANIEL)

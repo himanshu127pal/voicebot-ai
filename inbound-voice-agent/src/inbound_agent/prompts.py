@@ -11,7 +11,9 @@ from datetime import datetime, timezone
 from zoneinfo import ZoneInfo
 
 from .campaigns import Campaign
-from .phones import PhoneInfo, check_phone
+from .leads import Lead
+from .phones import LANDLINE, MOBILE, PhoneInfo, check_phone
+from .postcodes import spoken_postcode
 
 
 def time_greeting(tz_name: str, now: datetime | None = None) -> str:
@@ -31,7 +33,7 @@ def build_greeting(c: Campaign, now: datetime | None = None) -> str:
         return c.greeting.replace("{time_greeting}", time_greeting(c.timezone, now))
     return (f"Hi, thanks for calling {c.company}, this is {c.agent_name}. "
             f"We'd tried giving you a call about {c.purpose}. "
-            f"Is now an okay time for a quick minute?")
+            f"Would you like to hear a little more about it?")
 
 
 def _channels(c: Campaign) -> tuple[str, str]:
@@ -155,9 +157,12 @@ def _call_handling(c: Campaign, can_transfer: bool) -> str:
     )
 
 
-def _tools(c: Campaign, can_transfer: bool) -> str:
+def _tools(c: Campaign, can_transfer: bool, lead: Lead | None = None) -> str:
     save_answer = ("- save_answer(field, answer) — save each answer to the QUESTIONS.\n"
                    if c.questions else "")
+    confirm = ("- confirm_address — they said the address ON FILE is still right.\n"
+               if lead and lead.has_address and any(q.field == "address" for q in c.questions)
+               else "")
     address = (
         "- check_postcode(postcode) — checks the UK postcode is real and finds its area.\n"
         "- save_address(first_line) — saves the first line of the address, after the "
@@ -181,6 +186,7 @@ def _tools(c: Campaign, can_transfer: bool) -> str:
         "- mark_interested(notes) — they're interested; notes = one line for the specialist.\n"
         f"{save_answer}"
         f"{address}"
+        f"{confirm}"
         f"{transfer}"
         "- set_disposition(outcome, reason) — only for NOT_INTERESTED, WRONG_NUMBER or "
         "INFO_ONLY when no other tool fits.\n"
@@ -189,18 +195,65 @@ def _tools(c: Campaign, can_transfer: bool) -> str:
 
 
 def _caller_clause(phone: PhoneInfo) -> str:
+    """Tells the model what kind of line this is AND to say so — callers expect the agent
+    to see that for itself, not to ask whether it's a mobile or a landline."""
     if not phone.valid:
         return "The caller's number is withheld — if they want WhatsApp, ask for a mobile number."
     if phone.can_whatsapp:
-        return (f"The caller is ringing from {phone.describe()} ending in {phone.last4}. For "
-                "WhatsApp, assume this number unless they give another.")
+        say_it = (" When their number comes up, say you can see it, e.g. \"I can see you're "
+                  f"calling from a mobile ending in {phone.last4}.\""
+                  if phone.kind == MOBILE else "")
+        return (f"The caller is ringing from {phone.describe()} ending in {phone.last4}."
+                f"{say_it} For WhatsApp, assume this number unless they give another.")
+    line = "a landline" if phone.kind == LANDLINE else "a number that can't get WhatsApp"
     return (f"The caller is ringing from {phone.describe()} ending in {phone.last4} — "
-            "WhatsApp does NOT work on it. Never offer WhatsApp to this number; for WhatsApp, "
-            "ask for a mobile number.")
+            "WhatsApp does NOT work on it. Never offer WhatsApp to this number. When WhatsApp "
+            "comes up, say plainly that you can see this, e.g. \"I can see you're calling "
+            f"from {line}, so I can't send WhatsApp messages to it — do you have a mobile "
+            "number I could send the details to?\"")
+
+
+def _on_file(c: Campaign, lead: Lead | None) -> str:
+    """We rang this number first, so we may already hold their name and address: confirm
+    them instead of asking. Nothing is read out until the caller confirms who they are —
+    whoever answers might not be the customer."""
+    if not lead or not (lead.full_name or lead.has_address):
+        return ""
+    fields = {q.field for q in c.questions}
+    lines = []
+    if lead.full_name:
+        lines.append(f"- Name: {lead.full_name}")
+    spoken_address = ", ".join(
+        p for p in (lead.first_line, lead.town, spoken_postcode(lead.postcode)) if p)
+    if lead.has_address:
+        lines.append(f"- Address: {lead.address} — read the postcode as "
+                     f"\"{spoken_postcode(lead.postcode)}\"")
+    rules = []
+    if lead.full_name:
+        save = (f" Yes → save_answer full_name \"{lead.full_name}\"." if "full_name" in fields
+                else "")
+        rules.append(
+            "- NAME: never skip this and never assume it. Your FIRST question after they "
+            f"reply to the greeting is \"Am I speaking with {lead.full_name}?\" — before the "
+            f"offer or anything else.{save} Someone else → ask who you're speaking with and "
+            "take their name as "
+            "normal; then treat this call as having NOTHING on file and never read out "
+            "anything above.")
+    if lead.has_address and "address" in fields:
+        moved = (" Moved or wrong → ask for the new postcode (check_postcode), then the first "
+                 "line (save_address)." if c.checks_uk_address else
+                 " Moved or wrong → ask for the new address and save_answer it.")
+        rules.append(
+            "- ADDRESS (only once they've confirmed their name): don't ask for the postcode — "
+            f"read the address back: \"I have your address as {spoken_address} — is that "
+            "still right?\" Yes → confirm_address."
+            f"{moved}")
+    return ("## ON FILE — we called this number first, so we already have their details:\n"
+            + "\n".join(lines) + "\n" + "\n".join(rules) + "\n\n")
 
 
 def build_instructions(c: Campaign, caller: PhoneInfo | str = "",
-                       can_transfer: bool = True) -> str:
+                       can_transfer: bool = True, lead: Lead | None = None) -> str:
     language_rule, language_reminder = _language_rule(c)
     phone = caller if isinstance(caller, PhoneInfo) else check_phone(caller, c.country)
     caller_clause = _caller_clause(phone)
@@ -235,7 +288,8 @@ def build_instructions(c: Campaign, caller: PhoneInfo | str = "",
         f"{_HOW_YOU_TALK}\n\n"
         f"{_call_handling(c, can_transfer)}\n\n"
         f"{_questions(c)}"
-        f"{_tools(c, can_transfer)}\n\n"
+        f"{_on_file(c, lead)}"
+        f"{_tools(c, can_transfer, lead)}\n\n"
         f"{extra}"
         f"{caller_clause}\n\n"
 

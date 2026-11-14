@@ -37,6 +37,7 @@ class Settings:
     campaigns_dir: Path
     console_campaign: str
     console_caller: str
+    leads_file: str
     llm_provider: str
     gemini_model: str
     anthropic_model: str
@@ -50,6 +51,9 @@ class Settings:
     webhook_token: str
     transcript_log_path: str
     postcode_api_url: str
+
+    usd_inr_rate: float
+    telephony_usd_per_minute: float
 
     vad_activation_threshold: float
     vad_min_speech_duration: float
@@ -75,6 +79,8 @@ def get_settings() -> Settings:
         console_campaign=_str("CONSOLE_CAMPAIGN"),
         # Console mode has no caller ID either; this stands in for it (mobile/landline tests).
         console_caller=_str("CONSOLE_CALLER"),
+        # Customer records (name, address) looked up by caller ID. Blank = no lookup.
+        leads_file=_str("LEADS_FILE"),
         llm_provider=_str("LLM_PROVIDER", "google").lower(),
         gemini_model=_str("GEMINI_MODEL", "gemini-2.5-flash"),
         anthropic_model=_str("ANTHROPIC_MODEL", "claude-haiku-4-5"),
@@ -90,6 +96,10 @@ def get_settings() -> Settings:
         # then just reads the postcode back.
         postcode_api_url=("" if _str("POSTCODE_API_URL").lower() == "off"
                           else _str("POSTCODE_API_URL", "https://api.postcodes.io")),
+        # Per-call cost in the call log (costs.py). Sarvam bills in rupees; the carrier's
+        # per-minute rate comes from its invoice (0 = left out of the total).
+        usd_inr_rate=_float("USD_INR_RATE", 88.0),
+        telephony_usd_per_minute=_float("TELEPHONY_USD_PER_MINUTE", 0.0),
         # 0.6 rejects quiet background chatter without dropping soft speakers (default 0.5).
         vad_activation_threshold=_float("VAD_ACTIVATION_THRESHOLD", 0.6),
         vad_min_speech_duration=_float("VAD_MIN_SPEECH_DURATION", 0.10),

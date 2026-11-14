@@ -11,6 +11,7 @@ from .call_guards import SilenceNudger, start_max_duration_guard
 from .call_state import CallState, usable_phone
 from .campaigns import CampaignRegistry
 from .disposition import DispositionReporter
+from .leads import find_lead
 from .phones import check_phone
 from .pipeline import build_llm, build_stt, build_tts, build_turn_handling, load_vad
 from .prompts import build_greeting
@@ -43,10 +44,12 @@ def _build_call_state(ctx: JobContext, attrs: dict) -> CallState:
     registry = CampaignRegistry.load(settings.campaigns_dir)
     campaign = registry.resolve(did=did, hint=hint)
     caller = usable_phone(caller_attr)
+    caller_phone = check_phone(caller, campaign.country)
     return CallState(
         campaign=campaign,
         caller=caller,
-        caller_phone=check_phone(caller, campaign.country),
+        caller_phone=caller_phone,
+        lead=find_lead(settings.leads_file, caller_phone, campaign.country),
         did=did,
         call_id=_first(attrs, ATTR_CALL_ID),
         room=ctx.room.name,
@@ -62,9 +65,10 @@ async def entrypoint(ctx: JobContext) -> None:
     # Console mode hands us a mock participant whose attributes are not a real dict.
     attrs = participant.attributes if isinstance(participant.attributes, dict) else {}
     state = _build_call_state(ctx, attrs)
-    log.info("call room=%s did=%r caller=…%s (%s) campaign=%s stack=%s llm=%s", state.room,
-             state.did, state.caller[-4:], state.caller_phone.kind, state.campaign.key,
-             state.campaign.voice.stack, settings.llm_provider)
+    log.info("call room=%s did=%r caller=…%s (%s) campaign=%s stack=%s llm=%s lead=%s",
+             state.room, state.did, state.caller[-4:], state.caller_phone.kind,
+             state.campaign.key, state.campaign.voice.stack, settings.llm_provider,
+             "found" if state.lead else "none")
 
     campaign = state.campaign
     session = AgentSession(
@@ -83,7 +87,7 @@ async def entrypoint(ctx: JobContext) -> None:
             state.add_transcript(str(getattr(item, "role", "")),
                                  getattr(item, "text_content", "") or "")
 
-    reporter = DispositionReporter(state, settings)
+    reporter = DispositionReporter(state, settings, usage=lambda: session.usage.model_usage)
     ctx.add_shutdown_callback(reporter.wait)
     ctx.room.on("participant_disconnected", lambda _p: reporter.start())
 

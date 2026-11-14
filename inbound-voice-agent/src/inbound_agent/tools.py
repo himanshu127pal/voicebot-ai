@@ -15,6 +15,7 @@ from livekit.agents import RunContext, function_tool
 from . import telephony
 from .call_state import CallState, Outcome
 from .campaigns import Campaign
+from .leads import Lead
 from .phones import (
     PhoneInfo,
     check_phone,
@@ -125,8 +126,8 @@ async def share_details(context: RunContext[CallState], channel: str, contact: s
             state.email_rejections += 1
             if state.email_rejections > MAX_EMAIL_REJECTIONS:
                 state.add_note(f"email unclear: {contact}")
-                return ("NOT SAVED — the email still isn't clear. Don't ask again: say the "
-                        "details will come by post to their address, then carry on.")
+                return ("NOT SAVED — the email still isn't clear. Don't ask again and don't "
+                        "offer post or any other way: say \"No problem\", then carry on.")
             return ("NOT SAVED — that isn't a complete email address. Ask them to spell it "
                     "slowly, like \"j dot smith at gmail dot com\", then call share_details "
                     "again with what they said.")
@@ -212,9 +213,11 @@ async def save_answer(context: RunContext[CallState], field: str, answer: str) -
                     "then save the full name.")
         answer += " (surname not given)"
     if key == "address" and state.campaign.checks_uk_address:
+        on_file = (" If they said the address ON FILE is still right, call confirm_address "
+                   "instead." if state.lead and state.lead.has_address else "")
         return ("NOT SAVED — for the address, call check_postcode with the postcode, then "
                 "save_address with the first line. (Lives outside the UK → follow UK ONLY; "
-                "no need to save an address.)")
+                f"no need to save an address.){on_file}")
     if key == "contact_number":
         return _save_contact_number(state, answer)
 
@@ -333,6 +336,21 @@ async def save_address(context: RunContext[CallState], first_line: str) -> str |
 
 
 @function_tool
+async def confirm_address(context: RunContext[CallState]) -> str | None:
+    """The caller said the address we have ON FILE is still right. Call it as soon as they
+    say yes — never ask for their postcode after that."""
+    state = context.userdata
+    lead = state.lead
+    if not (lead and lead.has_address):
+        return "NOT SAVED — there's no address on file. Ask for their postcode instead."
+    state.postcode, state.postcode_area = lead.postcode, lead.town
+    state.address_on_file = True
+    state.answers["address"] = lead.address
+    log.info("address on file confirmed (postcode %s)", lead.postcode)
+    return _quiet_if_asked(state, _next_question(state, "Address confirmed."))
+
+
+@function_tool
 async def transfer_to_human(context: RunContext[CallState]) -> str:
     """Connect the caller to a real person. Say one short line like "Sure, let me put you
     through" BEFORE calling this."""
@@ -394,5 +412,12 @@ ALL_TOOLS = [
 ADDRESS_TOOLS = [check_postcode, save_address]
 
 
-def tools_for(campaign: Campaign) -> list:
-    return ALL_TOOLS + ADDRESS_TOOLS if campaign.checks_uk_address else list(ALL_TOOLS)
+def asks_address(campaign: Campaign) -> bool:
+    return any(q.field == "address" for q in campaign.questions)
+
+
+def tools_for(campaign: Campaign, lead: Lead | None = None) -> list:
+    tools = ALL_TOOLS + ADDRESS_TOOLS if campaign.checks_uk_address else list(ALL_TOOLS)
+    if lead and lead.has_address and asks_address(campaign):
+        tools.append(confirm_address)
+    return tools

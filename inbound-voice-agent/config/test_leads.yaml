@@ -1,0 +1,19 @@
+# FAKE customers for console tests — not real people. Postcodes are real (so the postcode
+# check passes if the caller gives a new one); names and house numbers are made up.
+#
+# Used when LEADS_FILE points here. Set CONSOLE_CALLER to one of these numbers and Stacy
+# confirms the name and address on file instead of asking for them. Any other number →
+# no record, so she asks as before.
+
+leads:
+  - phone: "07400123456"          # UK mobile
+    full_name: Daniel Whitmore
+    first_line: 14 Hawthorn Grove
+    town: Stretford, Manchester
+    postcode: M32 0JG
+
+  - phone: "02079460123"          # UK landline (Ofcom drama range)
+    full_name: Margaret Ellis
+    first_line: 7 Coleridge Road
+    town: Islington, London
+    postcode: N1 9GU
