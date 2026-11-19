@@ -30,7 +30,16 @@ _GOODBYE = (
 class SilenceNudger:
     """After the agent finishes speaking, wait `nudge_after_seconds` for the caller.
     1st silence → "can you hear me?"; later ones → offer WhatsApp/callback;
-    after `max_nudges` unanswered → hang up the dead line. Caller speech resets it."""
+    after `max_nudges` unanswered → hang up the dead line.
+
+    Only a real caller turn (STT / typed text with words) resets the nudge counter.
+    VAD "speaking" alone does not — TV, fan, breathing and line noise trip VAD without
+    producing a transcript, and used to keep dead calls alive forever.
+
+    The hang-up path must not be cancelled when the goodbye starts playing: agent
+    `speaking` used to cancel this same task, so `hang_up()` never ran and the agent
+    looped nudges for the rest of the call (see recording UID-1795024111).
+    """
 
     def __init__(self, session: AgentSession, state: CallState, settings: Settings):
         self._session = session
@@ -39,29 +48,33 @@ class SilenceNudger:
         self._max = settings.max_nudges
         self._nudges = 0
         self._task: asyncio.Task | None = None
+        self._closing = False   # goodbye + hang-up in progress — ignore cancels / new waits
 
     def attach(self) -> None:
-        self._session.on("user_state_changed", self._on_user_state)
+        # Not user_state_changed: VAD "speaking" fires on noise/breathing without words.
         self._session.on("conversation_item_added", self._on_item)
         self._session.on("agent_state_changed", self._on_agent_state)
 
-    def _on_user_state(self, ev) -> None:
-        if str(getattr(ev, "new_state", "")) == "speaking":
-            self._caller_active()
-
     def _on_item(self, ev) -> None:
-        # A finished caller turn also counts; typed turns (console --text) never
-        # produce a "speaking" state.
         item = getattr(ev, "item", None)
-        if item is not None and str(getattr(item, "role", "")) == "user":
-            self._caller_active()
+        if item is None or str(getattr(item, "role", "")) != "user":
+            return
+        # Empty / whitespace-only items are not a reply (and console --text still sends
+        # real text through this event).
+        if not (getattr(item, "text_content", None) or "").strip():
+            return
+        self._caller_active()
 
     def _caller_active(self) -> None:
+        if self._closing:
+            return
         self._state.mark_person_spoke()
         self._nudges = 0
         self._cancel()
 
     def _on_agent_state(self, ev) -> None:
+        if self._closing:
+            return
         state = str(getattr(ev, "new_state", ""))
         if state == "speaking":
             self._cancel()
@@ -71,6 +84,8 @@ class SilenceNudger:
             self._task = asyncio.create_task(self._wait_then_nudge())
 
     def _cancel(self) -> None:
+        if self._closing:
+            return
         if self._task and not self._task.done():
             self._task.cancel()
         self._task = None
@@ -79,17 +94,29 @@ class SilenceNudger:
         try:
             await asyncio.sleep(self._after)
             if self._nudges >= self._max:
-                log.info("no response after %d nudges — hanging up", self._nudges)
-                handle = self._session.generate_reply(instructions=_GOODBYE, tool_choice="none",
-                                                      allow_interruptions=False)
-                await handle.wait_for_playout()
-                await telephony.hang_up()
+                await self._goodbye_and_hang_up()
                 return
             self._nudges += 1
             instructions = _PRESENCE_CHECK if self._nudges == 1 else _RE_ENGAGE
             self._session.generate_reply(instructions=instructions)
         except asyncio.CancelledError:
             pass
+
+    async def _goodbye_and_hang_up(self) -> None:
+        """Play the final goodbye, then delete the room. `_closing` keeps agent
+        speaking/listening events from cancelling this task or starting a new wait."""
+        self._closing = True
+        log.info("no response after %d nudges — hanging up", self._nudges)
+        try:
+            handle = self._session.generate_reply(
+                instructions=_GOODBYE, tool_choice="none", allow_interruptions=False)
+            await handle.wait_for_playout()
+        except Exception as e:
+            log.warning("silence goodbye failed: %s — hanging up anyway", e)
+        try:
+            await telephony.hang_up()
+        except Exception as e:
+            log.warning("silence hang-up failed: %s", e)
 
 
 def start_max_duration_guard(settings: Settings) -> asyncio.Task:

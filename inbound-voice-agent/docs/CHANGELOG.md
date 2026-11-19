@@ -2,6 +2,19 @@
 
 What changed in the inbound agent, when, and why. Newest first.
 
+## 2026-11-19 — Silence hang-up race + noise ≠ reply
+
+- **Dead-air calls no longer loop nudges for minutes.** After `MAX_NUDGES` (still 3),
+  the goodbye used to put the agent into `speaking`, which cancelled the same task that
+  was about to call `hang_up()` — so the BYE never went out (see recording
+  `UID-1795024111`, ~6.8 min of ~10s silence + short nudges). Hang-up now runs under a
+  `_closing` flag that ignores speaking/listening cancels and caller noise during the
+  goodbye. Timing unchanged: `NUDGE_AFTER_SECONDS=10`, `MAX_NUDGES=3` → ~35–45s then cut.
+- **VAD "speaking" no longer resets the silence counter.** Only a user conversation item
+  with real words (STT / console text) counts as a reply. TV, breathing and line noise
+  that trip VAD without a transcript no longer keep the call alive. Empty/whitespace
+  items are ignored too.
+
 ## 2026-11-12 — Per-call cost
 
 - **Every call log line now says what the call cost.** `usage` = LiveKit's per-model

@@ -35,6 +35,7 @@ greeting: >
 facts:
   - We offer 12 months of washing machine cover for a one-off payment of £99.99.
   - The cover is only available for customers living in the UK.
+  - Our office is in London.
   - The plan covers eligible breakdowns, including engineer call-out, diagnosis, labour and replacement parts, subject to the policy terms and conditions.
   - There are no additional charges for repairs covered under the policy.
   - If the washing machine develops an eligible fault, the customer contacts our customer care team on the number in their policy documents, and we arrange assistance according to their cover.
@@ -42,6 +43,8 @@ facts:
   - A senior supervisor answers any further questions and helps the customer complete the cover.
 
 faq:
+  - q: Where is your office? Where are you based?
+    a: Our office is in London.
   - q: What isn't covered? Is there an excess? Are there exclusions or age limits?
     a: That's all set out in the policy terms, conditions and exclusions — our senior supervisor can go through them with you, and you'll get everything in writing.
   - q: Can I cancel?
