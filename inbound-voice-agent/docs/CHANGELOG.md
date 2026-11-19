@@ -14,6 +14,10 @@ What changed in the inbound agent, when, and why. Newest first.
   with real words (STT / console text) counts as a reply. TV, breathing and line noise
   that trip VAD without a transcript no longer keep the call alive. Empty/whitespace
   items are ignored too.
+- **Hang-up is forced even if goodbye TTS stalls**, and works in console too:
+  `wait_for_playout` is capped at 8s, then `session.shutdown(drain=False)` +
+  `delete_room` + `job_ctx.shutdown` (console used to no-op on `delete_room` alone,
+  so silent tests ran until Ctrl+C).
 
 ## 2026-11-12 — Per-call cost
 

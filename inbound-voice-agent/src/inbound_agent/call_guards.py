@@ -26,6 +26,9 @@ _GOODBYE = (
     "them go, they're welcome to call back any time, goodbye. Do not ask a question."
 )
 
+# Don't let a stuck TTS/LLM block hang-up (recording UID-1795024111 looped for minutes).
+_GOODBYE_PLAYOUT_TIMEOUT = 8.0
+
 
 class SilenceNudger:
     """After the agent finishes speaking, wait `nudge_after_seconds` for the caller.
@@ -36,9 +39,8 @@ class SilenceNudger:
     VAD "speaking" alone does not — TV, fan, breathing and line noise trip VAD without
     producing a transcript, and used to keep dead calls alive forever.
 
-    The hang-up path must not be cancelled when the goodbye starts playing: agent
-    `speaking` used to cancel this same task, so `hang_up()` never ran and the agent
-    looped nudges for the rest of the call (see recording UID-1795024111).
+    Hang-up must not depend on goodbye finishing: agent `speaking` used to cancel the
+    hang-up task, and a stuck `wait_for_playout` would never reach `hang_up()`.
     """
 
     def __init__(self, session: AgentSession, state: CallState, settings: Settings):
@@ -103,20 +105,36 @@ class SilenceNudger:
             pass
 
     async def _goodbye_and_hang_up(self) -> None:
-        """Play the final goodbye, then delete the room. `_closing` keeps agent
-        speaking/listening events from cancelling this task or starting a new wait."""
+        """Say a short goodbye (best-effort), then always end the call.
+
+        `_closing` blocks speaking/listening from cancelling us or starting a new wait.
+        Hang-up is shielded and does not wait forever on TTS.
+        """
+        if self._closing:
+            return
         self._closing = True
         log.info("no response after %d nudges — hanging up", self._nudges)
-        try:
-            handle = self._session.generate_reply(
-                instructions=_GOODBYE, tool_choice="none", allow_interruptions=False)
-            await handle.wait_for_playout()
-        except Exception as e:
-            log.warning("silence goodbye failed: %s — hanging up anyway", e)
-        try:
-            await telephony.hang_up()
-        except Exception as e:
-            log.warning("silence hang-up failed: %s", e)
+
+        async def _end() -> None:
+            try:
+                handle = self._session.generate_reply(
+                    instructions=_GOODBYE, tool_choice="none", allow_interruptions=False)
+                await asyncio.wait_for(handle.wait_for_playout(),
+                                       timeout=_GOODBYE_PLAYOUT_TIMEOUT)
+            except Exception as e:
+                log.warning("silence goodbye failed/timed out: %s — hanging up anyway", e)
+            try:
+                # Stop the agent loop immediately (console + SIP); don't drain more speech.
+                self._session.shutdown(drain=False)
+            except Exception as e:
+                log.warning("session shutdown failed: %s", e)
+            try:
+                await telephony.hang_up()
+            except Exception as e:
+                log.warning("silence hang-up failed: %s", e)
+
+        # Even if this task is cancelled mid-await, finish hang-up.
+        await asyncio.shield(_end())
 
 
 def start_max_duration_guard(settings: Settings) -> asyncio.Task:

@@ -1,4 +1,4 @@
-"""SilenceNudger hang-up must survive the agent entering `speaking` for the goodbye.
+"""SilenceNudger hang-up must survive goodbye speaking and stuck TTS.
 
 livekit.agents is mocked so this file runs on machines where the native DLL is blocked.
 """
@@ -62,7 +62,29 @@ async def test_goodbye_speaking_does_not_cancel_hang_up(english_campaign, monkey
     playout.set()
     await task
     hang_up.assert_awaited_once()
+    session.shutdown.assert_called_once_with(drain=False)
     assert nudger._closing is True
+
+
+@pytest.mark.asyncio
+async def test_stuck_goodbye_still_hangs_up(english_campaign, monkeypatch):
+    """TTS that never finishes must not leave the call open."""
+    hang_up = AsyncMock()
+    monkeypatch.setattr("inbound_agent.call_guards.telephony.hang_up", hang_up)
+    monkeypatch.setattr("inbound_agent.call_guards._GOODBYE_PLAYOUT_TIMEOUT", 0.05)
+
+    class Handle:
+        async def wait_for_playout(self):
+            await asyncio.sleep(60)
+
+    session = MagicMock()
+    session.generate_reply.return_value = Handle()
+    state = CallState(campaign=english_campaign)
+    nudger = SilenceNudger(session, state, _settings())
+    nudger._nudges = 3
+    await asyncio.wait_for(nudger._goodbye_and_hang_up(), timeout=2)
+    hang_up.assert_awaited_once()
+    session.shutdown.assert_called_once_with(drain=False)
 
 
 @pytest.mark.asyncio
@@ -92,12 +114,10 @@ def test_vad_speaking_alone_does_not_reset_nudges(english_campaign):
     nudger.attach()
     nudger._nudges = 2
 
-    # Old bug path: user_state_changed → speaking. We no longer listen to it.
     assert not any(
         c.args and c.args[0] == "user_state_changed"
         for c in session.on.call_args_list
     )
-    # Even if something called the old handler name, it must not exist as a reset path.
     assert not hasattr(nudger, "_on_user_state")
     assert nudger._nudges == 2
     assert state.outcome == "DROPPED"

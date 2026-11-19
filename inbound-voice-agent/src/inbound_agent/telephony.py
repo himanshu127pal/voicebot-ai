@@ -1,7 +1,4 @@
-"""Call control on the current job's room: hang up and SIP transfer.
-
-Uses the JobContext helpers, which are no-ops in console mode, so the same code runs
-in local testing and on real calls."""
+"""Call control on the current job's room: hang up and SIP transfer."""
 
 from __future__ import annotations
 
@@ -13,8 +10,23 @@ log = logging.getLogger(__name__)
 
 
 async def hang_up() -> None:
-    """Delete the room: livekit-sip sends BYE to FreeSWITCH and the call ends."""
-    await get_job_context().delete_room()
+    """End the call for real.
+
+    On a SIP call, deleting the LiveKit room makes livekit-sip send BYE to FreeSWITCH.
+    In console mode ``delete_room`` is a no-op, so we also shut the job down — otherwise
+    silence hang-up appears to do nothing and the session runs until Ctrl+C.
+    """
+    jctx = get_job_context()
+    try:
+        await jctx.delete_room()
+    except Exception as e:
+        log.warning("delete_room failed: %s", e)
+    try:
+        # Ends the worker job (and console session). Safe if delete_room already tore
+        # the room down — shutdown is idempotent from the framework's side.
+        jctx.shutdown(reason="agent hang-up")
+    except Exception as e:
+        log.warning("job shutdown failed: %s", e)
 
 
 async def transfer_caller(transfer_to: str) -> None:
