@@ -1,0 +1,1383 @@
+{
+  "metadata": {
+    "transaction_key": "deprecated",
+    "request_id": "01a1f38e-74ac-7812-9b84-e2b09bbf011c",
+    "sha256": "86910f3a1fe856c3404c54b6a188243a38e3ec34a0c13926ac5a63d9eb029fdb",
+    "created": "2026-11-19T11:26:04.089Z",
+    "duration": 73.05994,
+    "channels": 1,
+    "models": [
+      "24deafc2-0f98-4cbe-96bc-82fa678de7ae"
+    ],
+    "model_info": {
+      "24deafc2-0f98-4cbe-96bc-82fa678de7ae": {
+        "name": "general-nova-3",
+        "version": "2026-11-13.34821",
+        "arch": "nova-3"
+      }
+    }
+  },
+  "results": {
+    "channels": [
+      {
+        "alternatives": [
+          {
+            "transcript": "Good morning. Thanks for calling back. My name is Stacy from home appliance cover. Tried to reach you about home appliance cover for your washing machine. You like to hear a little more about it? Hello? Can you still hear me? No problem. Would you prefer I send you the details on WhatsApp, or shall I call you back at a better time? Is now not a great time, or would you rather I send you the details to look at first? No worries.",
+            "confidence": 1.0,
+            "words": [
+              {
+                "word": "good",
+                "start": 0.39999998,
+                "end": 0.71999997,
+                "confidence": 1.0,
+                "punctuated_word": "Good"
+              },
+              {
+                "word": "morning",
+                "start": 0.71999997,
+                "end": 1.3599999,
+                "confidence": 1.0,
+                "punctuated_word": "morning."
+              },
+              {
+                "word": "thanks",
+                "start": 1.52,
+                "end": 1.92,
+                "confidence": 0.99902344,
+                "punctuated_word": "Thanks"
+              },
+              {
+                "word": "for",
+                "start": 1.92,
+                "end": 2.08,
+                "confidence": 1.0,
+                "punctuated_word": "for"
+              },
+              {
+                "word": "calling",
+                "start": 2.08,
+                "end": 2.3999999,
+                "confidence": 1.0,
+                "punctuated_word": "calling"
+              },
+              {
+                "word": "back",
+                "start": 2.3999999,
+                "end": 2.8799999,
+                "confidence": 0.99853516,
+                "punctuated_word": "back."
+              },
+              {
+                "word": "my",
+                "start": 2.8799999,
+                "end": 3.36,
+                "confidence": 1.0,
+                "punctuated_word": "My"
+              },
+              {
+                "word": "name",
+                "start": 3.36,
+                "end": 3.52,
+                "confidence": 1.0,
+                "punctuated_word": "name"
+              },
+              {
+                "word": "is",
+                "start": 3.52,
+                "end": 3.76,
+                "confidence": 0.9941406,
+                "punctuated_word": "is"
+              },
+              {
+                "word": "stacy",
+                "start": 3.76,
+                "end": 4.08,
+                "confidence": 0.9550781,
+                "punctuated_word": "Stacy"
+              },
+              {
+                "word": "from",
+                "start": 4.08,
+                "end": 4.4,
+                "confidence": 1.0,
+                "punctuated_word": "from"
+              },
+              {
+                "word": "home",
+                "start": 4.4,
+                "end": 4.64,
+                "confidence": 0.77685547,
+                "punctuated_word": "home"
+              },
+              {
+                "word": "appliance",
+                "start": 4.64,
+                "end": 5.12,
+                "confidence": 1.0,
+                "punctuated_word": "appliance"
+              },
+              {
+                "word": "cover",
+                "start": 5.12,
+                "end": 5.92,
+                "confidence": 0.9980469,
+                "punctuated_word": "cover."
+              },
+              {
+                "word": "tried",
+                "start": 6.56,
+                "end": 6.96,
+                "confidence": 0.9921875,
+                "punctuated_word": "Tried"
+              },
+              {
+                "word": "to",
+                "start": 6.96,
+                "end": 7.12,
+                "confidence": 1.0,
+                "punctuated_word": "to"
+              },
+              {
+                "word": "reach",
+                "start": 7.12,
+                "end": 7.3599997,
+                "confidence": 1.0,
+                "punctuated_word": "reach"
+              },
+              {
+                "word": "you",
+                "start": 7.3599997,
+                "end": 7.52,
+                "confidence": 1.0,
+                "punctuated_word": "you"
+              },
+              {
+                "word": "about",
+                "start": 7.52,
+                "end": 7.8399997,
+                "confidence": 1.0,
+                "punctuated_word": "about"
+              },
+              {
+                "word": "home",
+                "start": 7.8399997,
+                "end": 8.16,
+                "confidence": 1.0,
+                "punctuated_word": "home"
+              },
+              {
+                "word": "appliance",
+                "start": 8.16,
+                "end": 8.639999,
+                "confidence": 1.0,
+                "punctuated_word": "appliance"
+              },
+              {
+                "word": "cover",
+                "start": 8.639999,
+                "end": 9.04,
+                "confidence": 1.0,
+                "punctuated_word": "cover"
+              },
+              {
+                "word": "for",
+                "start": 9.04,
+                "end": 9.28,
+                "confidence": 1.0,
+                "punctuated_word": "for"
+              },
+              {
+                "word": "your",
+                "start": 9.28,
+                "end": 9.44,
+                "confidence": 1.0,
+                "punctuated_word": "your"
+              },
+              {
+                "word": "washing",
+                "start": 9.44,
+                "end": 9.84,
+                "confidence": 1.0,
+                "punctuated_word": "washing"
+              },
+              {
+                "word": "machine",
+                "start": 9.84,
+                "end": 10.559999,
+                "confidence": 0.9975586,
+                "punctuated_word": "machine."
+              },
+              {
+                "word": "you",
+                "start": 11.04,
+                "end": 11.12,
+                "confidence": 1.0,
+                "punctuated_word": "You"
+              },
+              {
+                "word": "like",
+                "start": 11.12,
+                "end": 11.36,
+                "confidence": 1.0,
+                "punctuated_word": "like"
+              },
+              {
+                "word": "to",
+                "start": 11.36,
+                "end": 11.5199995,
+                "confidence": 1.0,
+                "punctuated_word": "to"
+              },
+              {
+                "word": "hear",
+                "start": 11.5199995,
+                "end": 11.759999,
+                "confidence": 1.0,
+                "punctuated_word": "hear"
+              },
+              {
+                "word": "a",
+                "start": 11.759999,
+                "end": 11.92,
+                "confidence": 0.9980469,
+                "punctuated_word": "a"
+              },
+              {
+                "word": "little",
+                "start": 11.92,
+                "end": 12.08,
+                "confidence": 1.0,
+                "punctuated_word": "little"
+              },
+              {
+                "word": "more",
+                "start": 12.08,
+                "end": 12.32,
+                "confidence": 0.99902344,
+                "punctuated_word": "more"
+              },
+              {
+                "word": "about",
+                "start": 12.32,
+                "end": 12.639999,
+                "confidence": 1.0,
+                "punctuated_word": "about"
+              },
+              {
+                "word": "it",
+                "start": 12.639999,
+                "end": 12.88,
+                "confidence": 1.0,
+                "punctuated_word": "it?"
+              },
+              {
+                "word": "hello",
+                "start": 23.855,
+                "end": 24.654999,
+                "confidence": 0.9975586,
+                "punctuated_word": "Hello?"
+              },
+              {
+                "word": "can",
+                "start": 24.654999,
+                "end": 24.975,
+                "confidence": 1.0,
+                "punctuated_word": "Can"
+              },
+              {
+                "word": "you",
+                "start": 24.975,
+                "end": 25.135,
+                "confidence": 1.0,
+                "punctuated_word": "you"
+              },
+              {
+                "word": "still",
+                "start": 25.135,
+                "end": 25.455,
+                "confidence": 1.0,
+                "punctuated_word": "still"
+              },
+              {
+                "word": "hear",
+                "start": 25.455,
+                "end": 25.695,
+                "confidence": 1.0,
+                "punctuated_word": "hear"
+              },
+              {
+                "word": "me",
+                "start": 25.695,
+                "end": 25.935,
+                "confidence": 1.0,
+                "punctuated_word": "me?"
+              },
+              {
+                "word": "no",
+                "start": 37.079998,
+                "end": 37.4,
+                "confidence": 1.0,
+                "punctuated_word": "No"
+              },
+              {
+                "word": "problem",
+                "start": 37.4,
+                "end": 38.12,
+                "confidence": 1.0,
+                "punctuated_word": "problem."
+              },
+              {
+                "word": "would",
+                "start": 38.12,
+                "end": 38.68,
+                "confidence": 0.9980469,
+                "punctuated_word": "Would"
+              },
+              {
+                "word": "you",
+                "start": 38.76,
+                "end": 38.92,
+                "confidence": 1.0,
+                "punctuated_word": "you"
+              },
+              {
+                "word": "prefer",
+                "start": 38.92,
+                "end": 39.239998,
+                "confidence": 1.0,
+                "punctuated_word": "prefer"
+              },
+              {
+                "word": "i",
+                "start": 39.239998,
+                "end": 39.559998,
+                "confidence": 0.99902344,
+                "punctuated_word": "I"
+              },
+              {
+                "word": "send",
+                "start": 39.559998,
+                "end": 39.8,
+                "confidence": 1.0,
+                "punctuated_word": "send"
+              },
+              {
+                "word": "you",
+                "start": 39.8,
+                "end": 39.96,
+                "confidence": 1.0,
+                "punctuated_word": "you"
+              },
+              {
+                "word": "the",
+                "start": 39.96,
+                "end": 40.12,
+                "confidence": 1.0,
+                "punctuated_word": "the"
+              },
+              {
+                "word": "details",
+                "start": 40.12,
+                "end": 40.6,
+                "confidence": 1.0,
+                "punctuated_word": "details"
+              },
+              {
+                "word": "on",
+                "start": 40.6,
+                "end": 40.84,
+                "confidence": 1.0,
+                "punctuated_word": "on"
+              },
+              {
+                "word": "whatsapp",
+                "start": 40.84,
+                "end": 41.4,
+                "confidence": 0.8261719,
+                "punctuated_word": "WhatsApp,"
+              },
+              {
+                "word": "or",
+                "start": 41.955,
+                "end": 42.195,
+                "confidence": 1.0,
+                "punctuated_word": "or"
+              },
+              {
+                "word": "shall",
+                "start": 42.195,
+                "end": 42.435,
+                "confidence": 1.0,
+                "punctuated_word": "shall"
+              },
+              {
+                "word": "i",
+                "start": 42.435,
+                "end": 42.595,
+                "confidence": 1.0,
+                "punctuated_word": "I"
+              },
+              {
+                "word": "call",
+                "start": 42.595,
+                "end": 42.835,
+                "confidence": 1.0,
+                "punctuated_word": "call"
+              },
+              {
+                "word": "you",
+                "start": 42.835,
+                "end": 42.995,
+                "confidence": 1.0,
+                "punctuated_word": "you"
+              },
+              {
+                "word": "back",
+                "start": 42.995,
+                "end": 43.155,
+                "confidence": 1.0,
+                "punctuated_word": "back"
+              },
+              {
+                "word": "at",
+                "start": 43.155,
+                "end": 43.395,
+                "confidence": 1.0,
+                "punctuated_word": "at"
+              },
+              {
+                "word": "a",
+                "start": 43.395,
+                "end": 43.555,
+                "confidence": 1.0,
+                "punctuated_word": "a"
+              },
+              {
+                "word": "better",
+                "start": 43.555,
+                "end": 43.795,
+                "confidence": 1.0,
+                "punctuated_word": "better"
+              },
+              {
+                "word": "time",
+                "start": 43.795,
+                "end": 44.115,
+                "confidence": 1.0,
+                "punctuated_word": "time?"
+              },
+              {
+                "word": "is",
+                "start": 55.489998,
+                "end": 55.809998,
+                "confidence": 0.9921875,
+                "punctuated_word": "Is"
+              },
+              {
+                "word": "now",
+                "start": 55.809998,
+                "end": 56.05,
+                "confidence": 0.9970703,
+                "punctuated_word": "now"
+              },
+              {
+                "word": "not",
+                "start": 56.05,
+                "end": 56.29,
+                "confidence": 0.98828125,
+                "punctuated_word": "not"
+              },
+              {
+                "word": "a",
+                "start": 56.29,
+                "end": 56.45,
+                "confidence": 0.99902344,
+                "punctuated_word": "a"
+              },
+              {
+                "word": "great",
+                "start": 56.45,
+                "end": 56.61,
+                "confidence": 1.0,
+                "punctuated_word": "great"
+              },
+              {
+                "word": "time",
+                "start": 56.61,
+                "end": 57.25,
+                "confidence": 0.7922363,
+                "punctuated_word": "time,"
+              },
+              {
+                "word": "or",
+                "start": 57.489998,
+                "end": 57.73,
+                "confidence": 1.0,
+                "punctuated_word": "or"
+              },
+              {
+                "word": "would",
+                "start": 57.73,
+                "end": 57.97,
+                "confidence": 1.0,
+                "punctuated_word": "would"
+              },
+              {
+                "word": "you",
+                "start": 57.97,
+                "end": 58.05,
+                "confidence": 1.0,
+                "punctuated_word": "you"
+              },
+              {
+                "word": "rather",
+                "start": 58.05,
+                "end": 58.37,
+                "confidence": 1.0,
+                "punctuated_word": "rather"
+              },
+              {
+                "word": "i",
+                "start": 58.37,
+                "end": 58.61,
+                "confidence": 0.9970703,
+                "punctuated_word": "I"
+              },
+              {
+                "word": "send",
+                "start": 58.61,
+                "end": 58.85,
+                "confidence": 0.99902344,
+                "punctuated_word": "send"
+              },
+              {
+                "word": "you",
+                "start": 58.85,
+                "end": 59.01,
+                "confidence": 1.0,
+                "punctuated_word": "you"
+              },
+              {
+                "word": "the",
+                "start": 59.01,
+                "end": 59.17,
+                "confidence": 1.0,
+                "punctuated_word": "the"
+              },
+              {
+                "word": "details",
+                "start": 59.17,
+                "end": 59.57,
+                "confidence": 0.9863281,
+                "punctuated_word": "details"
+              },
+              {
+                "word": "to",
+                "start": 59.57,
+                "end": 59.809998,
+                "confidence": 1.0,
+                "punctuated_word": "to"
+              },
+              {
+                "word": "look",
+                "start": 59.809998,
+                "end": 60.05,
+                "confidence": 1.0,
+                "punctuated_word": "look"
+              },
+              {
+                "word": "at",
+                "start": 60.05,
+                "end": 60.21,
+                "confidence": 0.99902344,
+                "punctuated_word": "at"
+              },
+              {
+                "word": "first",
+                "start": 60.21,
+                "end": 60.61,
+                "confidence": 0.9980469,
+                "punctuated_word": "first?"
+              },
+              {
+                "word": "no",
+                "start": 71.83488,
+                "end": 72.15488,
+                "confidence": 0.9941406,
+                "punctuated_word": "No"
+              },
+              {
+                "word": "worries",
+                "start": 72.15488,
+                "end": 72.55488,
+                "confidence": 0.9970703,
+                "punctuated_word": "worries."
+              }
+            ],
+            "paragraphs": {
+              "transcript": "\nGood morning. Thanks for calling back. My name is Stacy from home appliance cover. Tried to reach you about home appliance cover for your washing machine. You like to hear a little more about it?\n\nHello? Can you still hear me? No problem. Would you prefer I send you the details on WhatsApp, or shall I call you back at a better time? Is now not a great time, or would you rather I send you the details to look at first?\n\nNo worries.",
+              "paragraphs": [
+                {
+                  "sentences": [
+                    {
+                      "text": "Good morning.",
+                      "start": 0.39999998,
+                      "end": 1.3599999
+                    },
+                    {
+                      "text": "Thanks for calling back.",
+                      "start": 1.52,
+                      "end": 2.8799999
+                    },
+                    {
+                      "text": "My name is Stacy from home appliance cover.",
+                      "start": 2.8799999,
+                      "end": 5.92
+                    },
+                    {
+                      "text": "Tried to reach you about home appliance cover for your washing machine.",
+                      "start": 6.56,
+                      "end": 10.559999
+                    },
+                    {
+                      "text": "You like to hear a little more about it?",
+                      "start": 11.04,
+                      "end": 12.88
+                    }
+                  ],
+                  "num_words": 35,
+                  "start": 0.39999998,
+                  "end": 12.88
+                },
+                {
+                  "sentences": [
+                    {
+                      "text": "Hello?",
+                      "start": 23.855,
+                      "end": 24.654999
+                    },
+                    {
+                      "text": "Can you still hear me?",
+                      "start": 24.654999,
+                      "end": 25.935
+                    },
+                    {
+                      "text": "No problem.",
+                      "start": 37.079998,
+                      "end": 38.12
+                    },
+                    {
+                      "text": "Would you prefer I send you the details on WhatsApp, or shall I call you back at a better time?",
+                      "start": 38.12,
+                      "end": 44.115
+                    },
+                    {
+                      "text": "Is now not a great time, or would you rather I send you the details to look at first?",
+                      "start": 55.489998,
+                      "end": 60.61
+                    }
+                  ],
+                  "num_words": 47,
+                  "start": 23.855,
+                  "end": 60.61
+                },
+                {
+                  "sentences": [
+                    {
+                      "text": "No worries.",
+                      "start": 71.83488,
+                      "end": 72.55488
+                    }
+                  ],
+                  "num_words": 2,
+                  "start": 71.83488,
+                  "end": 72.55488
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "utterances": [
+      {
+        "start": 0.39999998,
+        "end": 5.92,
+        "confidence": 0.98012,
+        "channel": 0,
+        "transcript": "Good morning. Thanks for calling back. My name is Stacy from home appliance cover.",
+        "words": [
+          {
+            "word": "good",
+            "start": 0.39999998,
+            "end": 0.71999997,
+            "confidence": 1.0,
+            "punctuated_word": "Good"
+          },
+          {
+            "word": "morning",
+            "start": 0.71999997,
+            "end": 1.3599999,
+            "confidence": 1.0,
+            "punctuated_word": "morning."
+          },
+          {
+            "word": "thanks",
+            "start": 1.52,
+            "end": 1.92,
+            "confidence": 0.99902344,
+            "punctuated_word": "Thanks"
+          },
+          {
+            "word": "for",
+            "start": 1.92,
+            "end": 2.08,
+            "confidence": 1.0,
+            "punctuated_word": "for"
+          },
+          {
+            "word": "calling",
+            "start": 2.08,
+            "end": 2.3999999,
+            "confidence": 1.0,
+            "punctuated_word": "calling"
+          },
+          {
+            "word": "back",
+            "start": 2.3999999,
+            "end": 2.8799999,
+            "confidence": 0.99853516,
+            "punctuated_word": "back."
+          },
+          {
+            "word": "my",
+            "start": 2.8799999,
+            "end": 3.36,
+            "confidence": 1.0,
+            "punctuated_word": "My"
+          },
+          {
+            "word": "name",
+            "start": 3.36,
+            "end": 3.52,
+            "confidence": 1.0,
+            "punctuated_word": "name"
+          },
+          {
+            "word": "is",
+            "start": 3.52,
+            "end": 3.76,
+            "confidence": 0.9941406,
+            "punctuated_word": "is"
+          },
+          {
+            "word": "stacy",
+            "start": 3.76,
+            "end": 4.08,
+            "confidence": 0.9550781,
+            "punctuated_word": "Stacy"
+          },
+          {
+            "word": "from",
+            "start": 4.08,
+            "end": 4.4,
+            "confidence": 1.0,
+            "punctuated_word": "from"
+          },
+          {
+            "word": "home",
+            "start": 4.4,
+            "end": 4.64,
+            "confidence": 0.77685547,
+            "punctuated_word": "home"
+          },
+          {
+            "word": "appliance",
+            "start": 4.64,
+            "end": 5.12,
+            "confidence": 1.0,
+            "punctuated_word": "appliance"
+          },
+          {
+            "word": "cover",
+            "start": 5.12,
+            "end": 5.92,
+            "confidence": 0.9980469,
+            "punctuated_word": "cover."
+          }
+        ],
+        "id": "22d31b57-9652-48f1-bda8-39ef578312d2"
+      },
+      {
+        "start": 6.56,
+        "end": 10.559999,
+        "confidence": 0.9991455,
+        "channel": 0,
+        "transcript": "Tried to reach you about home appliance cover for your washing machine.",
+        "words": [
+          {
+            "word": "tried",
+            "start": 6.56,
+            "end": 6.96,
+            "confidence": 0.9921875,
+            "punctuated_word": "Tried"
+          },
+          {
+            "word": "to",
+            "start": 6.96,
+            "end": 7.12,
+            "confidence": 1.0,
+            "punctuated_word": "to"
+          },
+          {
+            "word": "reach",
+            "start": 7.12,
+            "end": 7.3599997,
+            "confidence": 1.0,
+            "punctuated_word": "reach"
+          },
+          {
+            "word": "you",
+            "start": 7.3599997,
+            "end": 7.52,
+            "confidence": 1.0,
+            "punctuated_word": "you"
+          },
+          {
+            "word": "about",
+            "start": 7.52,
+            "end": 7.8399997,
+            "confidence": 1.0,
+            "punctuated_word": "about"
+          },
+          {
+            "word": "home",
+            "start": 7.8399997,
+            "end": 8.16,
+            "confidence": 1.0,
+            "punctuated_word": "home"
+          },
+          {
+            "word": "appliance",
+            "start": 8.16,
+            "end": 8.639999,
+            "confidence": 1.0,
+            "punctuated_word": "appliance"
+          },
+          {
+            "word": "cover",
+            "start": 8.639999,
+            "end": 9.04,
+            "confidence": 1.0,
+            "punctuated_word": "cover"
+          },
+          {
+            "word": "for",
+            "start": 9.04,
+            "end": 9.28,
+            "confidence": 1.0,
+            "punctuated_word": "for"
+          },
+          {
+            "word": "your",
+            "start": 9.28,
+            "end": 9.44,
+            "confidence": 1.0,
+            "punctuated_word": "your"
+          },
+          {
+            "word": "washing",
+            "start": 9.44,
+            "end": 9.84,
+            "confidence": 1.0,
+            "punctuated_word": "washing"
+          },
+          {
+            "word": "machine",
+            "start": 9.84,
+            "end": 10.559999,
+            "confidence": 0.9975586,
+            "punctuated_word": "machine."
+          }
+        ],
+        "id": "0b546592-dc15-4e08-8e46-fa7761a907bf"
+      },
+      {
+        "start": 11.04,
+        "end": 12.88,
+        "confidence": 0.9996745,
+        "channel": 0,
+        "transcript": "You like to hear a little more about it?",
+        "words": [
+          {
+            "word": "you",
+            "start": 11.04,
+            "end": 11.12,
+            "confidence": 1.0,
+            "punctuated_word": "You"
+          },
+          {
+            "word": "like",
+            "start": 11.12,
+            "end": 11.36,
+            "confidence": 1.0,
+            "punctuated_word": "like"
+          },
+          {
+            "word": "to",
+            "start": 11.36,
+            "end": 11.5199995,
+            "confidence": 1.0,
+            "punctuated_word": "to"
+          },
+          {
+            "word": "hear",
+            "start": 11.5199995,
+            "end": 11.759999,
+            "confidence": 1.0,
+            "punctuated_word": "hear"
+          },
+          {
+            "word": "a",
+            "start": 11.759999,
+            "end": 11.92,
+            "confidence": 0.9980469,
+            "punctuated_word": "a"
+          },
+          {
+            "word": "little",
+            "start": 11.92,
+            "end": 12.08,
+            "confidence": 1.0,
+            "punctuated_word": "little"
+          },
+          {
+            "word": "more",
+            "start": 12.08,
+            "end": 12.32,
+            "confidence": 0.99902344,
+            "punctuated_word": "more"
+          },
+          {
+            "word": "about",
+            "start": 12.32,
+            "end": 12.639999,
+            "confidence": 1.0,
+            "punctuated_word": "about"
+          },
+          {
+            "word": "it",
+            "start": 12.639999,
+            "end": 12.88,
+            "confidence": 1.0,
+            "punctuated_word": "it?"
+          }
+        ],
+        "id": "aad0b0bc-2952-4f5c-8459-09654730ca64"
+      },
+      {
+        "start": 23.855,
+        "end": 25.935,
+        "confidence": 0.9995931,
+        "channel": 0,
+        "transcript": "Hello? Can you still hear me?",
+        "words": [
+          {
+            "word": "hello",
+            "start": 23.855,
+            "end": 24.654999,
+            "confidence": 0.9975586,
+            "punctuated_word": "Hello?"
+          },
+          {
+            "word": "can",
+            "start": 24.654999,
+            "end": 24.975,
+            "confidence": 1.0,
+            "punctuated_word": "Can"
+          },
+          {
+            "word": "you",
+            "start": 24.975,
+            "end": 25.135,
+            "confidence": 1.0,
+            "punctuated_word": "you"
+          },
+          {
+            "word": "still",
+            "start": 25.135,
+            "end": 25.455,
+            "confidence": 1.0,
+            "punctuated_word": "still"
+          },
+          {
+            "word": "hear",
+            "start": 25.455,
+            "end": 25.695,
+            "confidence": 1.0,
+            "punctuated_word": "hear"
+          },
+          {
+            "word": "me",
+            "start": 25.695,
+            "end": 25.935,
+            "confidence": 1.0,
+            "punctuated_word": "me?"
+          }
+        ],
+        "id": "bb7c8d07-e7c5-4704-8520-71be22d57109"
+      },
+      {
+        "start": 37.079998,
+        "end": 41.4,
+        "confidence": 0.9852702,
+        "channel": 0,
+        "transcript": "No problem. Would you prefer I send you the details on WhatsApp,",
+        "words": [
+          {
+            "word": "no",
+            "start": 37.079998,
+            "end": 37.4,
+            "confidence": 1.0,
+            "punctuated_word": "No"
+          },
+          {
+            "word": "problem",
+            "start": 37.4,
+            "end": 38.12,
+            "confidence": 1.0,
+            "punctuated_word": "problem."
+          },
+          {
+            "word": "would",
+            "start": 38.12,
+            "end": 38.68,
+            "confidence": 0.9980469,
+            "punctuated_word": "Would"
+          },
+          {
+            "word": "you",
+            "start": 38.76,
+            "end": 38.92,
+            "confidence": 1.0,
+            "punctuated_word": "you"
+          },
+          {
+            "word": "prefer",
+            "start": 38.92,
+            "end": 39.239998,
+            "confidence": 1.0,
+            "punctuated_word": "prefer"
+          },
+          {
+            "word": "i",
+            "start": 39.239998,
+            "end": 39.559998,
+            "confidence": 0.99902344,
+            "punctuated_word": "I"
+          },
+          {
+            "word": "send",
+            "start": 39.559998,
+            "end": 39.8,
+            "confidence": 1.0,
+            "punctuated_word": "send"
+          },
+          {
+            "word": "you",
+            "start": 39.8,
+            "end": 39.96,
+            "confidence": 1.0,
+            "punctuated_word": "you"
+          },
+          {
+            "word": "the",
+            "start": 39.96,
+            "end": 40.12,
+            "confidence": 1.0,
+            "punctuated_word": "the"
+          },
+          {
+            "word": "details",
+            "start": 40.12,
+            "end": 40.6,
+            "confidence": 1.0,
+            "punctuated_word": "details"
+          },
+          {
+            "word": "on",
+            "start": 40.6,
+            "end": 40.84,
+            "confidence": 1.0,
+            "punctuated_word": "on"
+          },
+          {
+            "word": "whatsapp",
+            "start": 40.84,
+            "end": 41.4,
+            "confidence": 0.8261719,
+            "punctuated_word": "WhatsApp,"
+          }
+        ],
+        "id": "d6bd14e0-d32b-42d3-aed8-b126552291cd"
+      },
+      {
+        "start": 41.955,
+        "end": 44.115,
+        "confidence": 1.0,
+        "channel": 0,
+        "transcript": "or shall I call you back at a better time?",
+        "words": [
+          {
+            "word": "or",
+            "start": 41.955,
+            "end": 42.195,
+            "confidence": 1.0,
+            "punctuated_word": "or"
+          },
+          {
+            "word": "shall",
+            "start": 42.195,
+            "end": 42.435,
+            "confidence": 1.0,
+            "punctuated_word": "shall"
+          },
+          {
+            "word": "i",
+            "start": 42.435,
+            "end": 42.595,
+            "confidence": 1.0,
+            "punctuated_word": "I"
+          },
+          {
+            "word": "call",
+            "start": 42.595,
+            "end": 42.835,
+            "confidence": 1.0,
+            "punctuated_word": "call"
+          },
+          {
+            "word": "you",
+            "start": 42.835,
+            "end": 42.995,
+            "confidence": 1.0,
+            "punctuated_word": "you"
+          },
+          {
+            "word": "back",
+            "start": 42.995,
+            "end": 43.155,
+            "confidence": 1.0,
+            "punctuated_word": "back"
+          },
+          {
+            "word": "at",
+            "start": 43.155,
+            "end": 43.395,
+            "confidence": 1.0,
+            "punctuated_word": "at"
+          },
+          {
+            "word": "a",
+            "start": 43.395,
+            "end": 43.555,
+            "confidence": 1.0,
+            "punctuated_word": "a"
+          },
+          {
+            "word": "better",
+            "start": 43.555,
+            "end": 43.795,
+            "confidence": 1.0,
+            "punctuated_word": "better"
+          },
+          {
+            "word": "time",
+            "start": 43.795,
+            "end": 44.115,
+            "confidence": 1.0,
+            "punctuated_word": "time?"
+          }
+        ],
+        "id": "fb5e63f7-6390-4ec9-a2e0-b41c60ebfeab"
+      },
+      {
+        "start": 55.489998,
+        "end": 57.25,
+        "confidence": 0.9614665,
+        "channel": 0,
+        "transcript": "Is now not a great time,",
+        "words": [
+          {
+            "word": "is",
+            "start": 55.489998,
+            "end": 55.809998,
+            "confidence": 0.9921875,
+            "punctuated_word": "Is"
+          },
+          {
+            "word": "now",
+            "start": 55.809998,
+            "end": 56.05,
+            "confidence": 0.9970703,
+            "punctuated_word": "now"
+          },
+          {
+            "word": "not",
+            "start": 56.05,
+            "end": 56.29,
+            "confidence": 0.98828125,
+            "punctuated_word": "not"
+          },
+          {
+            "word": "a",
+            "start": 56.29,
+            "end": 56.45,
+            "confidence": 0.99902344,
+            "punctuated_word": "a"
+          },
+          {
+            "word": "great",
+            "start": 56.45,
+            "end": 56.61,
+            "confidence": 1.0,
+            "punctuated_word": "great"
+          },
+          {
+            "word": "time",
+            "start": 56.61,
+            "end": 57.25,
+            "confidence": 0.7922363,
+            "punctuated_word": "time,"
+          }
+        ],
+        "id": "b481cf30-46f5-4ead-87ae-281c3400c367"
+      },
+      {
+        "start": 57.489998,
+        "end": 60.61,
+        "confidence": 0.9984225,
+        "channel": 0,
+        "transcript": "or would you rather I send you the details to look at first?",
+        "words": [
+          {
+            "word": "or",
+            "start": 57.489998,
+            "end": 57.73,
+            "confidence": 1.0,
+            "punctuated_word": "or"
+          },
+          {
+            "word": "would",
+            "start": 57.73,
+            "end": 57.97,
+            "confidence": 1.0,
+            "punctuated_word": "would"
+          },
+          {
+            "word": "you",
+            "start": 57.97,
+            "end": 58.05,
+            "confidence": 1.0,
+            "punctuated_word": "you"
+          },
+          {
+            "word": "rather",
+            "start": 58.05,
+            "end": 58.37,
+            "confidence": 1.0,
+            "punctuated_word": "rather"
+          },
+          {
+            "word": "i",
+            "start": 58.37,
+            "end": 58.61,
+            "confidence": 0.9970703,
+            "punctuated_word": "I"
+          },
+          {
+            "word": "send",
+            "start": 58.61,
+            "end": 58.85,
+            "confidence": 0.99902344,
+            "punctuated_word": "send"
+          },
+          {
+            "word": "you",
+            "start": 58.85,
+            "end": 59.01,
+            "confidence": 1.0,
+            "punctuated_word": "you"
+          },
+          {
+            "word": "the",
+            "start": 59.01,
+            "end": 59.17,
+            "confidence": 1.0,
+            "punctuated_word": "the"
+          },
+          {
+            "word": "details",
+            "start": 59.17,
+            "end": 59.57,
+            "confidence": 0.9863281,
+            "punctuated_word": "details"
+          },
+          {
+            "word": "to",
+            "start": 59.57,
+            "end": 59.809998,
+            "confidence": 1.0,
+            "punctuated_word": "to"
+          },
+          {
+            "word": "look",
+            "start": 59.809998,
+            "end": 60.05,
+            "confidence": 1.0,
+            "punctuated_word": "look"
+          },
+          {
+            "word": "at",
+            "start": 60.05,
+            "end": 60.21,
+            "confidence": 0.99902344,
+            "punctuated_word": "at"
+          },
+          {
+            "word": "first",
+            "start": 60.21,
+            "end": 60.61,
+            "confidence": 0.9980469,
+            "punctuated_word": "first?"
+          }
+        ],
+        "id": "a34bd9b9-822e-4b23-ac0a-7596b572844d"
+      },
+      {
+        "start": 71.83488,
+        "end": 72.55488,
+        "confidence": 0.99560547,
+        "channel": 0,
+        "transcript": "No worries.",
+        "words": [
+          {
+            "word": "no",
+            "start": 71.83488,
+            "end": 72.15488,
+            "confidence": 0.9941406,
+            "punctuated_word": "No"
+          },
+          {
+            "word": "worries",
+            "start": 72.15488,
+            "end": 72.55488,
+            "confidence": 0.9970703,
+            "punctuated_word": "worries."
+          }
+        ],
+        "id": "b761ae39-7acc-46a3-9b09-40d1ed897968"
+      }
+    ]
+  }
+}

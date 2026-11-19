@@ -13,17 +13,22 @@ from .settings import Settings
 
 log = logging.getLogger(__name__)
 
-_PRESENCE_CHECK = (
-    "The caller has gone quiet. In the SAME language you were speaking, gently check they "
-    "can still hear you in ONE short line."
-)
-_RE_ENGAGE = (
-    "The caller is still quiet. In the SAME language, ONE short new line: offer to send the "
-    "details on WhatsApp or to call back later. Never repeat a line you've already used."
+# Dead air = presence checks only. Do NOT pitch WhatsApp / email / callback while they
+# have not answered — that sounds like a sales push into silence (see UID-1795086754).
+_PRESENCE_CHECKS = (
+    "The caller has gone quiet. In the SAME language you were speaking, ONE short line: "
+    "gently check they can still hear you. Do not offer WhatsApp, email, a callback, or "
+    "any product details.",
+    "The caller is still quiet. In the SAME language, ONE short NEW line: check again that "
+    "they're there (e.g. are you still with me?). Never repeat your last line. Do not offer "
+    "WhatsApp, email, a callback, or any product details.",
+    "Still no reply. In the SAME language, ONE short NEW presence check only — different "
+    "wording from before. Do not offer WhatsApp, email, a callback, or any product details.",
 )
 _GOODBYE = (
-    "The line has stayed silent. In the SAME language, ONE short polite line: you'll let "
-    "them go, they're welcome to call back any time, goodbye. Do not ask a question."
+    "The line has stayed silent after several checks. In the SAME language, ONE short "
+    "polite goodbye only: you'll let them go, they're welcome to call back any time. "
+    "Do not ask a question. Do not offer WhatsApp, email, or a callback."
 )
 
 # Don't let a stuck TTS/LLM block hang-up (recording UID-1795024111 looped for minutes).
@@ -32,8 +37,9 @@ _GOODBYE_PLAYOUT_TIMEOUT = 8.0
 
 class SilenceNudger:
     """After the agent finishes speaking, wait `nudge_after_seconds` for the caller.
-    1st silence → "can you hear me?"; later ones → offer WhatsApp/callback;
-    after `max_nudges` unanswered → hang up the dead line.
+    Each unanswered silence → a short presence check only ("still there?");
+    after `max_nudges` unanswered → goodbye and hang up. No WhatsApp / details offers
+    into dead air.
 
     Only a real caller turn (STT / typed text with words) resets the nudge counter.
     VAD "speaking" alone does not — TV, fan, breathing and line noise trip VAD without
@@ -99,7 +105,8 @@ class SilenceNudger:
                 await self._goodbye_and_hang_up()
                 return
             self._nudges += 1
-            instructions = _PRESENCE_CHECK if self._nudges == 1 else _RE_ENGAGE
+            # Cycle presence-only lines; never pitch offers while they're silent.
+            instructions = _PRESENCE_CHECKS[(self._nudges - 1) % len(_PRESENCE_CHECKS)]
             self._session.generate_reply(instructions=instructions)
         except asyncio.CancelledError:
             pass
