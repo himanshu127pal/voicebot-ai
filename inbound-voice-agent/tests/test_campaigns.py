@@ -33,6 +33,24 @@ def test_appliance_cover_campaign(campaigns_dir):
     assert "number_type" not in [q.field for q in c.questions]   # detected, never asked
 
 
+def test_go_care_health_au_campaign(campaigns_dir):
+    registry = CampaignRegistry.load(campaigns_dir)
+    c = registry.get("go_care_health_au")
+    assert c is not None and not c.has_placeholders()
+    assert c.company == "Go Care" and c.agent_name == "Emma"
+    assert c.country == "AU" and c.timezone == "Australia/Sydney"
+    assert not c.checks_uk_address   # AU postcode is confirm-only, no postcodes.io
+    assert "address" not in [q.field for q in c.questions]
+    assert [q.field for q in c.questions][:4] == [
+        "full_name", "has_private_insurance", "health_fund", "cover_for",
+    ]
+    assert c.voice.stt_language == "en-AU"
+    assert c.voice.tts_voice == "aura-2-theia-en"
+    assert registry.resolve(did="+61420199870").key == "go_care_health_au"
+    assert registry.resolve(did="61420199870").key == "go_care_health_au"
+    assert registry.resolve(did="0420199870").key == "go_care_health_au"
+
+
 def test_tts_speed_and_country_validation():
     base = {"key": "k", "company": "c", "agent_name": "a", "purpose": "p"}
     assert Campaign.from_dict({**base, "country": "gb"}).country == "GB"
